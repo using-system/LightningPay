@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 
@@ -10,14 +11,18 @@ namespace LightningPay.Samples.Console
     {
         public async override Task Execute()
         {
-            var client = new LndClient(new System.Net.Http.HttpClient(), new LndOptions()
+            using(HttpClient httpClient = new HttpClient())
             {
-                BaseUri = new Uri("http://localhost:42802/")
-            });
+                var lndClient = new LndClient(httpClient, new LndOptions()
+                {
+                    BaseUri = new Uri("http://localhost:42802/")
+                });
 
-            var invoice = await client.CreateInvoice(LightMoney.MilliSatoshis(1000), "Test", TimeSpan.FromMinutes(5));
+                var invoice = await lndClient.CreateInvoice(LightMoney.MilliSatoshis(1000), "Test", TimeSpan.FromMinutes(5));
 
-            System.Console.WriteLine(invoice.Id);
+                System.Console.WriteLine(invoice.Id);
+            }
+
         }
     }
 }
