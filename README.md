@@ -1,2 +1,2 @@
 # LightningPay
-Lightning Network Payment library 
+Lightning Network Payment library (development in progress)

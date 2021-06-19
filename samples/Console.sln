@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31402.337
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Samples.Console", "LightningPay.Samples.Console\LightningPay.Samples.Console.csproj", "{DFE9F3B5-CEDD-43BF-98A8-6E24829EA036}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Core", "..\src\LightningPay.Core\LightningPay.Core.csproj", "{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{41A5BD74-5C0C-43AB-98C5-C8328DACD0F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFE9F3B5-CEDD-43BF-98A8-6E24829EA036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE9F3B5-CEDD-43BF-98A8-6E24829EA036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE9F3B5-CEDD-43BF-98A8-6E24829EA036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE9F3B5-CEDD-43BF-98A8-6E24829EA036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09A20477-4BC8-42C7-89F9-D6AA73FA2BC6} = {41A5BD74-5C0C-43AB-98C5-C8328DACD0F1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7158B7E-5DC2-411A-8301-1B5981C71970}
+	EndGlobalSection
+EndGlobal
