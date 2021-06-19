@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace LightningPay.Core
+namespace LightningPay
 {
     public interface ILightningClient
     {

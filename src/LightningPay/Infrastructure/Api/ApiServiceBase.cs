@@ -5,7 +5,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace LightningPay.Core.Infrastructure.Api
+namespace LightningPay.Infrastructure.Api
 {
     public abstract class ApiServiceBase : IDisposable
     {

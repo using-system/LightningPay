@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace LightningPay.Core
+namespace LightningPay
 {
     public class LightMoney : IComparable, IComparable<LightMoney>, IEquatable<LightMoney>
     {

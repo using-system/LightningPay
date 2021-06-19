@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2E6DEFEE-1CB5-428E-B776-F2E59F9A6120}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Core", "..\src\LightningPay.Core\LightningPay.Core.csproj", "{D134223C-7041-45AD-BF6B-1384BF563777}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.Samples.WebAppMvc", "LightningPay.Samples.WebAppMvc\LightningPay.Samples.WebAppMvc.csproj", "{5D542FDA-3EB1-409B-AD9F-9345ADD3906A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.Samples.WebAppRazor", "LightningPay.Samples.WebAppRazor\LightningPay.Samples.WebAppRazor.csproj", "{00568831-716A-43C2-852B-FF4FB9B70D54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.DependencyInjection", "..\src\LightningPay.DependencyInjection\LightningPay.DependencyInjection.csproj", "{8CC8E6C0-A244-4949-8E19-B48469D960ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay", "..\src\LightningPay\LightningPay.csproj", "{3A886C1E-F93B-4E5B-9751-C59AAD647484}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D134223C-7041-45AD-BF6B-1384BF563777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D134223C-7041-45AD-BF6B-1384BF563777}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D134223C-7041-45AD-BF6B-1384BF563777}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D134223C-7041-45AD-BF6B-1384BF563777}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D542FDA-3EB1-409B-AD9F-9345ADD3906A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D542FDA-3EB1-409B-AD9F-9345ADD3906A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D542FDA-3EB1-409B-AD9F-9345ADD3906A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,13 +31,17 @@ Global
 		{8CC8E6C0-A244-4949-8E19-B48469D960ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CC8E6C0-A244-4949-8E19-B48469D960ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CC8E6C0-A244-4949-8E19-B48469D960ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A886C1E-F93B-4E5B-9751-C59AAD647484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A886C1E-F93B-4E5B-9751-C59AAD647484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A886C1E-F93B-4E5B-9751-C59AAD647484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A886C1E-F93B-4E5B-9751-C59AAD647484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D134223C-7041-45AD-BF6B-1384BF563777} = {2E6DEFEE-1CB5-428E-B776-F2E59F9A6120}
 		{8CC8E6C0-A244-4949-8E19-B48469D960ED} = {2E6DEFEE-1CB5-428E-B776-F2E59F9A6120}
+		{3A886C1E-F93B-4E5B-9751-C59AAD647484} = {2E6DEFEE-1CB5-428E-B776-F2E59F9A6120}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15666EF5-0508-4CCB-AC31-223B5AB519D2}

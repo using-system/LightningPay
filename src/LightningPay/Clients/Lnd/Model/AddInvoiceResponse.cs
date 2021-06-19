@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LightningPay.Core.Clients.Lnd
+namespace LightningPay.Clients.Lnd
 {
     public class AddInvoiceResponse
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightningPay.Core.Clients.Lnd
+namespace LightningPay.Clients.Lnd
 {
     public class LndOptions
     {

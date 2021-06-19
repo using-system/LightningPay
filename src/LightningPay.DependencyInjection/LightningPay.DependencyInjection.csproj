@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LightningPay.Core\LightningPay.Core.csproj" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LightningPay\LightningPay.csproj" />
   </ItemGroup>
 
 </Project>

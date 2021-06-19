@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightningPay.Core
+namespace LightningPay
 {
     public class LightningInvoice
     {

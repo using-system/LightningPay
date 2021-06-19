@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.Options;
 
-using LightningPay.Core.Infrastructure.Api;
+using LightningPay.Infrastructure.Api;
 
-namespace LightningPay.Core.Clients.Lnd
+namespace LightningPay.Clients.Lnd
 {
     public class LndClient : ApiServiceBase, ILightningClient
     {

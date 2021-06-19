@@ -1,4 +1,4 @@
-﻿namespace LightningPay.Core
+﻿namespace LightningPay
 {
     public enum LightningInvoiceStatus
     {
