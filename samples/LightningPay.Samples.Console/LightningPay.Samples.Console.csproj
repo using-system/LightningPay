@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\LightningPay.Core\LightningPay.Core.csproj" />
+    <ProjectReference Include="..\..\src\LightningPay\LightningPay.csproj" />
   </ItemGroup>
 
 </Project>
