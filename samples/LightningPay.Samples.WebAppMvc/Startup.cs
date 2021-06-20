@@ -21,6 +21,7 @@ namespace LightningPay.Samples.WebAppMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddLndLightningClient(new Uri("http://localhost:42802/"));
         }
 
