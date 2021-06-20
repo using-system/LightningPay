@@ -5,8 +5,32 @@ namespace LightningPay.Clients.Lnd
 {
     public static class Extensions
     {
+        public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
+            LightMoney amount,
+            TimeSpan expiry)
+        {
+            if(source == null)
+            {
+                return null;
+            }
+
+            return new LightningInvoice
+            {
+                Id = source.R_hash.ToBitString(),
+                Amount = amount,
+                BOLT11 = source.Payment_request,
+                Status = LightningInvoiceStatus.Unpaid,
+                ExpiresAt = DateTimeOffset.UtcNow + expiry
+            };
+        }
+
         public static LightningInvoice ToLightningInvoice(this LnrpcInvoice source)
         {
+            if(source == null)
+            {
+                return null;
+            }
+
             var invoice = new LightningInvoice
             {
                 Id =  source.R_hash.ToBitString(),

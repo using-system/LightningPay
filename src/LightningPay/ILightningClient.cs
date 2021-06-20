@@ -7,6 +7,6 @@ namespace LightningPay
     {
         Task<LightningInvoice> GetInvoice(string invoiceId);
 
-        Task<string> CreateInvoice(LightMoney money, string description, TimeSpan expiry);
+        Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry);
     }
 }
