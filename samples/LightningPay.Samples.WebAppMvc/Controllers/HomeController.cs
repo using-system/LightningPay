@@ -1,20 +1,22 @@
-﻿using LightningPay.Samples.WebAppMvc.Models;
+﻿using System.Diagnostics;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+
+using LightningPay.Samples.WebAppMvc.Models;
 
 namespace LightningPay.Samples.WebAppMvc.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILightningClient lightningClient;
+
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILightningClient lightningClient,
+            ILogger<HomeController> logger)
         {
+            this.lightningClient = lightningClient;
             _logger = logger;
         }
 

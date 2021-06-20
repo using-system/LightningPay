@@ -11,12 +11,9 @@ namespace LightningPay.Clients.Lnd
     {
         private string baseUri;
 
-        private readonly HttpClient client;
-
         public LndClient(HttpClient client,
             LndOptions options) : base(client)
         {
-            this.client = client;
             this.baseUri = options.BaseUri.ToString().TrimEnd('/');
         }
 

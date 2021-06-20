@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace LightningPay.Infrastructure.Api
 {
-    public abstract class ApiServiceBase : IDisposable
+    public abstract class ApiServiceBase
     {
         protected readonly HttpClient httpClient;
 
@@ -72,9 +72,5 @@ namespace LightningPay.Infrastructure.Api
 
         }
 
-        public virtual void Dispose()
-        {
-            this?.httpClient?.Dispose();
-        }
     }
 }
