@@ -17,13 +17,13 @@ namespace LightningPay.Clients.Lnd
             this.baseUri = options.BaseUri.ToString().TrimEnd('/');
         }
 
-        public async Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
+        public async Task<string> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
         {
             var strAmount = money.ToUnit(LightMoneyUnit.Satoshi).ToString(CultureInfo.InvariantCulture);
             var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
 
 
-            var request = new AddInvoiceRequest
+            var request = new LnrpcInvoice
             {
                 Value = strAmount,
                 Memo = description,
@@ -35,18 +35,16 @@ namespace LightningPay.Clients.Lnd
                 $"{baseUri}/v1/invoices",
                 request);
 
+            return response.R_hash.ToBitString();
+        }
 
-            var invoice = new LightningInvoice
-            {
-                Id = BitConverter.ToString(response.R_hash)
-                  .Replace("-", "")
-                  .ToLower(CultureInfo.InvariantCulture),
-                Amount = money,
-                Status = LightningInvoiceStatus.Unpaid,
-                ExpiresAt = DateTimeOffset.UtcNow + expiry
-            };
+        public async Task<LightningInvoice> GetInvoice(string invoiceId)
+        {
+            var hash = Uri.EscapeDataString(Convert.ToString(invoiceId, CultureInfo.InvariantCulture));
+            var response = await this.SendAsync<LnrpcInvoice>(HttpMethod.Get,
+                $"{baseUri}/v1/invoice/{hash}");
 
-            return invoice;
+            return response.ToLightningInvoice();
         }
     }
 }
