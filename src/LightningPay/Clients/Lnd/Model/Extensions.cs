@@ -7,6 +7,7 @@ namespace LightningPay.Clients.Lnd
     {
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
             LightMoney amount,
+            string memo,
             TimeSpan expiry)
         {
             if(source == null)
@@ -17,6 +18,7 @@ namespace LightningPay.Clients.Lnd
             return new LightningInvoice
             {
                 Id = source.R_hash.ToBitString(),
+                Memo = memo,
                 Amount = amount,
                 BOLT11 = source.Payment_request,
                 Status = LightningInvoiceStatus.Unpaid,
@@ -34,6 +36,7 @@ namespace LightningPay.Clients.Lnd
             var invoice = new LightningInvoice
             {
                 Id =  source.R_hash.ToBitString(),
+                Memo = source.Memo,
                 Amount = new LightMoney(Convert.ToInt64(source.Value, CultureInfo.InvariantCulture.NumberFormat), LightMoneyUnit.Satoshi), //new LightMoney(ConvertInv.ToInt64(resp.Value), LightMoneyUnit.Satoshi),
                 AmountReceived = string.IsNullOrWhiteSpace(source.AmountPaid) ? null : 
                     new LightMoney(Convert.ToInt64(source.AmountPaid, CultureInfo.InvariantCulture.NumberFormat), LightMoneyUnit.MilliSatoshi),

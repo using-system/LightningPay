@@ -35,7 +35,7 @@ namespace LightningPay.Clients.Lnd
                 $"{baseUri}/v1/invoices",
                 request);
 
-            return response.ToLightningInvoice(money, expiry);
+            return response.ToLightningInvoice(money, description, expiry);
         }
 
         public async Task<LightningInvoice> GetInvoice(string invoiceId)

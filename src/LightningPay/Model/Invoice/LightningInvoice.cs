@@ -6,6 +6,8 @@ namespace LightningPay
     {
         public string Id { get; set; }
 
+        public string Memo { get; set; }
+
         public LightningInvoiceStatus Status { get; set; }
 
         public string BOLT11 { get; set; }
