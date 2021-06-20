@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace LightningPay.Clients.Lnd
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
             LightMoney amount,

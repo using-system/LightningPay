@@ -2,7 +2,7 @@
 
 namespace LightningPay.Clients.Lnd
 {
-    public class AddInvoiceResponse
+    internal class AddInvoiceResponse
     {
         [JsonProperty("r_hash",
             Required = Required.Default, 

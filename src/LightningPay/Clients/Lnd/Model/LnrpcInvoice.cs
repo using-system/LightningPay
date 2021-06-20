@@ -2,7 +2,7 @@
 
 namespace LightningPay.Clients.Lnd
 {
-    public class LnrpcInvoice
+    internal class LnrpcInvoice
     {
         [JsonProperty("memo", 
             Required = Required.Default, 
