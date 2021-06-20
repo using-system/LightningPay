@@ -11,9 +11,13 @@ namespace LightningPay.Infrastructure.Api
     {
         protected readonly HttpClient httpClient;
 
-        public ApiServiceBase(HttpClient httpClient)
+        private readonly AuthenticationBase authentication;
+
+        public ApiServiceBase(HttpClient httpClient, 
+            AuthenticationBase authentication)
         {
             this.httpClient = httpClient;
+            this.authentication = authentication;
         }
 
         protected async Task<string> GetStringAsync(string url)
@@ -37,6 +41,7 @@ namespace LightningPay.Infrastructure.Api
             {
                 Content = content
             };
+            authentication.AddAuthentication(request);
 
             try
             {

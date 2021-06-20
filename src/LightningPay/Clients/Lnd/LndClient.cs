@@ -12,7 +12,7 @@ namespace LightningPay.Clients.Lnd
         private string baseUri;
 
         public LndClient(HttpClient client,
-            LndOptions options) : base(client)
+            LndOptions options) : base(client, BuildAuthentication(options))
         {
             this.baseUri = options.BaseUri.ToString().TrimEnd('/');
         }
@@ -45,6 +45,11 @@ namespace LightningPay.Clients.Lnd
                 $"{baseUri}/v1/invoice/{hash}");
 
             return response.ToLightningInvoice();
+        }
+
+        private static AuthenticationBase BuildAuthentication(LndOptions options)
+        {
+            return new NoAuthentication();
         }
     }
 }
