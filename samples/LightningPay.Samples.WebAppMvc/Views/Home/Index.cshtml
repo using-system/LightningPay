@@ -1,8 +1,37 @@
-﻿@{
+﻿@model LightningPay.Samples.WebAppMvc.Models.CreateInvoiceRequest
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Create Invoice</h1>
+    <form asp-controller="home" asp-action="createinvoice" method="post">
+        <table border="0" cellpadding="2" cellspacing="2">
+            <tr>
+                <td>Amount (sat)</td>
+                <td>
+                    <input asp-for="Amount" />
+                </td>
+                <td>
+                    <span asp-validation-for="Amount"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>
+                    <input asp-for="Description"  />
+                </td>
+                <td>
+                    <span asp-validation-for="Description"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Create" />
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>

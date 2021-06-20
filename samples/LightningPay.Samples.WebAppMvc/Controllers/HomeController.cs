@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,9 +27,21 @@ namespace LightningPay.Samples.WebAppMvc.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Route("createinvoice")]
+        [HttpPost]
+        public async Task<IActionResult> CreateInvoice(CreateInvoiceRequest request)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                await this.lightningClient.CreateInvoice(LightMoney.Satoshis(request.Amount),
+                    request.Description,
+                    TimeSpan.FromMinutes(5));
+
+                return View(nameof(Index));
+            }
+
+            return View(nameof(Index));
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

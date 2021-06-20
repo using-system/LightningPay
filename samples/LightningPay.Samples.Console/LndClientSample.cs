@@ -18,7 +18,7 @@ namespace LightningPay.Samples.Console
                     BaseUri = new Uri("http://localhost:42802/")
                 });
 
-                var invoice = await lndClient.CreateInvoice(LightMoney.MilliSatoshis(1000), "Test", TimeSpan.FromMinutes(5));
+                var invoice = await lndClient.CreateInvoice(LightMoney.Satoshis(1), "Test", TimeSpan.FromMinutes(5));
 
                 System.Console.WriteLine(invoice.Id);
             }
