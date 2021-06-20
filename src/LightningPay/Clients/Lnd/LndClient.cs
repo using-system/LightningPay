@@ -49,6 +49,11 @@ namespace LightningPay.Clients.Lnd
 
         private static AuthenticationBase BuildAuthentication(LndOptions options)
         {
+            if(options.Macaroon != null)
+            {
+                return new MacaroonAuthentication(options.Macaroon);
+            }
+
             return new NoAuthentication();
         }
     }
