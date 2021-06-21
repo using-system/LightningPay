@@ -1,84 +1,54 @@
-﻿using Newtonsoft.Json;
+﻿using LightningPay.Tools;
 
 namespace LightningPay.Clients.Lnd
 {
     internal class LnrpcInvoice
     {
-        [JsonProperty("memo", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("memo")]
         public string Memo { get; set; }
 
-        [JsonProperty("receipt", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("receipt")]
         public byte[] Receipt { get; set; }
 
-        [JsonProperty("r_preimage", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("r_preimage")]
         public byte[] R_preimage { get; set; }
 
-        [JsonProperty("r_hash", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("r_hash")]
         public byte[] R_hash { get; set; }
 
-        [JsonProperty("value", 
-            Required = Required.Default, 
-            NullValueHandling =NullValueHandling.Ignore)]
+        [Json("value")]
         public string Value { get; set; }
 
-        [JsonProperty("amt_paid_msat", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("amt_paid_msat")]
         public string AmountPaid { get; set; }
 
-        [JsonProperty("settled", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("settled")]
         public bool? Settled { get; set; }
 
-        [JsonProperty("creation_date", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("creation_date")]
         public string Creation_date { get; set; }
 
-        [JsonProperty("settle_date", 
-            Required =Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("settle_date")]
         public string Settle_date { get; set; }
 
-        [JsonProperty("payment_request", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("payment_request")]
         public string Payment_request { get; set; }
 
-        [JsonProperty("description_hash", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("description_hash")]
         public byte[] Description_hash { get; set; }
 
-        [JsonProperty("expiry", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("expiry")]
         public string Expiry { get; set; }
 
 
-        [JsonProperty("fallback_addr", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("fallback_addr")]
         public string Fallback_addr { get; set; }
 
 
-        [JsonProperty("cltv_expiry", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("cltv_expiry")]
         public string Cltv_expiry { get; set; }
 
-        [JsonProperty("private", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("private")]
         public bool? Private { get; set; }
 
     }

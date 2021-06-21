@@ -1,17 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using LightningPay.Tools;
 
 namespace LightningPay.Clients.Lnd
 {
     internal class AddInvoiceResponse
     {
-        [JsonProperty("r_hash",
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("r_hash")]
         public byte[] R_hash { get; set; }
 
-        [JsonProperty("payment_request", 
-            Required = Required.Default, 
-            NullValueHandling = NullValueHandling.Ignore)]
+        [Json("payment_request")]
         public string Payment_request { get; set; }
     }
 }

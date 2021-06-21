@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 
-using Newtonsoft.Json;
+using LightningPay.Tools;
 
 namespace LightningPay.Infrastructure.Api
 {
@@ -34,7 +34,7 @@ namespace LightningPay.Infrastructure.Api
 
             if (body != null)
             {
-                content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+                content = new StringContent(Json.Serialize(body), Encoding.UTF8, "application/json");
             }
 
             var request = new HttpRequestMessage(method, url)
@@ -53,7 +53,11 @@ namespace LightningPay.Infrastructure.Api
 
                     if (!string.IsNullOrEmpty(json))
                     {
-                        var responseObject = JsonConvert.DeserializeObject<TResponse>(json);
+                        var responseObject = Json.Deserialize<TResponse>(json, new JsonOptions() 
+                        {
+                            SerializationOptions = JsonSerializationOptions.ByteArrayAsBase64
+                        }
+                        );
 
                         return responseObject;
                     }
