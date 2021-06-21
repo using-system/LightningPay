@@ -1,6 +1,6 @@
 variables:
-  projectPattern: 'src/**/*.csproj'
-  samplePattern: 'tests/**/*.csproj'
+  srcPattern: 'src/**/*.csproj'
+  samplesPattern: 'samples/**/*.csproj'
   testPattern: 'tests/**/*.csproj'
   buildConfiguration: 'Release'
 
@@ -10,17 +10,31 @@ trigger:
   paths:
     include: [ 'src', 'samples' ]
 
-steps:
+stages:
 
-- task: DotNetCoreCLI@2
-  displayName: 'Restore'
-  inputs:
-    command: restore
-    projects: '$(projectPattern)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    configuration: '$(buildConfiguration)'
-    projects: '$(projectPattern)'
+- stage : Build
+  jobs:
+  - job: Build
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore src packages'
+      inputs:
+        command: restore
+        projects: '$(srcPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore samples packages'
+      inputs:
+        command: restore
+        projects: '$(samplesPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build sources'
+      inputs:
+        command: build
+        configuration: '$(buildConfiguration)'
+        projects: '$(srcPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build samples'
+      inputs:
+        command: build
+        configuration: '$(buildConfiguration)'
+        projects: '$(samplesPattern)'
