@@ -1,0 +1,26 @@
+variables:
+  projectPattern: 'src/**/*.csproj'
+  samplePattern: 'tests/**/*.csproj'
+  testPattern: 'tests/**/*.csproj'
+  buildConfiguration: 'Release'
+
+trigger:
+  branches:
+    include: [ 'develop', 'master' ]
+  paths:
+    include: [ 'src', 'samples' ]
+
+steps:
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: restore
+    projects: '$(projectPattern)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    configuration: '$(buildConfiguration)'
+    projects: '$(projectPattern)'
