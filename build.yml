@@ -40,6 +40,15 @@ stages:
         command: build
         configuration: '$(buildConfiguration)'
         projects: '$(samplesPattern)'
+    - task: CopyFiles@2
+      displayName: 'Copy dll Artifact'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: |
+            **/LightningPay.dll
+            **/LightningPay.DependencyInjection.dll
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/dll'
+        OverWrite: true
     - task: DotNetCoreCLI@2
       displayName: 'Build nuget packages'
       inputs:
@@ -47,6 +56,8 @@ stages:
         configuration: '$(buildConfiguration)'
         packagesToPack: '$(srcPattern)'
         versioningScheme: 'byBuildNumber'
-        packDirectory: '$(Build.ArtifactStagingDirectory)'
-    - publish: '$(Build.ArtifactStagingDirectory)'
+        packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
+    - publish: '$(Build.ArtifactStagingDirectory)/nuget'
       artifact: 'nuget'
+    - publish: '$(Build.ArtifactStagingDirectory)/dll'
+      artifact: 'dll'
