@@ -1,3 +1,5 @@
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+
 variables:
   srcPattern: 'src/**/*.csproj'
   samplesPattern: 'samples/**/*.csproj'
