@@ -8,6 +8,9 @@
 	  <RepositoryUrl>https://github.com/using-system/LightningPay</RepositoryUrl>
 	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 	  <PackageTags>bitcoin;lightning;lnd;clightning;charge;eclair;lapps</PackageTags>
+	  <Authors>https://github.com/using-system</Authors>
+	  <PackageIcon>icon.png</PackageIcon>
+	  <PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +20,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LightningPay\LightningPay.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
