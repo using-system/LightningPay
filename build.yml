@@ -49,7 +49,7 @@ stages:
             **/LightningPay.DependencyInjection.dll
         targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
         overWrite: true
-        flattenFolders: false
+        flattenFolders: true
     - task: DotNetCoreCLI@2
       displayName: 'Build nuget packages'
       inputs:
