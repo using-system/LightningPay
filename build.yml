@@ -43,12 +43,13 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy dll Artifact'
       inputs:
-        SourceFolder: '$(Build.SourcesDirectory)'
-        Contents: |
+        sourceFolder: '$(Build.SourcesDirectory)/src'
+        contents: |
             **/LightningPay.dll
             **/LightningPay.DependencyInjection.dll
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/dll'
-        OverWrite: true
+        targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
+        overWrite: true
+        flattenFolders: false
     - task: DotNetCoreCLI@2
       displayName: 'Build nuget packages'
       inputs:
