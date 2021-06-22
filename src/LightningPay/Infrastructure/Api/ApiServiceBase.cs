@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
@@ -68,15 +69,19 @@ namespace LightningPay.Infrastructure.Api
                 }
                 else
                 {
-                    var json = await response.Content.ReadAsStringAsync();
+                    var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new ApiException("Internal error", json);
+                    throw new ApiException($"Http error with status code {response.StatusCode} and response data {errorContent}",
+                        response.StatusCode,
+                        responseData: errorContent);
                 }
 
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                throw new ApiException("Internal Error", "-1");
+                throw new ApiException($"Internal Error on request the url : {url} : {exc.Message}", 
+                    HttpStatusCode.InternalServerError, 
+                    innerException: exc);
             }
 
         }

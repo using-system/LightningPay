@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Net;
 
 namespace LightningPay
 {
     public class ApiException : Exception
     {
-        public string Code { get; set; }
+        public HttpStatusCode Code { get; set; }
+
+        public string ResponseData { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DryBikeDomainException"/> class.
@@ -25,10 +28,14 @@ namespace LightningPay
         /// Initializes a new instance of the <see cref="DryBikeDomainException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public ApiException(string message, string code)
-            : base(message)
+        public ApiException(string message, 
+            HttpStatusCode code,
+            string responseData = null,
+            Exception innerException = null)
+            : base(message, innerException)
         {
             this.Code = code;
+            this.ResponseData = responseData;
         }
 
         /// <summary>
