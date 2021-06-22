@@ -38,3 +38,13 @@ stages:
         command: build
         configuration: '$(buildConfiguration)'
         projects: '$(samplesPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build nuget packages'
+      inputs:
+        command: pack
+        configuration: '$(buildConfiguration)'
+        packagesToPack: '$(srcPattern)'
+        versioningScheme: 'byBuildNumber'
+        packDirectory: '$(Build.ArtifactStagingDirectory)'
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'nuget'
