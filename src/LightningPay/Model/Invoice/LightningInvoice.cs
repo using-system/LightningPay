@@ -19,5 +19,13 @@ namespace LightningPay
         public LightMoney Amount { get; set; }
         
         public LightMoney AmountReceived { get; set; }
+
+        public string Uri
+        {
+            get
+            {
+                return $"lightning:{BOLT11}";
+            }
+        }
     }
 }

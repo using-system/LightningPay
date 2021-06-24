@@ -22,8 +22,9 @@ namespace LightningPay.Samples.Console
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");
+                System.Console.WriteLine($"Invoice Uri : {invoice.Uri}");
 
-                while(true)
+                while (true)
                 {
                     System.Console.WriteLine("Waiting for invoice payment....");
                     await Task.Delay(5000);
