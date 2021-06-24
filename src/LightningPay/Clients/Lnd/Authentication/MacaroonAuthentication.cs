@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 using LightningPay.Infrastructure.Api;
 
@@ -13,9 +14,12 @@ namespace LightningPay.Clients.Lnd
             this.macaroon = macaroon;
         }
 
-        public override void AddAuthentication(HttpRequestMessage request)
+        public override Task AddAuthentication(HttpClient client, 
+            HttpRequestMessage request)
         {
             request.Headers.Add("Grpc-Metadata-macaroon", this.macaroon.ToBitString());
+
+            return Task.CompletedTask;
         }
     }
 }

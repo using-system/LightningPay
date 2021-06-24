@@ -42,7 +42,7 @@ namespace LightningPay.Infrastructure.Api
             {
                 Content = content
             };
-            authentication.AddAuthentication(request);
+            await authentication.AddAuthentication(this.httpClient, request);
 
             try
             {
@@ -71,7 +71,7 @@ namespace LightningPay.Infrastructure.Api
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new ApiException($"Http error with status code {response.StatusCode} and response data {errorContent}",
+                    throw new ApiException($"Http error with status code {response.StatusCode} and response {errorContent}",
                         response.StatusCode,
                         responseData: errorContent);
                 }

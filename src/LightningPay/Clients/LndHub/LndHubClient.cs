@@ -8,10 +8,13 @@ namespace LightningPay.Clients.LndHub
 {
     public class LndHubClient : ApiServiceBase, ILightningClient
     {
+        private string baseUri;
+
         public LndHubClient(HttpClient client, 
             LndHubOptions options) : base(client,
             BuildAuthentication(options))
         {
+            this.baseUri = options.BaseUri.ToBaseUrl();
         }
 
 
@@ -27,7 +30,13 @@ namespace LightningPay.Clients.LndHub
 
         private static AuthenticationBase BuildAuthentication(LndHubOptions options)
         {
-            return new NoAuthentication();
+            if(string.IsNullOrEmpty(options.Login)
+                || string.IsNullOrEmpty(options.Password))
+            {
+                throw new ArgumentException("Login and Password are mandatory for lndhub authentication");
+            }
+
+            return new LndHubAuthentication(options);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace LightningPay.Clients.Lnd
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
-            this.baseUri = options.BaseUri.ToString().TrimEnd('/');
+            this.baseUri = options.BaseUri.ToBaseUrl();
         }
 
         public async Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
