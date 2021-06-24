@@ -16,10 +16,10 @@ namespace LightningPay.Clients.LndHub
 
             return new LightningInvoice
             {
-                Id = source.R_hash.ToBitString(),
+                Id = source.R_hash.Data.ToBitString(),
                 Memo = memo,
                 Amount = amount,
-                BOLT11 = source.Payment_request,
+                BOLT11 = source.PaymentRequest,
                 Status = LightningInvoiceStatus.Unpaid,
                 ExpiresAt = DateTimeOffset.UtcNow + expiry
             };
