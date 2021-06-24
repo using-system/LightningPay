@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -18,9 +19,24 @@ namespace LightningPay.Clients.LndHub
         }
 
 
-        public Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
+        public async Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
         {
-            return null;
+            var strAmount = money.ToUnit(LightMoneyUnit.Satoshi).ToString(CultureInfo.InvariantCulture);
+            var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
+
+
+            var request = new AddInvoiceRequest
+            {
+                Amount = strAmount,
+                Memo = description,
+                Expiry = strExpiry
+            };
+
+            var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
+                $"{baseUri}/addinvoice",
+                request);
+
+            return response.ToLightningInvoice(money, description, expiry);
         }
 
         public Task<LightningInvoice> GetInvoice(string invoiceId)

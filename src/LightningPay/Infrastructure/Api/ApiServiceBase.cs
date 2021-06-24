@@ -77,6 +77,10 @@ namespace LightningPay.Infrastructure.Api
                 }
 
             }
+            catch(ApiException)
+            {
+                throw;
+            }
             catch (Exception exc)
             {
                 throw new ApiException($"Internal Error on request the url : {url} : {exc.Message}", 

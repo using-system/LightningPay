@@ -22,16 +22,23 @@ namespace LightningPay.Clients.LndHub
         {
             try
             {
-                var response = await client.PostAsync($"{this.options.BaseUri.ToBaseUrl()}/token",
-                    new StringContent(Json.Serialize(new
+                var response = await client.PostAsync($"{this.options.BaseUri.ToBaseUrl()}/auth?type=auth",
+                    new StringContent(Json.Serialize(new GetTokenRequest()
                     {
-                        login = options.Login,
-                        password = options.Password
+                        Login = options.Login,
+                        Password = options.Password
                     }), Encoding.UTF8, "application/json"));
 
                 if(response.IsSuccessStatusCode)
                 {
                     var tokenResponse = Json.Deserialize<GetTokenResponse>(await response.Content.ReadAsStringAsync());
+                    if(string.IsNullOrEmpty(tokenResponse.AccessToken))
+                    {
+                        throw new ApiException(
+                            $"Bad Autentication to the lndhub : {this.options.BaseUri}",
+                            HttpStatusCode.Unauthorized);
+                    }
+
                     request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
                 }
                 else
@@ -42,6 +49,10 @@ namespace LightningPay.Clients.LndHub
                         $"Bad Autentication to the lndhub : {this.options.BaseUri} with error status code {response.StatusCode} and response {errorContent}",
                         HttpStatusCode.Unauthorized);
                 }
+            }
+            catch(ApiException)
+            {
+                throw;
             }
             catch(Exception exc)
             {

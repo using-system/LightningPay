@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace LightningPay.Clients.Lnd
 {
-    internal static class Extensions
+    internal static class ModelExtensions
     {
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
             LightMoney amount,
@@ -61,13 +61,6 @@ namespace LightningPay.Clients.Lnd
                 }
             }
             return invoice;
-        }
-
-        public  static string ToBitString(this byte[] source)
-        {
-            return BitConverter.ToString(source)
-                .Replace("-", "")
-                .ToLower(CultureInfo.InvariantCulture);
         }
     }
 }

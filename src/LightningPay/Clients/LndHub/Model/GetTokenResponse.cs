@@ -2,7 +2,7 @@
 
 namespace LightningPay.Clients.LndHub
 {
-    public class GetTokenResponse
+    internal class GetTokenResponse
     {
         [Json("access_token")]
         public string AccessToken { get; set; }
