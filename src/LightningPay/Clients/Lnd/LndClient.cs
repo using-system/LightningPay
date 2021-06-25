@@ -17,9 +17,9 @@ namespace LightningPay.Clients.Lnd
             this.baseUri = options.BaseUri.ToBaseUrl();
         }
 
-        public async Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry)
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry)
         {
-            var strAmount = money.ToUnit(LightMoneyUnit.Satoshi).ToString(CultureInfo.InvariantCulture);
+            var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
             var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
 
 
@@ -35,7 +35,7 @@ namespace LightningPay.Clients.Lnd
                 $"{baseUri}/v1/invoices",
                 request);
 
-            return response.ToLightningInvoice(money, description, expiry);
+            return response.ToLightningInvoice(satoshis, description, expiry);
         }
 
         public async Task<bool> CheckPayment(string invoiceId)

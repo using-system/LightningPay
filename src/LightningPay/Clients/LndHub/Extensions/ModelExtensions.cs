@@ -5,7 +5,7 @@ namespace LightningPay.Clients.LndHub
     internal static class ModelExtensions
     {
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
-          LightMoney amount,
+          long amount,
           string memo,
           TimeSpan expiry)
         {

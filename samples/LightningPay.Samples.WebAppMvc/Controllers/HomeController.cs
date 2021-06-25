@@ -27,29 +27,22 @@ namespace LightningPay.Samples.WebAppMvc.Controllers
             return View();
         }
 
-        [HttpGet("pay/{invoiceId}")]
-        public async Task<IActionResult> Pay(string invoiceId)
-        {
-            var invoice = await this.lightningClient.GetInvoice(invoiceId);
-            return View(new InvoiceModel()
-            {
-                Id = invoice.Id,
-                Description = invoice.Memo,
-                PayementRequest = invoice.BOLT11
-            });
-        }
-
-        [Route("createinvoice")]
+        [Route("pay")]
         [HttpPost]
-        public async Task<IActionResult> CreateInvoice(CreateInvoiceRequest request)
+        public async Task<IActionResult> Pay(CreateInvoiceRequest request)
         {
             if(ModelState.IsValid)
             {
-                var invoice = await this.lightningClient.CreateInvoice(LightMoney.Satoshis(request.Amount),
+                var invoice = await this.lightningClient.CreateInvoice(request.Amount,
                     request.Description,
                     TimeSpan.FromMinutes(5));
 
-                return RedirectToAction(actionName: nameof(Pay), routeValues: new { invoiceId = invoice.Id });
+                return View("Invoice", new InvoiceModel()
+                {
+                    Id = invoice.Id,
+                    Description = invoice.Memo,
+                    PayementRequest = invoice.BOLT11
+                });
             }
 
             return View(nameof(Index));

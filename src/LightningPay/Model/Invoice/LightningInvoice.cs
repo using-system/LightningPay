@@ -14,7 +14,7 @@ namespace LightningPay
 
         public DateTimeOffset ExpiresAt { get; set; }
         
-        public LightMoney Amount { get; set; }
+        public long Amount { get; set; }
 
         public string Uri
         {

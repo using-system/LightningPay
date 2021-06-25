@@ -5,7 +5,7 @@ namespace LightningPay
 {
     public interface ILightningClient
     {
-        Task<LightningInvoice> CreateInvoice(LightMoney money, string description, TimeSpan expiry);
+        Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry);
 
         Task<bool> CheckPayment(string invoiceId);
     }
