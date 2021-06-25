@@ -47,11 +47,6 @@ namespace LightningPay.Clients.LndHub
             return response.Paid;
         }
 
-        public Task<LightningInvoice> GetInvoice(string invoiceId)
-        {
-            throw new NotImplementedException();
-        }
-
         private static AuthenticationBase BuildAuthentication(LndHubOptions options)
         {
             if(string.IsNullOrEmpty(options.Login)

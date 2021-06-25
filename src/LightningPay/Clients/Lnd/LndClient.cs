@@ -38,20 +38,20 @@ namespace LightningPay.Clients.Lnd
             return response.ToLightningInvoice(money, description, expiry);
         }
 
-        public async Task<LightningInvoice> GetInvoice(string invoiceId)
+        public async Task<bool> CheckPayment(string invoiceId)
+        {
+            var invoice = await this.GetInvoice(invoiceId);
+
+            return invoice.Status == LightningInvoiceStatus.Paid;
+        }
+
+        private async Task<LightningInvoice> GetInvoice(string invoiceId)
         {
             var hash = Uri.EscapeDataString(Convert.ToString(invoiceId, CultureInfo.InvariantCulture));
             var response = await this.SendAsync<LnrpcInvoice>(HttpMethod.Get,
                 $"{baseUri}/v1/invoice/{hash}");
 
             return response.ToLightningInvoice();
-        }
-
-        public async Task<bool> CheckPayment(string invoiceId)
-        {
-            var invoice = await this.GetInvoice(invoiceId);
-
-            return invoice.Status == LightningInvoiceStatus.Paid;
         }
 
         private static AuthenticationBase BuildAuthentication(LndOptions options)

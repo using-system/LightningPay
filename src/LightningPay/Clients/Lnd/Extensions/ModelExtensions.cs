@@ -38,8 +38,6 @@ namespace LightningPay.Clients.Lnd
                 Id =  source.R_hash.ToBitString(),
                 Memo = source.Memo,
                 Amount = new LightMoney(Convert.ToInt64(source.Value, CultureInfo.InvariantCulture.NumberFormat), LightMoneyUnit.Satoshi), //new LightMoney(ConvertInv.ToInt64(resp.Value), LightMoneyUnit.Satoshi),
-                AmountReceived = string.IsNullOrWhiteSpace(source.AmountPaid) ? null : 
-                    new LightMoney(Convert.ToInt64(source.AmountPaid, CultureInfo.InvariantCulture.NumberFormat), LightMoneyUnit.MilliSatoshi),
                 BOLT11 = source.Payment_request,
                 Status = LightningInvoiceStatus.Unpaid
             };
@@ -49,8 +47,6 @@ namespace LightningPay.Clients.Lnd
             
             if (source.Settled == true)
             {
-                invoice.PaidAt = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(source.Settle_date, CultureInfo.InvariantCulture.NumberFormat));
-
                 invoice.Status = LightningInvoiceStatus.Paid;
             }
             else
