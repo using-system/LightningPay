@@ -29,10 +29,9 @@ namespace LightningPay.Samples.Console
                     System.Console.WriteLine("Waiting for invoice payment....");
                     await Task.Delay(5000);
 
-                    invoice = await lndClient.GetInvoice(invoice.Id);
+                    bool isPaid = await lndClient.CheckPayment(invoice.Id);
 
-                    if(invoice.Status == LightningInvoiceStatus.Paid
-                        || invoice.Status == LightningInvoiceStatus.Expired)
+                    if(isPaid)
                     {
                         break;
                     }

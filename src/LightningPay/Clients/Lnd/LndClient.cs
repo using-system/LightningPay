@@ -47,6 +47,13 @@ namespace LightningPay.Clients.Lnd
             return response.ToLightningInvoice();
         }
 
+        public async Task<bool> CheckPayment(string invoiceId)
+        {
+            var invoice = await this.GetInvoice(invoiceId);
+
+            return invoice.Status == LightningInvoiceStatus.Paid;
+        }
+
         private static AuthenticationBase BuildAuthentication(LndOptions options)
         {
             if(options.Macaroon != null)

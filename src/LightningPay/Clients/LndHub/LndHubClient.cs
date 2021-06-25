@@ -39,6 +39,14 @@ namespace LightningPay.Clients.LndHub
             return response.ToLightningInvoice(money, description, expiry);
         }
 
+        public async Task<bool> CheckPayment(string invoiceId)
+        {
+            var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
+                $"{baseUri}/checkpayment/{invoiceId}");
+
+            return response.Paid;
+        }
+
         public Task<LightningInvoice> GetInvoice(string invoiceId)
         {
             throw new NotImplementedException();
