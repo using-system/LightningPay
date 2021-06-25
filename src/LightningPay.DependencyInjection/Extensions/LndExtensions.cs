@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 
@@ -73,29 +71,8 @@ namespace LightningPay
                 Macaroon = macaroon
             });
 
-            services.AddHttpClient<LndClient>().ConfigurePrimaryHttpMessageHandler(serviceProvider =>
-            {
-                var handler = new HttpClientHandler();
-
-                if (allowInsecure)
-                {
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-                }
-                else if (certificateThumbprint != null)
-                {
-                    var expectedThumbprint = certificateThumbprint.ToArray();
-
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
-                    {
-                        var actualCert = chain.ChainElements[chain.ChainElements.Count - 1].Certificate;
-                        var hash = GetHash(actualCert);
-                        return hash.SequenceEqual(expectedThumbprint);
-                    };
-
-                }
-
-                return handler;
-            });
+            services.AddHttpClient<LndClient>()
+                .ConfigureHttpHandler<LndClient>(allowInsecure, certificateThumbprint);
 
             return services;
         }
