@@ -2,7 +2,7 @@
 
 ## Introduction
 
-LND Client is shipped with LightningPay package (NET Standard 2.0 library).
+LND Client is shipped with `LightningPay` package (NET Standard 2.0 library).
 
 ## Create the client
 
@@ -50,7 +50,30 @@ namespace Samples
 }
 ```
 
-### Configuration
+### Sample
+
+You can retrieve a code sample with LND Client here : [LND Client Sample](/samples/LightningPay.Samples.Console/LndClientSample.cs)
+
+## Dependency Injection
+
+LightningPay.DependencyInjection package adds extension method to create the LND Client with .NET Core Dependency Injection in your startup file : 
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+	///...
+
+	byte[] yourMacaroon = null;
+	services.AddLndLightningClient(new Uri("http://localhost:42802/"),
+		macaroon: yourMacaroon);
+}
+
+
+```
+
+
+
+### Options
 
 You can configure the LND client with the `LndOptions` class : 
 
@@ -59,6 +82,3 @@ You can configure the LND client with the `LndOptions` class :
 | Address       | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
 | Macaroon      | `byte[]` | Authentication assertion                                     |
 
-### Sample
-
-You can retrieve a code sample with LND Client here : [LND Client Sample](/samples/LightningPay.Samples.Console/LndClientSample.cs)
