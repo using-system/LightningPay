@@ -10,14 +10,9 @@ namespace LightningPay.Samples.Console
     {
         public async override Task Execute()
         {
-            using (HttpClient httpClient = new HttpClient())
+            using (var lndHubClient = 
+                LndHubClient.New("https://lndhub.herokuapp.com/", "2073282b83fad2955b57", "a1c4f8c30a93bf3e8cbf"))
             {
-                var lndHubClient = new LndHubClient(httpClient, new LndHubOptions()
-                {
-                    Address = new Uri("https://lndhub.herokuapp.com/"),
-                    Login = "2073282b83fad2955b57",
-                    Password = "a1c4f8c30a93bf3e8cbf"
-                });
 
                 var invoice = await lndHubClient.CreateInvoice(100, "Test", TimeSpan.FromMinutes(5));
 
