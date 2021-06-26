@@ -11,13 +11,8 @@ namespace LightningPay.Samples.Console
     {
         public async override Task Execute()
         {
-            using(HttpClient httpClient = new HttpClient())
+            using (var lndClient = LndClient.New("http://localhost:42802/"))
             {
-                var lndClient = new LndClient(httpClient, new LndOptions()
-                {
-                    BaseUri = new Uri("http://localhost:42802/")
-                });
-
                 var invoice = await lndClient.CreateInvoice(1, "Test", TimeSpan.FromMinutes(5));
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
@@ -31,7 +26,7 @@ namespace LightningPay.Samples.Console
 
                     bool isPaid = await lndClient.CheckPayment(invoice.Id);
 
-                    if(isPaid)
+                    if (isPaid)
                     {
                         break;
                     }

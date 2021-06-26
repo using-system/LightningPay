@@ -1,9 +1,8 @@
-﻿using System;
+﻿using LightningPay.Infrastructure.Api;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-
-using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Clients.Lnd
 {
@@ -66,11 +65,25 @@ namespace LightningPay.Clients.Lnd
             return new NoAuthentication();
         }
 
-        public static LndClient New(LndOptions options)
+        public static LndClient New(string address, 
+            byte[] macaroon = null,
+            HttpClient httpClient = null)
         {
-            LndClient client = new LndClient(new HttpClient(), options);
+            bool clientInternalBuilt = false;
 
-            client.clientInternalBuilt = true;
+            if(httpClient == null)
+            {
+                httpClient = new HttpClient();
+                clientInternalBuilt = true;
+            }
+
+            LndClient client = new LndClient(httpClient, new LndOptions()
+            {
+                BaseUri = new Uri(address),
+                Macaroon = macaroon
+            });
+
+            client.clientInternalBuilt = clientInternalBuilt;
 
             return client;
         }
