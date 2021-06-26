@@ -3,7 +3,7 @@
 
 Lightning Network Payment  library NET Standard 2.0
 
-Features (more supported ) : 
+Features : 
 
 - Create an invoice
 - Check invoice payment
