@@ -80,5 +80,5 @@ The AddLndLightningClient method has optionnal pamameters to configure your clie
 | Address               | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
 | macaroon              | `byte[]` | Authentication assertion                                     |
 | macaroonFilePath      | `string` | Path of your macaroon file (macaroon parameter will be ignored) |
-| certificateThumbprint | `byte[]` | Certificate used for your https address if the certificate is not public () |
-| allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (default : false) |
+| certificateThumbprint | `byte[]` | Certificate used for your https address if the certificate is not public |
+| allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |

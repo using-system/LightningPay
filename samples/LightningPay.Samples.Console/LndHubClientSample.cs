@@ -20,17 +20,10 @@ namespace LightningPay.Samples.Console
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");
                 System.Console.WriteLine($"Invoice Uri : {invoice.Uri}");
 
-                while (true)
+                while (!await lndHubClient.CheckPayment(invoice.Id))
                 {
                     System.Console.WriteLine("Waiting for invoice payment....");
                     await Task.Delay(5000);
-
-                    bool isPaid = await lndHubClient.CheckPayment(invoice.Id);
-
-                    if (isPaid)
-                    {
-                        break;
-                    }
                 }
             }
         }
