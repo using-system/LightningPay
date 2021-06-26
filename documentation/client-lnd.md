@@ -56,7 +56,7 @@ You can retrieve a code sample with LND Client here : [LND Client Sample](/sampl
 
 ## Dependency Injection
 
-LightningPay.DependencyInjection package adds extension method to create the LND Client with .NET Core Dependency Injection in your startup file : 
+`LightningPay.DependencyInjection` package adds extension method to create the LND Client with .NET Core Dependency Injection in your startup file : 
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
@@ -71,14 +71,14 @@ public void ConfigureServices(IServiceCollection services)
 
 ```
 
-
-
 ### Options
 
-You can configure the LND client with the `LndOptions` class : 
+The AddLndLightningClient method has optionnal pamameters to configure your client : 
 
-| Property name | Type     | Description                                                  |
-| ------------- | -------- | ------------------------------------------------------------ |
-| Address       | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
-| Macaroon      | `byte[]` | Authentication assertion                                     |
-
+| Property name         | Type     | Description                                                  |
+| --------------------- | -------- | ------------------------------------------------------------ |
+| Address               | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
+| macaroon              | `byte[]` | Authentication assertion                                     |
+| macaroonFilePath      | `string` | Path of your macaroon file (macaroon parameter will be ignored) |
+| certificateThumbprint | `byte[]` | Certificate used for your https address if the certificate is not public () |
+| allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (default : false) |

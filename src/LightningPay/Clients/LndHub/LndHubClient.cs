@@ -60,11 +60,27 @@ namespace LightningPay.Clients.LndHub
             return new LndHubAuthentication(options);
         }
 
-        public static LndHubClient New(LndHubOptions options)
+        public static LndHubClient New(string address,
+           string login,
+           string password,
+           HttpClient httpClient = null)
         {
-            LndHubClient client = new LndHubClient(new HttpClient(), options);
+            bool clientInternalBuilt = false;
 
-            client.clientInternalBuilt = true;
+            if (httpClient == null)
+            {
+                httpClient = new HttpClient();
+                clientInternalBuilt = true;
+            }
+
+            LndHubClient client = new LndHubClient(httpClient, new LndHubOptions()
+            {
+                Address = new Uri(address),
+                Login = login,
+                Password = password
+            });
+
+            client.clientInternalBuilt = clientInternalBuilt;
 
             return client;
         }

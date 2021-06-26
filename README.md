@@ -1,5 +1,5 @@
 # LightningPay
-Bitcoin Lightning Network Payment  library (.NET Standard 2.0)
+Bitcoin Lightning Network Payment .NET library (.NET Standard 2.0)
 
 ## Features
 
@@ -7,6 +7,11 @@ Bitcoin Lightning Network Payment  library (.NET Standard 2.0)
 - Check invoice payment
 
 More features will be supported in futures versions (payment, send money...). 
+
+## Packages
+
+- `LightningPay` : Core library with 0 dependency
+- `LightningPay.DependencyInjection` : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
 
 ## Integration
 
@@ -21,11 +26,6 @@ Or with custodial solution for lightning (without having a node  of your own) :
 
 - [x] LNDHub
 - [ ] LNbits  (Not supported yet)
-
-## Packages
-
-- `LightningPay` : Core library with 0 dependency
-- `LightningPay.DependencyInjection` : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
 
 ## Samples
 
