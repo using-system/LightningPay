@@ -1,9 +1,7 @@
 # LightningPay
-## Introduction
+Bitcoin Lightning Network Payment  library (.NET Standard 2.0)
 
-Lightning Network Payment  library NET Standard 2.0
-
-Features : 
+## Features
 
 - Create an invoice
 - Check invoice payment
