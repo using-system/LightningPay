@@ -14,7 +14,7 @@ More features will be supported in futures versions (payment, send money...).
 
 Connect to your lightning nodes : 
 
-- [x] LND
+- [x] LND ([Documentation](documentation/client-lnd.md))
 - [ ] C-Lightning  (Not supported yet)
 - [ ] Eclair  (Not supported yet)
 - [ ] Charge (Not supported yet)
