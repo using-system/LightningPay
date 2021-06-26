@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace LightningPay
 {
-    public interface ILightningClient
+    public interface ILightningClient : IDisposable
     {
         Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry);
 

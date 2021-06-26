@@ -11,6 +11,8 @@ namespace LightningPay.Clients.Lnd
     {
         private string baseUri;
 
+        private bool clientInternalBuilt = false;
+
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
@@ -62,6 +64,23 @@ namespace LightningPay.Clients.Lnd
             }
 
             return new NoAuthentication();
+        }
+
+        public static LndClient New(LndOptions options)
+        {
+            LndClient client = new LndClient(new HttpClient(), options);
+
+            client.clientInternalBuilt = true;
+
+            return client;
+        }
+
+        public void Dispose()
+        {
+            if(this.clientInternalBuilt)
+            {
+                this.httpClient?.Dispose();
+            }
         }
     }
 }

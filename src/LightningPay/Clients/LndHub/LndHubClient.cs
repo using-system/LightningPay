@@ -9,7 +9,9 @@ namespace LightningPay.Clients.LndHub
 {
     public class LndHubClient : ApiServiceBase, ILightningClient
     {
-        private string baseUri;
+        private readonly string baseUri;
+
+        private bool clientInternalBuilt = false;
 
         public LndHubClient(HttpClient client, 
             LndHubOptions options) : base(client,
@@ -56,6 +58,23 @@ namespace LightningPay.Clients.LndHub
             }
 
             return new LndHubAuthentication(options);
+        }
+
+        public static LndHubClient New(LndHubOptions options)
+        {
+            LndHubClient client = new LndHubClient(new HttpClient(), options);
+
+            client.clientInternalBuilt = true;
+
+            return client;
+        }
+
+        public void Dispose()
+        {
+            if (this.clientInternalBuilt)
+            {
+                this.httpClient?.Dispose();
+            }
         }
     }
 }
