@@ -29,6 +29,14 @@ Or with custodial solution for lightning (without having a node  of your own) :
 - `LightningPay` : Core library with 0 dependency
 - `LightningPay.DependencyInjection` : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
 
+## Samples
+
+Need for code samples ? Go here : [Lightning samples](samples/)
+
+## Documentation
+
+[Lightning Documentation](documentation/)
+
 ## Contributing
 
 We appreciate new contributions.
