@@ -15,7 +15,7 @@ namespace LightningPay.Clients.Lnd
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
-            this.baseUri = options.BaseUri.ToBaseUrl();
+            this.baseUri = options.Address.ToBaseUrl();
         }
 
         public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry)
@@ -79,7 +79,7 @@ namespace LightningPay.Clients.Lnd
 
             LndClient client = new LndClient(httpClient, new LndOptions()
             {
-                BaseUri = new Uri(address),
+                Address = new Uri(address),
                 Macaroon = macaroon
             });
 

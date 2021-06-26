@@ -14,7 +14,7 @@ namespace LightningPay.Samples.Console
             {
                 var lndHubClient = new LndHubClient(httpClient, new LndHubOptions()
                 {
-                    BaseUri = new Uri("https://lndhub.herokuapp.com/"),
+                    Address = new Uri("https://lndhub.herokuapp.com/"),
                     Login = "2073282b83fad2955b57",
                     Password = "a1c4f8c30a93bf3e8cbf"
                 });

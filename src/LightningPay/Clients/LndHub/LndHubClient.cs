@@ -17,7 +17,7 @@ namespace LightningPay.Clients.LndHub
             LndHubOptions options) : base(client,
             BuildAuthentication(options))
         {
-            this.baseUri = options.BaseUri.ToBaseUrl();
+            this.baseUri = options.Address.ToBaseUrl();
         }
 
 

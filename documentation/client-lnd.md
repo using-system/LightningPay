@@ -28,11 +28,7 @@ namespace Samples
 }
 ```
 
-
-
 If you wants to use your own HttpClient to request the Lnd API, you can send it with the parameter "httpClient" of the method New() : 
-
-
 
 ```c#
 using System.Net.Http;
@@ -60,7 +56,7 @@ You can configure the LND client with the `LndOptions` class :
 
 | Property name | Type     | Description                                                  |
 | ------------- | -------- | ------------------------------------------------------------ |
-| BaseUri       | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
+| Address       | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
 | Macaroon      | `byte[]` | Authentication assertion                                     |
 
 ### Sample
