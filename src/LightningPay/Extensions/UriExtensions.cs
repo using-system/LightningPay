@@ -6,7 +6,7 @@ namespace LightningPay
     {
         internal static string ToBaseUrl(this Uri source)
         {
-            return source.ToString().TrimEnd('/');
+            return source?.ToString().TrimEnd('/');
         }
     }
 }

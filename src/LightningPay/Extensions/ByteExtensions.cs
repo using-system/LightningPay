@@ -7,6 +7,11 @@ namespace LightningPay
     {
         public static string ToBitString(this byte[] source)
         {
+            if(source == null)
+            {
+                return null;
+            }
+
             return BitConverter.ToString(source)
                 .Replace("-", "")
                 .ToLower(CultureInfo.InvariantCulture);

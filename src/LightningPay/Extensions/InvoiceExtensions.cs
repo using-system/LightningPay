@@ -7,7 +7,7 @@ namespace LightningPay
     {
         internal static string ToExpiryString(this CreateInvoiceOptions source)
         {
-            TimeSpan expiry = TimeSpan.FromDays(1);
+            TimeSpan expiry = Constants.INVOICE_DEFAULT_EXPIRY;
 
             if(source?.Expiry.HasValue == true)
             {
@@ -22,7 +22,7 @@ namespace LightningPay
             if (source == null
                 || !source.Expiry.HasValue)
             {
-                return DateTimeOffset.UtcNow + TimeSpan.FromDays(1);
+                return DateTimeOffset.UtcNow + Constants.INVOICE_DEFAULT_EXPIRY;
             }
 
             return DateTimeOffset.UtcNow + source.Expiry.Value;
