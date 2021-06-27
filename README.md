@@ -26,7 +26,7 @@ Connect to your lightning nodes :
 
 Or with custodial solution for lightning (without having a node  of your own) : 
 
-- [x] LNDHub
+- [x] LNDHub  ([Documentation](documentation/client-lndhub.md))
 - [ ] LNbits  (Not supported yet)
 
 ## Samples
