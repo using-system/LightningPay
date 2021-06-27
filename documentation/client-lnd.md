@@ -9,44 +9,21 @@ LND Client is shipped with `LightningPay` package (NET Standard 2.0 library).
 ### Instantiate
 
 ```c#
-using LightningPay.Clients.Lnd;
-
-namespace Samples
+byte[] macaroon = null; // Enter here your macaroon
+using (var client = LndClient.New("http://localhost:42802/", macaroon))
 {
-    class LndClientSample
-    {
-        public void CreateClient()
-        {
-            byte[] macaroon = null; // Enter here your macaroon
-            using (var client = LndClient.New("http://localhost:42802/", macaroon))
-            {
-
-            }
-        }
-    }
-
+	//Your code...
 }
 ```
 
 If you wants to use your own HttpClient to request the Lnd API, you can send it with the parameter "httpClient" of the method New() : 
 
 ```c#
-using System.Net.Http;
-
-using LightningPay.Clients.Lnd;
-
-namespace Samples
+using (HttpClient httpClient = new HttpClient())
 {
-    class LndClientSample
-    {
-        public void CreateClient()
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
-            }
-        }
-    }
+	var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+    
+	//Your code...
 }
 ```
 
@@ -82,3 +59,7 @@ The AddLndLightningClient method has optionnal pamameters to configure your clie
 | macaroonFilePath      | `string` | Path of your macaroon file (macaroon parameter will be ignored) |
 | certificateThumbprint | `byte[]` | Certificate used for your https address if the certificate is not public |
 | allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
+
+### Sample
+
+You can retrieve a code samples used Dependency Injection in the Visual Studio Solution [`WebApp.sln`](/samples)
