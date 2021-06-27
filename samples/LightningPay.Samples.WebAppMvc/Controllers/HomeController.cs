@@ -33,9 +33,7 @@ namespace LightningPay.Samples.WebAppMvc.Controllers
         {
             if(ModelState.IsValid)
             {
-                var invoice = await this.lightningClient.CreateInvoice(request.Amount,
-                    request.Description,
-                    TimeSpan.FromMinutes(5));
+                var invoice = await this.lightningClient.CreateInvoice(request.Amount, request.Description);
 
                 return View("Invoice", new InvoiceModel()
                 {

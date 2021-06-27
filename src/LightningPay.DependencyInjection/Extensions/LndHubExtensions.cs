@@ -9,12 +9,12 @@ namespace LightningPay
     public static class LndHubExtensions
     {
         public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
-            Uri server,
+            Uri address,
             string login,
             string password)
         {
             return AddLndHubLightningClient(services,
-                server,
+                address,
                 login,
                 password,
                 allowInsecure: false,
@@ -22,7 +22,7 @@ namespace LightningPay
         }
 
         public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
-            Uri server,
+            Uri address,
             string login,
             string password,
             bool allowInsecure = false,
@@ -32,7 +32,7 @@ namespace LightningPay
 
             services.AddSingleton(new LndHubOptions()
             {
-                BaseUri = server,
+                Address = address,
                 Login = login,
                 Password = password
             });

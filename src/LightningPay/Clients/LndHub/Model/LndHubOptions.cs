@@ -4,7 +4,7 @@ namespace LightningPay.Clients.LndHub
 {
     public class LndHubOptions
     {
-        public Uri BaseUri { get; set; }
+        public Uri Address { get; set; }
 
         public string Login { get; set; }
 

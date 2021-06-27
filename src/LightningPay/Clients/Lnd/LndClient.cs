@@ -1,9 +1,8 @@
-﻿using System;
+﻿using LightningPay.Infrastructure.Api;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-
-using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Clients.Lnd
 {
@@ -11,16 +10,20 @@ namespace LightningPay.Clients.Lnd
     {
         private string baseUri;
 
+        private bool clientInternalBuilt = false;
+
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
-            this.baseUri = options.BaseUri.ToBaseUrl();
+            this.baseUri = options.Address.ToBaseUrl();
         }
 
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry)
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, 
+            string description, 
+            CreateInvoiceOptions options = null)
         {
             var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
-            var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
+            var strExpiry = options.ToExpiryString();
 
 
             var request = new LnrpcInvoice
@@ -35,7 +38,7 @@ namespace LightningPay.Clients.Lnd
                 $"{baseUri}/v1/invoices",
                 request);
 
-            return response.ToLightningInvoice(satoshis, description, expiry);
+            return response.ToLightningInvoice(satoshis, description, options);
         }
 
         public async Task<bool> CheckPayment(string invoiceId)
@@ -62,6 +65,37 @@ namespace LightningPay.Clients.Lnd
             }
 
             return new NoAuthentication();
+        }
+
+        public static LndClient New(string address, 
+            byte[] macaroon = null,
+            HttpClient httpClient = null)
+        {
+            bool clientInternalBuilt = false;
+
+            if(httpClient == null)
+            {
+                httpClient = new HttpClient();
+                clientInternalBuilt = true;
+            }
+
+            LndClient client = new LndClient(httpClient, new LndOptions()
+            {
+                Address = new Uri(address),
+                Macaroon = macaroon
+            });
+
+            client.clientInternalBuilt = clientInternalBuilt;
+
+            return client;
+        }
+
+        public void Dispose()
+        {
+            if(this.clientInternalBuilt)
+            {
+                this.httpClient?.Dispose();
+            }
         }
     }
 }

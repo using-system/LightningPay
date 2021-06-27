@@ -9,20 +9,24 @@ namespace LightningPay.Clients.LndHub
 {
     public class LndHubClient : ApiServiceBase, ILightningClient
     {
-        private string baseUri;
+        private readonly string baseUri;
+
+        private bool clientInternalBuilt = false;
 
         public LndHubClient(HttpClient client, 
             LndHubOptions options) : base(client,
             BuildAuthentication(options))
         {
-            this.baseUri = options.BaseUri.ToBaseUrl();
+            this.baseUri = options.Address.ToBaseUrl();
         }
 
 
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry)
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, 
+            string description, 
+            CreateInvoiceOptions options = null)
         {
             var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
-            var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
+            var strExpiry = options.ToExpiryString();
 
 
             var request = new AddInvoiceRequest
@@ -36,7 +40,7 @@ namespace LightningPay.Clients.LndHub
                 $"{baseUri}/addinvoice",
                 request);
 
-            return response.ToLightningInvoice(satoshis, description, expiry);
+            return response.ToLightningInvoice(satoshis, description, options);
         }
 
         public async Task<bool> CheckPayment(string invoiceId)
@@ -56,6 +60,39 @@ namespace LightningPay.Clients.LndHub
             }
 
             return new LndHubAuthentication(options);
+        }
+
+        public static LndHubClient New(string address,
+           string login,
+           string password,
+           HttpClient httpClient = null)
+        {
+            bool clientInternalBuilt = false;
+
+            if (httpClient == null)
+            {
+                httpClient = new HttpClient();
+                clientInternalBuilt = true;
+            }
+
+            LndHubClient client = new LndHubClient(httpClient, new LndHubOptions()
+            {
+                Address = new Uri(address),
+                Login = login,
+                Password = password
+            });
+
+            client.clientInternalBuilt = clientInternalBuilt;
+
+            return client;
+        }
+
+        public void Dispose()
+        {
+            if (this.clientInternalBuilt)
+            {
+                this.httpClient?.Dispose();
+            }
         }
     }
 }

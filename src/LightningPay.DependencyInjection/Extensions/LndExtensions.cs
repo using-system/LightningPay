@@ -13,52 +13,52 @@ namespace LightningPay
     public static class LndExtensions
     {
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri server)
+            Uri address)
         {
-            return AddLndLightningClient(services, 
-                server, 
+            return AddLndLightningClient(services,
+                address, 
                 macaroon: null,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri server,
+            Uri address,
             byte[] macaroon)
         {
-            return AddLndLightningClient(services, 
-                server, 
+            return AddLndLightningClient(services,
+                address, 
                 macaroon, 
                 allowInsecure: false, 
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-           Uri server,
+           Uri address,
            string macaroonFilePath)
         {
-            return AddLndLightningClient(services, 
-                server, 
+            return AddLndLightningClient(services,
+                address, 
                 File.ReadAllBytes(macaroonFilePath), 
                 allowInsecure: false, 
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri server,
+            Uri address,
             string macaroonFilePath,
             bool allowInsecure = false,
             byte[] certificateThumbprint = null)
         {
-            return AddLndLightningClient(services, 
-                server, 
+            return AddLndLightningClient(services,
+                address, 
                 File.ReadAllBytes(macaroonFilePath), 
                 allowInsecure, 
                 certificateThumbprint);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri server,
+            Uri address,
             byte[] macaroon = null,
             bool allowInsecure = false,
             byte[] certificateThumbprint = null)
@@ -67,7 +67,7 @@ namespace LightningPay
 
             services.AddSingleton(new LndOptions()
             {
-                BaseUri = server,
+                Address = address,
                 Macaroon = macaroon
             });
 

@@ -22,7 +22,7 @@ namespace LightningPay.Clients.LndHub
         {
             try
             {
-                var response = await client.PostAsync($"{this.options.BaseUri.ToBaseUrl()}/auth?type=auth",
+                var response = await client.PostAsync($"{this.options.Address.ToBaseUrl()}/auth?type=auth",
                     new StringContent(Json.Serialize(new GetTokenRequest()
                     {
                         Login = options.Login,
@@ -35,7 +35,7 @@ namespace LightningPay.Clients.LndHub
                     if(string.IsNullOrEmpty(tokenResponse.AccessToken))
                     {
                         throw new ApiException(
-                            $"Bad Autentication to the lndhub : {this.options.BaseUri}",
+                            $"Bad Autentication to the lndhub : {this.options.Address}",
                             HttpStatusCode.Unauthorized);
                     }
 
@@ -46,7 +46,7 @@ namespace LightningPay.Clients.LndHub
                     var errorContent = await response.Content.ReadAsStringAsync();
 
                     throw new ApiException(
-                        $"Bad Autentication to the lndhub : {this.options.BaseUri} with error status code {response.StatusCode} and response {errorContent}",
+                        $"Bad Autentication to the lndhub : {this.options.Address} with error status code {response.StatusCode} and response {errorContent}",
                         HttpStatusCode.Unauthorized);
                 }
             }
