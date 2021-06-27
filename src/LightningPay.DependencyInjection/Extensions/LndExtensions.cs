@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -75,14 +73,6 @@ namespace LightningPay
                 .ConfigureHttpHandler<LndClient>(allowInsecure, certificateThumbprint);
 
             return services;
-        }
-
-        private static byte[] GetHash(X509Certificate2 cert)
-        {
-            using (HashAlgorithm alg = SHA256.Create())
-            {
-                return alg.ComputeHash(cert.RawData);
-            }
         }
     }
 }
