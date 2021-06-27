@@ -60,6 +60,19 @@ The AddLndLightningClient method has optionnal pamameters to configure your clie
 | certificateThumbprint | `byte[]` | Certificate used for your https address if the certificate is not public |
 | allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
 
+### Use to the LightningPay Client
+
+Once you register `LightningPay`, you can use the [client](/documentation/client.md) in any object by dependency injection in constructor : 
+
+```c#
+private readonly ILightningClient lightningClient;
+
+public HomeController(ILightningClient lightningClient)
+{
+        this.lightningClient = lightningClient;
+}
+```
+
 ### Sample
 
 You can retrieve a code samples used Dependency Injection in the Visual Studio Solution [`WebApp.sln`](/samples)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using LightningPay.Clients.LndHub;
 
@@ -13,7 +12,7 @@ namespace LightningPay.Samples.Console
                 LndHubClient.New("https://lndhub.herokuapp.com/", "2073282b83fad2955b57", "a1c4f8c30a93bf3e8cbf"))
             {
 
-                var invoice = await lndHubClient.CreateInvoice(100, "Test");
+                var invoice = await lndHubClient.CreateInvoice(100, "My First invoice");
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");

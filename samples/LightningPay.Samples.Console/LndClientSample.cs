@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using LightningPay.Clients.Lnd;
 
@@ -11,7 +10,7 @@ namespace LightningPay.Samples.Console
         {
             using (var lndClient = LndClient.New("http://localhost:42802/"))
             {
-                var invoice = await lndClient.CreateInvoice(1, "Test");
+                var invoice = await lndClient.CreateInvoice(100 , "My First invoice");
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");

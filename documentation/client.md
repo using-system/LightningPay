@@ -7,13 +7,34 @@ Every clients of the `LightningPay` package implements the interface [`ILightnin
 ```c#
 public interface ILightningClient : IDisposable
 {
-	Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry);
+	Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
 
 	Task<bool> CheckPayment(string invoiceId);
 }
 ```
 
 ## Create an invoice
+
+### Standard use
+
+To create an invoice, call the method `CreateInvoice` with the 2 parameters required : satoshis and the description will be appear on the invoice : 
+
+```c#
+var invoice = await lndClient.CreateInvoice(100, "My First Invoice");
+```
+
+### Optional parameters
+
+You can add optional parameters with the CreateInvoiceOptions object : 
+
+| Property | Type      | Description                                                  |
+| -------- | --------- | ------------------------------------------------------------ |
+| Expiry   | TimeSpan? | Duration before which the invoice will expire (Default value : 1 Day) |
+
+```c#
+var invoice = await lndClient.CreateInvoice(100 , "My First invoice", 
+         new CreateInvoiceOptions(TimeSpan.FromHours(2)));
+```
 
 
 
@@ -24,7 +45,7 @@ Once the invoice is created, you can check the payment of the invoice simply by 
 You can retrieve the invoice identifier with the `LightningInvoice` object returned by the `CreateInvoice` method : 
 
 ```c#
-var invoice = await lndClient.CreateInvoice(1, "Test", TimeSpan.FromMinutes(5));
+var invoice = await lndClient.CreateInvoice(100, "My First Invoice", TimeSpan.FromMinutes(5));
 
 while (! await lndClient.CheckPayment(invoice.Id))
 {
