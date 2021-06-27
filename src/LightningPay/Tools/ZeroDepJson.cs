@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,13 @@ using System.Xml.Serialization;
 #pragma warning disable CA1031 // Do not catch general exception types
 #pragma warning disable CA1034 // Nested types should not be visible
 
+
 namespace LightningPay.Tools
 {
     /// <summary>
     /// A utility class to serialize and deserialize JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal static class Json
     {
         private const string _null = "null";
