@@ -44,8 +44,16 @@ stages:
       displayName: 'Run unit tests'
       inputs:
         command: test
-        configuration: '$(buildConfiguration)'
+        arguments: >
+            --configuration $(buildConfiguration) 
+            /p:CollectCoverage=true 
+            /p:CoverletOutputFormat=opencover%2ccobertura
         projects: '$(testPattern)'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Build.SourcesDirectory)/**/*cobertura.xml'
     - task: CopyFiles@2
       displayName: 'Copy dll Artifact'
       inputs:
