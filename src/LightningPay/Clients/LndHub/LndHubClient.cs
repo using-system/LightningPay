@@ -21,10 +21,12 @@ namespace LightningPay.Clients.LndHub
         }
 
 
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry)
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, 
+            string description, 
+            CreateInvoiceOptions options = null)
         {
             var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
-            var strExpiry = Math.Round(expiry.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture);
+            var strExpiry = options.ToExpiryString();
 
 
             var request = new AddInvoiceRequest
@@ -38,7 +40,7 @@ namespace LightningPay.Clients.LndHub
                 $"{baseUri}/addinvoice",
                 request);
 
-            return response.ToLightningInvoice(satoshis, description, expiry);
+            return response.ToLightningInvoice(satoshis, description, options);
         }
 
         public async Task<bool> CheckPayment(string invoiceId)

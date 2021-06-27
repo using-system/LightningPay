@@ -11,7 +11,7 @@ namespace LightningPay.Samples.Console
         {
             using (var lndClient = LndClient.New("http://localhost:42802/"))
             {
-                var invoice = await lndClient.CreateInvoice(1, "Test", TimeSpan.FromMinutes(5));
+                var invoice = await lndClient.CreateInvoice(1, "Test");
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");

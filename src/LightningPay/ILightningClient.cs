@@ -5,7 +5,7 @@ namespace LightningPay
 {
     public interface ILightningClient : IDisposable
     {
-        Task<LightningInvoice> CreateInvoice(long satoshis, string description, TimeSpan expiry);
+        Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
 
         Task<bool> CheckPayment(string invoiceId);
     }

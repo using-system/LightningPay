@@ -7,7 +7,7 @@ namespace LightningPay.Clients.LndHub
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
           long amount,
           string memo,
-          TimeSpan expiry)
+          CreateInvoiceOptions options)
         {
             if (source == null)
             {
@@ -21,7 +21,7 @@ namespace LightningPay.Clients.LndHub
                 Amount = amount,
                 BOLT11 = source.PaymentRequest,
                 Status = LightningInvoiceStatus.Unpaid,
-                ExpiresAt = DateTimeOffset.UtcNow + expiry
+                ExpiresAt = options.ToExpiryDate()
             };
         }
     }
