@@ -17,7 +17,10 @@ namespace LightningPay.Clients.Lnd
         public override Task AddAuthentication(HttpClient client, 
             HttpRequestMessage request)
         {
-            request.Headers.Add("Grpc-Metadata-macaroon", this.macaroon.ToBitString());
+            if(this.macaroon != null)
+            {
+                request.Headers.Add("Grpc-Metadata-macaroon", this.macaroon.ToBitString());
+            }            
 
             return Task.CompletedTask;
         }
