@@ -8,14 +8,14 @@ namespace LightningPay.Clients.Lnd
 {
     public class LndClient : ApiServiceBase, ILightningClient
     {
-        public string Address { get; private set; }
+        private readonly string address;
 
         private bool clientInternalBuilt = false;
 
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
-            this.Address = options.Address.ToBaseUrl();
+            this.address = options.Address.ToBaseUrl();
         }
 
         public async Task<LightningInvoice> CreateInvoice(long satoshis, 
@@ -35,7 +35,7 @@ namespace LightningPay.Clients.Lnd
             };
 
             var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{Address}/v1/invoices",
+                $"{address}/v1/invoices",
                 request);
 
             if(string.IsNullOrEmpty(response.Payment_request)
@@ -59,7 +59,7 @@ namespace LightningPay.Clients.Lnd
         {
             var hash = Uri.EscapeDataString(Convert.ToString(invoiceId, CultureInfo.InvariantCulture));
             var response = await this.SendAsync<LnrpcInvoice>(HttpMethod.Get,
-                $"{Address}/v1/invoice/{hash}");
+                $"{address}/v1/invoice/{hash}");
 
             return response.ToLightningInvoice();
         }
