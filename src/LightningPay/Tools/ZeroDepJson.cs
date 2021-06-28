@@ -4676,6 +4676,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Define options for JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class JsonOptions
     {
         private readonly List<Exception> _exceptions = new List<Exception>();
@@ -4958,6 +4959,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Provides data for a JSON event.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class JsonEventArgs : EventArgs
     {
         /// <summary>
@@ -5054,6 +5056,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Provides options for JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class JsonAttribute : Attribute
     {
