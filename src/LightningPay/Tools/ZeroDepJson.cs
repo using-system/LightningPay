@@ -24,6 +24,9 @@ using System.Xml.Serialization;
 #pragma warning disable CA1034 // Nested types should not be visible
 
 
+/// <summary>
+/// Source forked with the original project https://github.com/smourier/ZeroDepJson
+/// </summary>
 namespace LightningPay.Tools
 {
     /// <summary>
