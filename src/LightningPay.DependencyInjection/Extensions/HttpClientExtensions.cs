@@ -9,11 +9,10 @@ namespace LightningPay
 {
     internal static class HttpClientExtensions
     {
-        internal static IHttpClientBuilder ConfigureHttpHandler<LightningClient>(this IHttpClientBuilder builder,
+        internal static IHttpClientBuilder ConfigureHttpHandler(this IHttpClientBuilder builder,
             bool allowInsecure = false,
-            byte[] certificateThumbprint = null) where LightningClient : ILightningClient
-        {
-            
+            byte[] certificateThumbprint = null) 
+        {            
             builder.ConfigurePrimaryHttpMessageHandler(serviceProvider =>
             {
                 var handler = new HttpClientHandler();

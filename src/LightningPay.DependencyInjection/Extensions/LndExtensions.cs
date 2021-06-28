@@ -69,8 +69,8 @@ namespace LightningPay
                 Macaroon = macaroon
             });
 
-            services.AddHttpClient<LndClient>()
-                .ConfigureHttpHandler<LndClient>(allowInsecure, certificateThumbprint);
+            services.AddHttpClient<ILightningClient, LndClient>()
+                .ConfigureHttpHandler(allowInsecure, certificateThumbprint);
 
             return services;
         }

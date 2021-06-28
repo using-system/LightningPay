@@ -37,8 +37,8 @@ namespace LightningPay
                 Password = password
             });
 
-            services.AddHttpClient<LndHubClient>()
-                .ConfigureHttpHandler<LndHubClient>(allowInsecure, certificateThumbprint);
+            services.AddHttpClient<ILightningClient, LndHubClient>()
+                .ConfigureHttpHandler(allowInsecure, certificateThumbprint);
 
             return services;
         }
