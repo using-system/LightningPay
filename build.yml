@@ -57,7 +57,7 @@ stages:
       displayName: 'Publish code coverage'
       inputs:
         codeCoverageTool: Cobertura
-        summaryFileLocation: '$(Build.SourcesDirectory)/**/*cobertura.xml'
+        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
     - task: CopyFiles@2
       displayName: 'Copy dll Artifact'
       inputs:
