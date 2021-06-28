@@ -28,10 +28,4 @@
     <ProjectReference Include="..\..\src\LightningPay.DependencyInjection\LightningPay.DependencyInjection.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Seed\TestCertificate.cer">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

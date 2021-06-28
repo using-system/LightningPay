@@ -4,8 +4,6 @@ using Xunit;
 using NSubstitute;
 
 using LightningPay.Clients.LndHub;
-using System.Net.Http;
-using System.IO;
 
 namespace LightningPay.DependencyInjection.Test
 {
@@ -31,45 +29,14 @@ namespace LightningPay.DependencyInjection.Test
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
             Assert.IsType<LndHubClient>(lightningClient);
-        }
 
-        [Fact]
-        public void AddLndHubLightningClient_Should_Add_LndHubClient_If_Allow_Insecure_Setted()
-        {
-            // Arrange
-            var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
+            var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
+            Assert.NotNull(httpHandler);
 
-            // Act
-            serviceCollection.AddLndHubLightningClient(new System.Uri("https://lndhub.herokuapp.com/"), 
-                "login",
-                "password",
-                allowInsecure: true);
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            // Assert
-            var lightningClient = serviceProvider.GetService<ILightningClient>();
-            Assert.NotNull(lightningClient);
-            Assert.IsType<LndHubClient>(lightningClient);
-        }
-
-        [Fact]
-        public void AddLndHubLightningClient_Should_AddLndHubClient_If_CertificateThumbprint_Setted()
-        {
-            // Arrange
-            var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
-
-            // Act
-            serviceCollection.AddLndHubLightningClient(new System.Uri("https://lndhub.herokuapp.com/"),
-                "login",
-                "password",
-                certificateThumbprint: File.ReadAllBytes((Path.Combine($"{Directory.GetCurrentDirectory()}/Seed/", "TestCertificate.cer"))));
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            // Assert
-            var lightningClient = serviceProvider.GetService<ILightningClient>();
-            Assert.NotNull(lightningClient);
-            Assert.IsType<LndHubClient>(lightningClient);
-
+            var httpHandlerOptions = serviceProvider.GetService<HttpClientHandlerOptions>();
+            Assert.NotNull(httpHandlerOptions);
+            Assert.False(httpHandlerOptions.AllowInsecure);
+            Assert.Null(httpHandlerOptions.CertificateThumbprint);
         }
     }
 }

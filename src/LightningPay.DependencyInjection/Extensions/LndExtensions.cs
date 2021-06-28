@@ -61,16 +61,22 @@ namespace LightningPay
             bool allowInsecure = false,
             byte[] certificateThumbprint = null)
         {
-            services.AddSingleton<ILightningClient, LndClient>();
-
             services.AddSingleton(new LndOptions()
             {
                 Address = address,
                 Macaroon = macaroon
             });
+            services.AddSingleton<ILightningClient, LndClient>();
 
+
+            services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
+            {
+                AllowInsecure = allowInsecure,
+                CertificateThumbprint = certificateThumbprint
+            });
+            services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
             services.AddHttpClient<ILightningClient, LndClient>()
-                .ConfigureHttpHandler(allowInsecure, certificateThumbprint);
+                .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;
         }
