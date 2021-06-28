@@ -5259,6 +5259,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// The exception that is thrown when a JSON error occurs.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [Serializable]
     internal class JsonException : Exception
     {
