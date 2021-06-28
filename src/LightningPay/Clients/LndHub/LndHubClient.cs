@@ -40,6 +40,13 @@ namespace LightningPay.Clients.LndHub
                 $"{baseUri}/addinvoice",
                 request);
 
+            if (string.IsNullOrEmpty(response.PaymentRequest)
+                || response.R_hash == null)
+            {
+                throw new ApiException("Cannot retrieve Payment request or request hash in the LNDHub api response",
+                    System.Net.HttpStatusCode.BadRequest);
+            }
+
             return response.ToLightningInvoice(satoshis, description, options);
         }
 
@@ -51,7 +58,7 @@ namespace LightningPay.Clients.LndHub
             return response.Paid;
         }
 
-        private static AuthenticationBase BuildAuthentication(LndHubOptions options)
+        internal static AuthenticationBase BuildAuthentication(LndHubOptions options)
         {
             if(string.IsNullOrEmpty(options.Login)
                 || string.IsNullOrEmpty(options.Password))
