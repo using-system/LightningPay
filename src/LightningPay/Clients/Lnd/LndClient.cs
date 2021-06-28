@@ -1,8 +1,9 @@
-﻿using LightningPay.Infrastructure.Api;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Clients.Lnd
 {
