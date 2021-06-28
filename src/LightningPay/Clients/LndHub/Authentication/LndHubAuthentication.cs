@@ -12,6 +12,9 @@ namespace LightningPay.Clients.LndHub
     public class LndHubAuthentication : AuthenticationBase
     {
         private readonly LndHubOptions options;
+
+        private (string AccessToken, string RefreshToken, DateTimeOffset CreationDate) token;
+
         public LndHubAuthentication(LndHubOptions options)
         {
             this.options = options;
@@ -19,6 +22,22 @@ namespace LightningPay.Clients.LndHub
 
         public async override Task AddAuthentication(HttpClient client, 
             HttpRequestMessage request)
+        {
+            if (string.IsNullOrEmpty(token.AccessToken)
+                || DateTimeOffset.UtcNow - token.CreationDate >= TimeSpan.FromHours(7))
+            {
+                await RequestNewToken(client);
+            }
+            else if (DateTimeOffset.UtcNow - token.CreationDate >= TimeSpan.FromHours(2))
+            {
+                await RefreshToken(client);
+            }
+
+            request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
+
+        }
+
+        private async Task RequestNewToken(HttpClient client)
         {
             try
             {
@@ -29,17 +48,20 @@ namespace LightningPay.Clients.LndHub
                         Password = options.Password
                     }), Encoding.UTF8, "application/json"));
 
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     var tokenResponse = Json.Deserialize<GetTokenResponse>(await response.Content.ReadAsStringAsync());
-                    if(string.IsNullOrEmpty(tokenResponse.AccessToken))
+                    if (string.IsNullOrEmpty(tokenResponse.AccessToken)
+                        || string.IsNullOrEmpty(tokenResponse.RefreshToken))
                     {
                         throw new ApiException(
                             $"Bad Autentication to the lndhub : {this.options.Address}",
                             HttpStatusCode.Unauthorized);
                     }
 
-                    request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
+                    this.token.AccessToken = tokenResponse.AccessToken;
+                    this.token.RefreshToken = tokenResponse.RefreshToken;
+                    this.token.CreationDate = DateTimeOffset.UtcNow;
                 }
                 else
                 {
@@ -50,17 +72,62 @@ namespace LightningPay.Clients.LndHub
                         HttpStatusCode.Unauthorized);
                 }
             }
-            catch(ApiException)
+            catch (ApiException)
             {
                 throw;
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 throw new ApiException($"Bad Autentication",
                    HttpStatusCode.Unauthorized,
                    innerException: exc);
             }
+        }
 
+        private async Task RefreshToken(HttpClient client)
+        {
+            try
+            {
+                var response = await client.PostAsync($"{this.options.Address.ToBaseUrl()}/auth?type=refresh_token",
+                    new StringContent(Json.Serialize(new RefreshTokenRequest()
+                    {
+                        ResfreshToken = this.token.RefreshToken
+                    }), Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var tokenResponse = Json.Deserialize<GetTokenResponse>(await response.Content.ReadAsStringAsync());
+                    if (string.IsNullOrEmpty(tokenResponse.AccessToken)
+                        || string.IsNullOrEmpty(tokenResponse.RefreshToken))
+                    {
+                        throw new ApiException(
+                            $"Cannot refresh token for {this.options.Address}",
+                            HttpStatusCode.Unauthorized);
+                    }
+
+                    this.token.AccessToken = tokenResponse.AccessToken;
+                    this.token.RefreshToken = tokenResponse.RefreshToken;
+                    this.token.CreationDate = DateTimeOffset.UtcNow;
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+
+                    throw new ApiException(
+                        $"Cannot refresh token to the lndhub : {this.options.Address} with error status code {response.StatusCode} and response {errorContent}",
+                        HttpStatusCode.Unauthorized);
+                }
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception exc)
+            {
+                throw new ApiException($"Cannot refresh token",
+                   HttpStatusCode.Unauthorized,
+                   innerException: exc);
+            }
         }
     }
 }
