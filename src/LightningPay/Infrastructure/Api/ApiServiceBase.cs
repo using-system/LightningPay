@@ -8,12 +8,18 @@ using LightningPay.Tools;
 
 namespace LightningPay.Infrastructure.Api
 {
+    /// <summary>
+    ///   Client api base class
+    /// </summary>
     public abstract class ApiServiceBase
     {
         protected readonly HttpClient httpClient;
 
         private readonly AuthenticationBase authentication;
 
+        /// <summary>Initializes a new instance of the <see cref="ApiServiceBase" /> class.</summary>
+        /// <param name="httpClient">The HTTP client.</param>
+        /// <param name="authentication">The authentication.</param>
         public ApiServiceBase(HttpClient httpClient, 
             AuthenticationBase authentication)
         {
@@ -21,11 +27,17 @@ namespace LightningPay.Infrastructure.Api
             this.authentication = authentication;
         }
 
-        protected async Task<string> GetStringAsync(string url)
-        {
-            return await this.httpClient.GetStringAsync(url);
-        }
-
+        /// <summary>Sends the asynchronous.</summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="method">The method.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="body">The body.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        /// <exception cref="LightningPay.ApiException">Http error with status code {response.StatusCode} and response {errorContent}
+        /// or
+        /// Internal Error on request the url : {url} : {exc.Message}</exception>
         protected async Task<TResponse> SendAsync<TResponse>(HttpMethod method,
            string url,
            object body = null)
