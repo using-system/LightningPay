@@ -12,8 +12,8 @@ More features will be supported in futures versions.
 
 ## Packages
 
-- `LightningPay` : Core library with zero dependency
-- `LightningPay.DependencyInjection` : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
+- `LightningPay` [![NuGet](https://img.shields.io/nuget/v/LightningPay.svg)](https://www.nuget.org/packages/LightningPay) : Core library with zero dependency
+- `LightningPay.DependencyInjection` [![NuGet](https://img.shields.io/nuget/v/LightningPay.DependencyInjection.svg)](https://www.nuget.org/packages/LightningPay.DependencyInjection) : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
 
 ## Integration
 
