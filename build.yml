@@ -86,7 +86,7 @@ stages:
   - Build
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   jobs:
-  - job: Publish nuget packages
+  - job: PublishNugetPackages
     steps:
     - download: current
       artifact: 'nuget'
@@ -97,7 +97,7 @@ stages:
         packagesToPack: '$(Pipeline.Workspace)/nuget/*.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'NugetOrg'
-  - job: Add github release
+  - job: AddGithubRelease
     steps:
     - download: current
       artifact: 'dll'
