@@ -26,7 +26,7 @@ namespace LightningPay
             string login,
             string password,
             bool allowInsecure = false,
-            byte[] certificateThumbprint = null)
+            string certificateThumbprint = null)
         {
             services.AddSingleton(new LndHubOptions()
             {
@@ -39,7 +39,7 @@ namespace LightningPay
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
                 AllowInsecure = allowInsecure,
-                CertificateThumbprint = certificateThumbprint
+                CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
             services.AddHttpClient<ILightningClient, LndHubClient>()

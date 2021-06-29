@@ -35,7 +35,7 @@ namespace LightningPay.DependencyInjection.Test
         }
 
         [Fact]
-        public void AddLndLightningClient_Without_Macaroon_Should_Add_LndClient_()
+        public void AddLndLightningClient_Without_Macaroon_Should_Add_LndClient()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();

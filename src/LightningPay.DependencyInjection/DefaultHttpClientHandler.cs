@@ -20,8 +20,7 @@ namespace LightningPay.DependencyInjection
                 this.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
                 {
                     var actualCert = chain.ChainElements[chain.ChainElements.Count - 1].Certificate;
-                    var hash = GetHash(actualCert);
-                    return hash.SequenceEqual(expectedThumbprint);
+                    return actualCert.Thumbprint.HexStringToByteArray().SequenceEqual(expectedThumbprint);
                 };
 
             }

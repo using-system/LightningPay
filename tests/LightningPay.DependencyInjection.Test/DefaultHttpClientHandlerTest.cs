@@ -31,7 +31,7 @@ namespace LightningPay.DependencyInjection.Test
             var certificate = GenerateSelfSignedCertificate();
             var httpHandler = new DefaultHttpClientHandler(new HttpClientHandlerOptions()
             {
-                CertificateThumbprint = Convert.FromHexString(certificate.Thumbprint)
+                CertificateThumbprint = certificate.Thumbprint.HexStringToByteArray()
             });
             var certChain = new X509Chain();
             certChain.Build(certificate);
@@ -41,8 +41,7 @@ namespace LightningPay.DependencyInjection.Test
                 httpHandler.ServerCertificateCustomValidationCallback(null, null, certChain, System.Net.Security.SslPolicyErrors.None);
 
             //Assert
-            //TODO:Fix this test
-            //Assert.True(actual);
+            Assert.True(actual);
         }
 
         private X509Certificate2 GenerateSelfSignedCertificate()

@@ -46,7 +46,7 @@ namespace LightningPay
             Uri address,
             string macaroonFilePath,
             bool allowInsecure = false,
-            byte[] certificateThumbprint = null)
+            string certificateThumbprint = null)
         {
             return AddLndLightningClient(services,
                 address, 
@@ -59,7 +59,7 @@ namespace LightningPay
             Uri address,
             byte[] macaroon = null,
             bool allowInsecure = false,
-            byte[] certificateThumbprint = null)
+            string certificateThumbprint = null)
         {
             services.AddSingleton(new LndOptions()
             {
@@ -72,7 +72,7 @@ namespace LightningPay
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
                 AllowInsecure = allowInsecure,
-                CertificateThumbprint = certificateThumbprint
+                CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
             services.AddHttpClient<ILightningClient, LndClient>()
