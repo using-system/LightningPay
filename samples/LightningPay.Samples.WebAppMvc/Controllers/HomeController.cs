@@ -39,7 +39,8 @@ namespace LightningPay.Samples.WebAppMvc.Controllers
                 {
                     Id = invoice.Id,
                     Description = invoice.Memo,
-                    PayementRequest = invoice.BOLT11
+                    PayementRequest = invoice.BOLT11,
+                    Uri = invoice.Uri
                 });
             }
 
