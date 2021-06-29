@@ -9,17 +9,25 @@ using LightningPay.Tools;
 
 namespace LightningPay.Clients.LndHub
 {
+    /// <summary>
+    ///   LNDHub authentication
+    /// </summary>
     public class LndHubAuthentication : AuthenticationBase
     {
         private readonly LndHubOptions options;
 
         private (string AccessToken, string RefreshToken, DateTimeOffset CreationDate) token;
 
+        /// <summary>Initializes a new instance of the <see cref="LndHubAuthentication" /> class.</summary>
+        /// <param name="options">The options.</param>
         public LndHubAuthentication(LndHubOptions options)
         {
             this.options = options;
         }
 
+        /// <summary>Adds the authentication.</summary>
+        /// <param name="client">The client.</param>
+        /// <param name="request">The request.</param>
         public async override Task AddAuthentication(HttpClient client, 
             HttpRequestMessage request)
         {
