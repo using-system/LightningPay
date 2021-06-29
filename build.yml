@@ -80,3 +80,30 @@ stages:
       artifact: 'nuget'
     - publish: '$(Build.ArtifactStagingDirectory)/dll'
       artifact: 'dll'
+
+- stage : Release
+  dependsOn:
+  - Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: Publish nuget packages
+    steps:
+    - download: current
+      artifact: 'nuget'
+    - task: DotNetCoreCLI@2
+      displayName: 'Push nuget packages'
+      inputs:
+        command: push
+        packagesToPack: '$(Pipeline.Workspace)/nuget/*.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'NugetOrg'
+  - job: Add github release
+    steps:
+    - download: current
+      artifact: 'dll'
+    - task: GithubRelease@0 
+      displayName: 'Add github release'
+      inputs:
+        gitHubConnection: using-system
+        packagesToPack: using-system/LightningPay
+        assets: $(Pipeline.Workspace)/nuget/*.dll
