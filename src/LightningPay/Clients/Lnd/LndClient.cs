@@ -1,21 +1,22 @@
-﻿using LightningPay.Infrastructure.Api;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Clients.Lnd
 {
     public class LndClient : ApiServiceBase, ILightningClient
     {
-        private string baseUri;
+        private readonly string address;
 
         private bool clientInternalBuilt = false;
 
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
-            this.baseUri = options.Address.ToBaseUrl();
+            this.address = options.Address.ToBaseUrl();
         }
 
         public async Task<LightningInvoice> CreateInvoice(long satoshis, 
@@ -35,8 +36,15 @@ namespace LightningPay.Clients.Lnd
             };
 
             var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{baseUri}/v1/invoices",
+                $"{address}/v1/invoices",
                 request);
+
+            if(string.IsNullOrEmpty(response.Payment_request)
+                || response.R_hash == null)
+            {
+                throw new ApiException("Cannot retrieve Payment request or request hash in the lnd api response", 
+                    System.Net.HttpStatusCode.BadRequest);
+            }
 
             return response.ToLightningInvoice(satoshis, description, options);
         }
@@ -52,12 +60,12 @@ namespace LightningPay.Clients.Lnd
         {
             var hash = Uri.EscapeDataString(Convert.ToString(invoiceId, CultureInfo.InvariantCulture));
             var response = await this.SendAsync<LnrpcInvoice>(HttpMethod.Get,
-                $"{baseUri}/v1/invoice/{hash}");
+                $"{address}/v1/invoice/{hash}");
 
             return response.ToLightningInvoice();
         }
 
-        private static AuthenticationBase BuildAuthentication(LndOptions options)
+        internal static AuthenticationBase BuildAuthentication(LndOptions options)
         {
             if(options.Macaroon != null)
             {
@@ -68,7 +76,8 @@ namespace LightningPay.Clients.Lnd
         }
 
         public static LndClient New(string address, 
-            byte[] macaroon = null,
+            string macaroonHexString = null,
+            byte[] macaroonBytes = null,
             HttpClient httpClient = null)
         {
             bool clientInternalBuilt = false;
@@ -82,7 +91,7 @@ namespace LightningPay.Clients.Lnd
             LndClient client = new LndClient(httpClient, new LndOptions()
             {
                 Address = new Uri(address),
-                Macaroon = macaroon
+                Macaroon = macaroonBytes?? macaroonHexString.HexStringToByteArray()
             });
 
             client.clientInternalBuilt = clientInternalBuilt;

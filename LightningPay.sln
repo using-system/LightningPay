@@ -17,6 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.DependencyInje
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay", "src\LightningPay\LightningPay.csproj", "{B43EE960-8107-426A-A51D-78653B242FC5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF5C9502-891A-443F-8A33-350B4920CC2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Test", "tests\LightningPay.Test\LightningPay.Test.csproj", "{6E06E522-961C-47D0-91D3-DB0C6CB90679}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.DependencyInjection.Test", "tests\LightningPay.DependencyInjection.Test\LightningPay.DependencyInjection.Test.csproj", "{520516C9-F314-4FF5-A86B-58C9DE5219C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +37,14 @@ Global
 		{B43EE960-8107-426A-A51D-78653B242FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B43EE960-8107-426A-A51D-78653B242FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B43EE960-8107-426A-A51D-78653B242FC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E06E522-961C-47D0-91D3-DB0C6CB90679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E06E522-961C-47D0-91D3-DB0C6CB90679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E06E522-961C-47D0-91D3-DB0C6CB90679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E06E522-961C-47D0-91D3-DB0C6CB90679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{520516C9-F314-4FF5-A86B-58C9DE5219C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{520516C9-F314-4FF5-A86B-58C9DE5219C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{520516C9-F314-4FF5-A86B-58C9DE5219C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{520516C9-F314-4FF5-A86B-58C9DE5219C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +52,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FD0937ED-B30D-4089-9C1E-BCEE7622D139} = {6DAEE4F1-42F8-41CE-B852-F6F64C3D1A3C}
 		{B43EE960-8107-426A-A51D-78653B242FC5} = {6DAEE4F1-42F8-41CE-B852-F6F64C3D1A3C}
+		{6E06E522-961C-47D0-91D3-DB0C6CB90679} = {AF5C9502-891A-443F-8A33-350B4920CC2C}
+		{520516C9-F314-4FF5-A86B-58C9DE5219C0} = {AF5C9502-891A-443F-8A33-350B4920CC2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65D566AD-39E7-4F67-97BC-B59B9299935B}

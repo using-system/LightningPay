@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,16 @@ using System.Xml.Serialization;
 #pragma warning disable CA1031 // Do not catch general exception types
 #pragma warning disable CA1034 // Nested types should not be visible
 
+
+/// <summary>
+/// Source forked with the original project https://github.com/smourier/ZeroDepJson
+/// </summary>
 namespace LightningPay.Tools
 {
     /// <summary>
     /// A utility class to serialize and deserialize JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal static class Json
     {
         private const string _null = "null";
@@ -4670,6 +4676,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Define options for JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class JsonOptions
     {
         private readonly List<Exception> _exceptions = new List<Exception>();
@@ -4952,6 +4959,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Provides data for a JSON event.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class JsonEventArgs : EventArgs
     {
         /// <summary>
@@ -5048,6 +5056,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// Provides options for JSON.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class JsonAttribute : Attribute
     {
@@ -5250,6 +5259,7 @@ namespace LightningPay.Tools
     /// <summary>
     /// The exception that is thrown when a JSON error occurs.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [Serializable]
     internal class JsonException : Exception
     {

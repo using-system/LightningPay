@@ -5,14 +5,14 @@ Bitcoin Lightning Network Payment .NET library (.NET Standard 2.0)
 
 - [x] Create an invoice ([Documentation](documentation/client.md))
 - [x] Check invoice payment ([Documentation](documentation/client.md))
-- [ ] Pay an invoice
-- [ ] Send money
+- [ ] Pay an invoice  (Not supported yet)
+- [ ] Send money  (Not supported yet)
 
 More features will be supported in futures versions. 
 
 ## Packages
 
-- `LightningPay` : Core library with 0 dependency
+- `LightningPay` : Core library with zero dependency
 - `LightningPay.DependencyInjection` : Extension methods for .NET Core Dependency injection mechanism (`IServiceCollection`)
 
 ## Integration
@@ -36,6 +36,10 @@ Need for code samples ? Go here : [Lightning samples](samples/)
 ## Documentation
 
 [Lightning Documentation](documentation/)
+
+## Continuous Integration
+
+[LightningPay build reports](https://dev.azure.com/NiawaCorp/LightningPay/_build?definitionId=24)
 
 ## Contributing
 

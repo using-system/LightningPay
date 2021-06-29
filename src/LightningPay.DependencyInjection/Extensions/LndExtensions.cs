@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,72 +14,59 @@ namespace LightningPay
         {
             return AddLndLightningClient(services,
                 address, 
-                macaroon: null,
+                macaroonHexString: null,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
             Uri address,
-            byte[] macaroon)
+            string macaroonHexString)
         {
             return AddLndLightningClient(services,
                 address, 
-                macaroon, 
+                macaroonHexString.HexStringToByteArray(), 
                 allowInsecure: false, 
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
            Uri address,
-           string macaroonFilePath)
+           string macaroonHexString = null,
+           bool allowInsecure = false,
+           string certificateThumbprint = null)
         {
             return AddLndLightningClient(services,
-                address, 
-                File.ReadAllBytes(macaroonFilePath), 
-                allowInsecure: false, 
-                certificateThumbprint: null);
-        }
-
-        public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri address,
-            string macaroonFilePath,
-            bool allowInsecure = false,
-            byte[] certificateThumbprint = null)
-        {
-            return AddLndLightningClient(services,
-                address, 
-                File.ReadAllBytes(macaroonFilePath), 
-                allowInsecure, 
+                address,
+                macaroonHexString.HexStringToByteArray(),
+                allowInsecure,
                 certificateThumbprint);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
             Uri address,
-            byte[] macaroon = null,
+            byte[] macaroonBytes = null,
             bool allowInsecure = false,
-            byte[] certificateThumbprint = null)
+            string certificateThumbprint = null)
         {
-            services.AddSingleton<ILightningClient, LndClient>();
-
             services.AddSingleton(new LndOptions()
             {
                 Address = address,
-                Macaroon = macaroon
+                Macaroon = macaroonBytes
             });
+            services.AddSingleton<ILightningClient, LndClient>();
 
-            services.AddHttpClient<LndClient>()
-                .ConfigureHttpHandler<LndClient>(allowInsecure, certificateThumbprint);
+
+            services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
+            {
+                AllowInsecure = allowInsecure,
+                CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
+            });
+            services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
+            services.AddHttpClient<ILightningClient, LndClient>()
+                .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;
-        }
-
-        private static byte[] GetHash(X509Certificate2 cert)
-        {
-            using (HashAlgorithm alg = SHA256.Create())
-            {
-                return alg.ComputeHash(cert.RawData);
-            }
         }
     }
 }

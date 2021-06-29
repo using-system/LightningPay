@@ -45,7 +45,7 @@ Once the invoice is created, you can check the payment of the invoice simply by 
 You can retrieve the invoice identifier with the `LightningInvoice` object returned by the `CreateInvoice` method : 
 
 ```c#
-var invoice = await lndClient.CreateInvoice(100, "My First Invoice", TimeSpan.FromMinutes(5));
+var invoice = await lndClient.CreateInvoice(100, "My First Invoice");
 
 while (! await lndClient.CheckPayment(invoice.Id))
 {

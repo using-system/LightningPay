@@ -40,6 +40,24 @@ stages:
         command: build
         configuration: '$(buildConfiguration)'
         projects: '$(samplesPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: test
+        arguments: >
+            --configuration $(buildConfiguration) 
+            /p:CollectCoverage=true 
+            /p:CoverletOutputFormat=opencover%2ccobertura
+        projects: '$(testPattern)'
+    - task: reportgenerator@4
+      inputs:
+        reports: '$(Build.SourcesDirectory)/**/*cobertura.xml'
+        targetdir: '$(Build.ArtifactStagingDirectory)/coveragereport'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
     - task: CopyFiles@2
       displayName: 'Copy dll Artifact'
       inputs:
