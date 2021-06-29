@@ -1,0 +1,109 @@
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+
+variables:
+  srcPattern: 'src/**/*.csproj'
+  samplesPattern: 'samples/**/*.csproj'
+  testPattern: 'tests/**/*.csproj'
+  buildConfiguration: 'Release'
+
+trigger:
+  branches:
+    include: [ 'develop', 'master' ]
+  paths:
+    include: [ 'src', 'samples' ]
+
+stages:
+
+- stage : Build
+  jobs:
+  - job: Build
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore src packages'
+      inputs:
+        command: restore
+        projects: '$(srcPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore samples packages'
+      inputs:
+        command: restore
+        projects: '$(samplesPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build sources'
+      inputs:
+        command: build
+        configuration: '$(buildConfiguration)'
+        projects: '$(srcPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build samples'
+      inputs:
+        command: build
+        configuration: '$(buildConfiguration)'
+        projects: '$(samplesPattern)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: test
+        arguments: >
+            --configuration $(buildConfiguration) 
+            /p:CollectCoverage=true 
+            /p:CoverletOutputFormat=opencover%2ccobertura
+        projects: '$(testPattern)'
+    - task: reportgenerator@4
+      inputs:
+        reports: '$(Build.SourcesDirectory)/**/*cobertura.xml'
+        targetdir: '$(Build.ArtifactStagingDirectory)/coveragereport'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
+    - task: CopyFiles@2
+      displayName: 'Copy dll Artifact'
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)/src'
+        contents: |
+            **/LightningPay.dll
+            **/LightningPay.DependencyInjection.dll
+        targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
+        overWrite: true
+        flattenFolders: true
+    - task: DotNetCoreCLI@2
+      displayName: 'Build nuget packages'
+      inputs:
+        command: pack
+        configuration: '$(buildConfiguration)'
+        packagesToPack: '$(srcPattern)'
+        versioningScheme: 'byBuildNumber'
+        packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
+    - publish: '$(Build.ArtifactStagingDirectory)/nuget'
+      artifact: 'nuget'
+    - publish: '$(Build.ArtifactStagingDirectory)/dll'
+      artifact: 'dll'
+
+- stage : Release
+  dependsOn:
+  - Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: PublishNugetPackages
+    steps:
+    - download: current
+      artifact: 'nuget'
+    - task: DotNetCoreCLI@2
+      displayName: 'Push nuget packages'
+      inputs:
+        command: push
+        packagesToPack: '$(Pipeline.Workspace)/nuget/*.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'NugetOrg'
+  - job: AddGithubRelease
+    steps:
+    - download: current
+      artifact: 'dll'
+    - task: GithubRelease@0 
+      displayName: 'Add github release'
+      inputs:
+        gitHubConnection: github.com_using-system
+        packagesToPack: using-system/LightningPay
+        assets: $(Pipeline.Workspace)/nuget/*.dll

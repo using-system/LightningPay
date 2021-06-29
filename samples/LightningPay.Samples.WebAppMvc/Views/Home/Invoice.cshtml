@@ -1,0 +1,11 @@
+﻿@model LightningPay.Samples.WebAppMvc.Models.InvoiceModel
+
+@{
+    ViewData["Title"] = "Pay invoice";
+}
+
+<h1>Pay Invoice</h1>
+For : @Model.Description
+<br />
+<qrcode content="@Model.PayementRequest" width="200" height="200" /> <br />
+<a href="@Model.Uri">Pay</a>
