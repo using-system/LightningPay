@@ -94,7 +94,7 @@ stages:
       displayName: 'Push nuget packages'
       inputs:
         command: push
-        packagesToPack: '$(Pipeline.Workspace)/**/nuget/*.nupkg'
+        packagesToPack: $(Pipeline.Workspace)/**/nuget/*.nupkg
         nuGetFeedType: 'external'
         publishFeedCredentials: 'NugetOrg'
   - job: AddGithubRelease
