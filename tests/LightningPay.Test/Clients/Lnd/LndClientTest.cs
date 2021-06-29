@@ -28,7 +28,7 @@ namespace LightningPay.Test.Clients.Lnd
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? new byte[] { 0, 1 } : null, httpClient);
+            var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? "971a5512" : null, httpClient: httpClient);
 
             //Act
             var invoice = await lndClient.CreateInvoice(1000, "Test");
@@ -98,7 +98,7 @@ namespace LightningPay.Test.Clients.Lnd
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? new byte[] { 0, 1 } : null, httpClient);
+            var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? "971a5512" : null, httpClient: httpClient);
 
             //Act
             var actual = await lndClient.CheckPayment("id");

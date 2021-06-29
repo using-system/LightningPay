@@ -17,14 +17,14 @@ namespace LightningPay.DependencyInjection.Test
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLndLightningClient(new System.Uri("http://localhost:42802/"), macaroon: new byte[] { 0, 1 });
+            serviceCollection.AddLndLightningClient(new System.Uri("http://localhost:42802/"), macaroonHexString: "971a5512");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
             var options = serviceProvider.GetService<LndOptions>();
             Assert.NotNull(options);
             Assert.Equal("http://localhost:42802/", options.Address.ToString());
-            Assert.Equal(new byte[] { 0, 1 }, options.Macaroon);
+            Assert.Equal(new byte[] { 151, 26, 85, 18 }, options.Macaroon);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);

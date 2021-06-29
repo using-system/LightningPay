@@ -76,7 +76,8 @@ namespace LightningPay.Clients.Lnd
         }
 
         public static LndClient New(string address, 
-            byte[] macaroon = null,
+            string macaroonHexString = null,
+            byte[] macaroonBytes = null,
             HttpClient httpClient = null)
         {
             bool clientInternalBuilt = false;
@@ -90,7 +91,7 @@ namespace LightningPay.Clients.Lnd
             LndClient client = new LndClient(httpClient, new LndOptions()
             {
                 Address = new Uri(address),
-                Macaroon = macaroon
+                Macaroon = macaroonBytes?? macaroonHexString.HexStringToByteArray()
             });
 
             client.clientInternalBuilt = clientInternalBuilt;

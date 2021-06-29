@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,56 +14,45 @@ namespace LightningPay
         {
             return AddLndLightningClient(services,
                 address, 
-                macaroon: null,
+                macaroonHexString: null,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
             Uri address,
-            byte[] macaroon)
+            string macaroonHexString)
         {
             return AddLndLightningClient(services,
                 address, 
-                macaroon, 
+                macaroonHexString.HexStringToByteArray(), 
                 allowInsecure: false, 
                 certificateThumbprint: null);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
            Uri address,
-           string macaroonFilePath)
+           string macaroonHexString = null,
+           bool allowInsecure = false,
+           string certificateThumbprint = null)
         {
             return AddLndLightningClient(services,
-                address, 
-                File.ReadAllBytes(macaroonFilePath), 
-                allowInsecure: false, 
-                certificateThumbprint: null);
-        }
-
-        public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
-            Uri address,
-            string macaroonFilePath,
-            bool allowInsecure = false,
-            string certificateThumbprint = null)
-        {
-            return AddLndLightningClient(services,
-                address, 
-                File.ReadAllBytes(macaroonFilePath), 
-                allowInsecure, 
+                address,
+                macaroonHexString.HexStringToByteArray(),
+                allowInsecure,
                 certificateThumbprint);
         }
 
         public static IServiceCollection AddLndLightningClient(this IServiceCollection services,
             Uri address,
-            byte[] macaroon = null,
+            byte[] macaroonBytes = null,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
             services.AddSingleton(new LndOptions()
             {
                 Address = address,
-                Macaroon = macaroon
+                Macaroon = macaroonBytes
             });
             services.AddSingleton<ILightningClient, LndClient>();
 

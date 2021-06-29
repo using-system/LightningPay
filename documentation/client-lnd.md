@@ -9,7 +9,7 @@ LND Client is shipped with `LightningPay` package (NET Standard 2.0 library).
 ### Instantiate
 
 ```c#
-byte[] macaroon = null; // Enter here your macaroon
+string macaroon = null; // Enter here your macaroon
 using (var client = LndClient.New("http://localhost:42802/", macaroon))
 {
 	//Your code...
@@ -40,9 +40,8 @@ public void ConfigureServices(IServiceCollection services)
 {
 	///...
 
-	byte[] yourMacaroon = null;
-	services.AddLndLightningClient(new Uri("http://localhost:42802/"),
-		macaroon: yourMacaroon);
+	string yourMacaroon = null;
+	services.AddLndLightningClient(new Uri("http://localhost:42802/"), yourMacaroon);
 }
 
 
@@ -55,8 +54,8 @@ The AddLndLightningClient method has optionnal pamameters to configure your clie
 | Property name         | Type     | Description                                                  |
 | --------------------- | -------- | ------------------------------------------------------------ |
 | Address               | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
-| macaroon              | `byte[]` | Authentication assertion                                     |
-| macaroonFilePath      | `string` | Path of your macaroon file (macaroon parameter will be ignored) |
+| macaroonHexString     | `String` | Authentication assertion in hex string format or directly    |
+| macaroonBytes         | `byte[]` | Authentication assertion in Byte array (to load macaron from file with .NET code `File.ReadAllBytes(macaroonFilePath)` ) |
 | certificateThumbprint | `String` | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
 | allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
 
