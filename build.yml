@@ -94,7 +94,7 @@ stages:
       displayName: 'Push nuget packages'
       inputs:
         command: push
-        packagesToPack: '**/*.nupkg'
+        packagesToPack: '$(Pipeline.Workspace)/nuget/*'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'NugetOrg'
   - job: AddGithubRelease
@@ -106,7 +106,7 @@ stages:
       inputs:
         gitHubConnection: github.com_using-system
         packagesToPack: using-system/LightningPay
-        assets: $(Pipeline.Workspace)/nuget/*.dll
+        assets: $(Pipeline.Workspace)/dll/*.dll
         tagSource: manual
         tag: $(Build.BuildNumber)   
         title: $(Build.BuildNumber)
