@@ -104,6 +104,6 @@ stages:
     - task: GithubRelease@0 
       displayName: 'Add github release'
       inputs:
-        gitHubConnection: using-system
+        gitHubConnection: github.com_using-system
         packagesToPack: using-system/LightningPay
         assets: $(Pipeline.Workspace)/nuget/*.dll
