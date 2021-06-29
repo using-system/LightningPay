@@ -8,7 +8,7 @@ variables:
 
 trigger:
   branches:
-    include: [ 'develop', 'main' ]
+    include: [ 'develop', 'master' ]
   paths:
     include: [ 'src', 'samples' ]
 
@@ -94,7 +94,7 @@ stages:
       displayName: 'Push nuget packages'
       inputs:
         command: push
-        packagesToPack: '$(Pipeline.Workspace)/nuget/*.nupkg'
+        packagesToPack: '**/*.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'NugetOrg'
   - job: AddGithubRelease
@@ -107,3 +107,7 @@ stages:
         gitHubConnection: github.com_using-system
         packagesToPack: using-system/LightningPay
         assets: $(Pipeline.Workspace)/nuget/*.dll
+        tagSource: manual
+        tag: $(Build.BuildNumber)   
+        title: $(Build.BuildNumber)
+        isDraft: true
