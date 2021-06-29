@@ -7,18 +7,30 @@ using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Clients.Lnd
 {
+    /// <summary>
+    ///   LND Client
+    /// </summary>
     public class LndClient : ApiServiceBase, ILightningClient
     {
         private readonly string address;
 
         private bool clientInternalBuilt = false;
 
+        /// <summary>Initializes a new instance of the <see cref="LndClient" /> class.</summary>
+        /// <param name="client">The client.</param>
+        /// <param name="options">The options.</param>
         public LndClient(HttpClient client,
             LndOptions options) : base(client, BuildAuthentication(options))
         {
             this.address = options.Address.ToBaseUrl();
         }
 
+        /// <summary>Creates the invoice.</summary>
+        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="description">The description will be appears in the invoice.</param>
+        /// <param name="options">Invoice creation options.</param>
+        /// <returns>The lightning invoice just created</returns>
+        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the lnd api response</exception>
         public async Task<LightningInvoice> CreateInvoice(long satoshis, 
             string description, 
             CreateInvoiceOptions options = null)
@@ -49,6 +61,9 @@ namespace LightningPay.Clients.Lnd
             return response.ToLightningInvoice(satoshis, description, options);
         }
 
+        /// <summary>Checks the payment of an invoice.</summary>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <returns>True of the invoice is paid, false otherwise</returns>
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var invoice = await this.GetInvoice(invoiceId);
@@ -75,6 +90,14 @@ namespace LightningPay.Clients.Lnd
             return new NoAuthentication();
         }
 
+        /// <summary>Instanciate a new LND Client.</summary>
+        /// <param name="address">The address of the lnd api server.</param>
+        /// <param name="macaroonHexString">The macaroon hexadecimal string.</param>
+        /// <param name="macaroonBytes">The macaroon bytes.</param>
+        /// <param name="httpClient">The HTTP client.</param>
+        /// <returns>
+        ///   LND Client
+        /// </returns>
         public static LndClient New(string address, 
             string macaroonHexString = null,
             byte[] macaroonBytes = null,
@@ -99,6 +122,7 @@ namespace LightningPay.Clients.Lnd
             return client;
         }
 
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
             if(this.clientInternalBuilt)

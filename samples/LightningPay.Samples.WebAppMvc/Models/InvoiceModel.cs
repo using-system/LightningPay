@@ -7,5 +7,7 @@
         public string Description { get; set; }
 
         public string PayementRequest { get; set; }
+
+        public string Uri { get; set; }
     }
 }

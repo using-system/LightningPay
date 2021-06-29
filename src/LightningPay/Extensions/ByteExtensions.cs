@@ -3,8 +3,16 @@ using System.Globalization;
 
 namespace LightningPay
 {
+    /// <summary>
+    ///   Byte extension methods
+    /// </summary>
     public static class ByteExtensions
     {
+        /// <summary>Converts to bitstring.</summary>
+        /// <param name="source">The source.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public static string ToBitString(this byte[] source)
         {
             if(source == null)
@@ -17,6 +25,11 @@ namespace LightningPay
                 .ToLower(CultureInfo.InvariantCulture);
         }
 
+        /// <summary>Hexadecimals string to byte array.</summary>
+        /// <param name="source">The source.</param>
+        /// <returns>
+        ///   Return data in byte array
+        /// </returns>
         public static byte[] HexStringToByteArray(this String source)
         {
             if(source == null)

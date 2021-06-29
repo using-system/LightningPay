@@ -3,10 +3,17 @@ using System.Net;
 
 namespace LightningPay
 {
+    /// <summary>
+    ///  Exception thrown by LightningPay
+    /// </summary>
     public class ApiException : Exception
     {
+        /// <summary>Gets or sets the http status code.</summary>
+        /// <value>The http status code.</value>
         public HttpStatusCode Code { get; set; }
 
+        /// <summary>Gets or sets the response data.</summary>
+        /// <value>The response data.</value>
         public string ResponseData { get; set; }
 
         /// <summary>
