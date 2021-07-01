@@ -3,6 +3,7 @@ Bitcoin Lightning Network Payment .NET library (.NET Standard 2.0)
 
 ## Features
 
+- [x] Get balance ([Documentation](documentation/client.md))
 - [x] Create an invoice ([Documentation](documentation/client.md))
 - [x] Check invoice payment ([Documentation](documentation/client.md))
 - [ ] Pay an invoice  (Not supported yet)
@@ -19,14 +20,14 @@ More features will be supported in futures versions.
 
 Connect to your lightning nodes : 
 
-- [x] LND ([Documentation](documentation/client-lnd.md))
+- [x] [LND](https://github.com/lightningnetwork/lnd) ([Documentation](documentation/client-lnd.md))
 - [ ] C-Lightning  (Not supported yet)
 - [ ] Eclair  (Not supported yet)
 - [ ] Charge (Not supported yet)
 
 Or with custodial solution for lightning (without having a node  of your own) : 
 
-- [x] LNDHub  ([Documentation](documentation/client-lndhub.md))
+- [x] [LNDHub](https://github.com/BlueWallet/LndHub)  ([Documentation](documentation/client-lndhub.md))
 - [ ] LNbits  (Not supported yet)
 
 ## Samples

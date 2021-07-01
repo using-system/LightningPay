@@ -7,10 +7,20 @@ Every clients of the `LightningPay` package implements the interface [`ILightnin
 ```c#
 public interface ILightningClient : IDisposable
 {
+    Task<long> GetBalance();
+    
 	Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
 
 	Task<bool> CheckPayment(string invoiceId);
 }
+```
+
+## Get wallet balance
+
+To get the wallet balance (amount in satoshis), call the method `GetBalance` : 
+
+```c#
+var balance = await client.GetBalance();
 ```
 
 ## Create an invoice
@@ -20,7 +30,7 @@ public interface ILightningClient : IDisposable
 To create an invoice, call the method `CreateInvoice` with the 2 parameters required : satoshis and the description will be appear on the invoice : 
 
 ```c#
-var invoice = await lndClient.CreateInvoice(100, "My First Invoice");
+var invoice = await client.CreateInvoice(100, "My First Invoice");
 ```
 
 ### Optional parameters
@@ -32,7 +42,7 @@ You can add optional parameters with the CreateInvoiceOptions object :
 | Expiry   | TimeSpan? | Duration before which the invoice will expire (Default value : 1 Day) |
 
 ```c#
-var invoice = await lndClient.CreateInvoice(100 , "My First invoice", 
+var invoice = await client.CreateInvoice(100 , "My First invoice", 
          new CreateInvoiceOptions(TimeSpan.FromHours(2)));
 ```
 
@@ -45,9 +55,9 @@ Once the invoice is created, you can check the payment of the invoice simply by 
 You can retrieve the invoice identifier with the `LightningInvoice` object returned by the `CreateInvoice` method : 
 
 ```c#
-var invoice = await lndClient.CreateInvoice(100, "My First Invoice");
+var invoice = await client.CreateInvoice(100, "My First Invoice");
 
-while (! await lndClient.CheckPayment(invoice.Id))
+while (! await client.CheckPayment(invoice.Id))
 {
 	System.Console.WriteLine("Waiting for invoice payment....");
 	await Task.Delay(5000);
