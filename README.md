@@ -20,14 +20,14 @@ More features will be supported in futures versions.
 
 Connect to your lightning nodes : 
 
-- [x] [LND](https://github.com/lightningnetwork/lnd) ([Documentation](documentation/client-lnd.md))
+- [x] LND ([Documentation](documentation/client-lnd.md))
 - [ ] C-Lightning  (Not supported yet)
 - [ ] Eclair  (Not supported yet)
 - [ ] Charge (Not supported yet)
 
 Or with custodial solution for lightning (without having a node  of your own) : 
 
-- [x] [LNDHub](https://github.com/BlueWallet/LndHub)  ([Documentation](documentation/client-lndhub.md))
+- [x] LNDHub  ([Documentation](documentation/client-lndhub.md))
 - [ ] LNbits  (Not supported yet)
 
 ## Samples

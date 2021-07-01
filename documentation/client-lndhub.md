@@ -4,6 +4,8 @@
 
 LNDHub Client is shipped with `LightningPay` package (NET Standard 2.0 library).
 
+[More info about LNDHUB](https://github.com/BlueWallet/LndHub) (Github Project)
+
 ## Create the client
 
 ### Instantiate

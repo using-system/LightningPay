@@ -4,6 +4,8 @@
 
 LND Client is shipped with `LightningPay` package (NET Standard 2.0 library).
 
+[More info about LND](https://github.com/lightningnetwork/lnd) (Github Project)
+
 ## Create the client
 
 ### Instantiate
