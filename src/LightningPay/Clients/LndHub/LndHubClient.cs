@@ -26,6 +26,16 @@ namespace LightningPay.Clients.LndHub
             this.baseUri = options.Address.ToBaseUrl();
         }
 
+        /// <summary>Gets the wallet balance in satoshis.</summary>
+        /// <returns>Balance is satoshis</returns>
+        public async Task<long> GetBalance()
+        {
+            var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
+                $"{baseUri}/balance");
+
+            return response?.BTC?.AvailableBalance ?? 0;
+        }
+
 
         /// <summary>Creates the invoice.</summary>
         /// <param name="satoshis">The amount in satoshis.</param>

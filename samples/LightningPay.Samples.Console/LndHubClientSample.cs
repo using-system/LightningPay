@@ -11,6 +11,8 @@ namespace LightningPay.Samples.Console
             using (var lndHubClient = 
                 LndHubClient.New(login: "2073282b83fad2955b57", password: "a1c4f8c30a93bf3e8cbf"))
             {
+                var balance = await lndHubClient.GetBalance();
+                System.Console.WriteLine($"Wallet balance : {balance} sat ");
 
                 var invoice = await lndHubClient.CreateInvoice(100, "My First invoice");
 
