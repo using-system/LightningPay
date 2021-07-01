@@ -155,6 +155,40 @@ namespace LightningPay.Test.Clients.LndHub
         }
 
         [Fact]
+        public async Task GetBalance_Should_Return_Wallet_Balance()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                     Json.Serialize(new GetTokenResponse()
+                     {
+                         AccessToken = "AccessToken",
+                         RefreshToken = "RefreshToken"
+                     }), HttpStatusCode.OK
+                 ),
+                (
+                    Json.Serialize(new GetBalanceResponse()
+                    {
+                        BTC = new GetBalanceResponse.BTCBalance()
+                        {
+                            AvailableBalance = 1500
+                        }
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.GetBalance();
+
+            //Assert
+            Assert.Equal(1500, actual);
+            Assert.Equal(2, mockMessageHandler.Requests.Count);
+            Assert.Equal("https://lndhub.herokuapp.com/balance", mockMessageHandler.Requests[1].RequestUri.ToString());
+        }
+
+        [Fact]
         public void BuildAuthentication_Should_Return_LndHubAuthentication_If_Options_Contains_Login_And_Password()
         {
             //Arrange
