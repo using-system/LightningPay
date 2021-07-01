@@ -13,7 +13,7 @@ public interface ILightningClient : IDisposable
 
 	Task<bool> CheckPayment(string invoiceId);
     
-    Task<bool> Pay(string paymentRequest);
+	Task<bool> Pay(string paymentRequest);
 }
 ```
 
