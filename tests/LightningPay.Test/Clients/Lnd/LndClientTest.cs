@@ -153,6 +153,53 @@ namespace LightningPay.Test.Clients.Lnd
         }
 
         [Fact]
+        public async Task Pay_Should_Return_Payment_Result()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new PayResponse()
+                    {
+                        Error = string.Empty
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", null, httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.Pay("request");
+
+            //Assert
+            Assert.True(actual);
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/channels/transactions", mockMessageHandler.Requests[0].RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task Pay_Should_Throw_ApiException_If_An_Payment_Error_Occurs()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new PayResponse()
+                    {
+                        Error = "no routes"
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", null, httpClient: httpClient);
+
+            //Act
+            await Assert.ThrowsAsync<ApiException>(() => lndClient.Pay("request"));
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/channels/transactions", mockMessageHandler.Requests[0].RequestUri.ToString());
+        }
+
+        [Fact]
         public void BuildAuthentication_Should_Return_NoAuthentication_If_Options_Not_Contains_Macaroon()
         {
             //Arrange

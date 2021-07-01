@@ -96,7 +96,7 @@ namespace LightningPay.Clients.Lnd
         public async Task<bool> Pay(string paymentRequest)
         {
             var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                "{address}/v1/channels/transactions",
+                $"{address}/v1/channels/transactions",
                 new PayRequest() { PaymentRequest = paymentRequest });
 
             if(!string.IsNullOrEmpty(response.Error))
