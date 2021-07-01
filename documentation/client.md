@@ -7,7 +7,7 @@ Every clients of the `LightningPay` package implements the interface [`ILightnin
 ```c#
 public interface ILightningClient : IDisposable
 {
-    Task<long> GetBalance();
+	Task<long> GetBalance();
     
 	Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
 
