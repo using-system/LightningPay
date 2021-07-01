@@ -8,6 +8,12 @@ namespace LightningPay
     /// </summary>
     public interface ILightningClient : IDisposable
     {
+        /// <summary>Gets the wallet balance in satoshis.</summary>
+        /// <returns>
+        ///   Balance is satoshis
+        /// </returns>
+        Task<long> GetBalance();
+
         /// <summary>Creates the invoice.</summary>
         /// <param name="satoshis">The amount in satoshis.</param>
         /// <param name="description">The description will be appears in the invoice.</param>

@@ -110,6 +110,7 @@ namespace LightningPay.Test.Clients.Lnd
             Assert.Equal("http://localhost:42802/v1/invoice/id", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
 
+
         [Fact]
         public async Task CheckPayment_Should_Throw_ApiException_If_Response_StatusCode_KO()
         {
@@ -125,6 +126,30 @@ namespace LightningPay.Test.Clients.Lnd
             //Act & Assert
             await Assert.ThrowsAsync<ApiException>(() => lndClient.CheckPayment("id"));
             Assert.Single(mockMessageHandler.Requests);
+        }
+
+        [Fact]
+        public async Task GetBalance_Should_Return_Wallet_Balance()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetBalanceResponse()
+                    {
+                        TotalBalance = 5000
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", null, httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.GetBalance();
+
+            //Assert
+            Assert.Equal(5000, actual);
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/balance/blockchain", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
 
         [Fact]
