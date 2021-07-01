@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <PackageId>LightningPay</PackageId>
-	  <Description>Lightning Network Payment library with zero dependencies</Description>
+	  <Description>Bitcoin Lightning Network Payment library with zero dependencies</Description>
 	  <PackageProjectUrl>https://github.com/using-system/LightningPay</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/using-system/LightningPay</RepositoryUrl>
 	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
