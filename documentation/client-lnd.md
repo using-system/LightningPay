@@ -2,7 +2,7 @@
 
 ## Introduction
 
-LND Client is shipped with `LightningPay` package (NET Standard 2.0 library).
+LND Client is shipped with `LightningPay` package.
 
 [More info about LND](https://github.com/lightningnetwork/lnd) (Github Project)
 

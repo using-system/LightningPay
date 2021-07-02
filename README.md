@@ -1,5 +1,5 @@
 # LightningPay
-Bitcoin Lightning Network Payment .NET library (.NET Standard 2.0)
+Bitcoin Lightning Network Payment .NET library
 
 ## Features
 
