@@ -80,3 +80,14 @@ public HomeController(ILightningClient lightningClient)
 ### Sample
 
 You can retrieve a code samples used Dependency Injection in the Visual Studio Solution [`WebApp.sln`](/samples)
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+	//...
+	services.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"),
+                    login: "2073282b41bad2955b74",
+                    password: "a1c5a8c30a74bc3e8cbf"); // Puts yours credentials in config :)
+}
+```
+

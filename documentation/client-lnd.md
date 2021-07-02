@@ -77,3 +77,27 @@ public HomeController(ILightningClient lightningClient)
 ### Sample
 
 You can retrieve a code samples used Dependency Injection in the Visual Studio Solution [`WebApp.sln`](/samples)
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllersWithViews();
+
+        /*
+         * 
+         * ############## LND Samples ##################
+         *  - With no macaroon authentication : 
+         *      services.AddLndLightningClient(new Uri("http://localhost:8080/"));
+         *  - With macaroon authentication (with hex string) : 
+         *      services.AddLndLightningClient(new Uri("http://localhost:8080/"),
+                    macaroonHexString: "020...72c8");
+         * - With macaroon authentication (Load macaroon file) : 
+         *       services.AddLndLightningClient(new Uri("http://localhost:8080/"),
+                    macaroonBytes: File.ReadAllBytes("/root/.lnd/data/chain/bitcoin/mainnet/invoice.macaroon"));
+         * 
+         * 
+         */
+
+        services.AddLndLightningClient(new Uri("http://localhost:42802/"));
+    }
+```

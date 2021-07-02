@@ -29,5 +29,12 @@ namespace LightningPay
         ///  True of the invoice is paid, false otherwise 
         /// </returns>
         Task<bool> CheckPayment(string invoiceId);
+
+        /// <summary>Pay.</summary>
+        /// <param name="paymentRequest">The payment request (aka bolt11).</param>
+        /// <returns>
+        ///    True on the payment success, false otherwise
+        /// </returns>
+        Task<bool> Pay(string paymentRequest);
     }
 }

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>netstandard2.0</TargetFramework>
+	  <TargetFrameworks>net472;net48;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0</TargetFrameworks>
 	  <PackageId>LightningPay</PackageId>
-	  <Description>Lightning Network Payment library with zero dependencies</Description>
+	  <Description>Bitcoin Lightning Network Payment library with zero dependencies</Description>
 	  <PackageProjectUrl>https://github.com/using-system/LightningPay</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/using-system/LightningPay</RepositoryUrl>
 	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
@@ -18,6 +18,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.4" Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'" />
   </ItemGroup>
 
 </Project>

@@ -83,6 +83,24 @@ namespace LightningPay.Clients.LndHub
             return response.Paid;
         }
 
+        /// <summary>Pay.</summary>
+        /// <param name="paymentRequest">The payment request (aka bolt11).</param>
+        /// <returns>True on the payment success, false otherwise</returns>
+        public async Task<bool> Pay(string paymentRequest)
+        {
+            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
+                $"{baseUri}/payinvoice",
+                new PayRequest() { PaymentRequest = paymentRequest });
+
+            if (!string.IsNullOrEmpty(response.Error))
+            {
+                throw new ApiException($"Cannot proceed to the payment : {response.Error}",
+                    System.Net.HttpStatusCode.BadRequest);
+            }
+
+            return true;
+        }
+
         internal static AuthenticationBase BuildAuthentication(LndHubOptions options)
         {
             if(string.IsNullOrEmpty(options.Login)
