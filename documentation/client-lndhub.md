@@ -54,7 +54,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Options
 
-The AddLndHubLightningClient method has optionnal pamameters to configure your client : 
+The `AddLndHubLightningClient` method has optionnal pamameters to configure your client : 
 
 | Property name         | Type     | Description                                                  |
 | --------------------- | -------- | ------------------------------------------------------------ |
