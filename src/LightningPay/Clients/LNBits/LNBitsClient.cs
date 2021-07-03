@@ -34,9 +34,34 @@ namespace LightningPay.Clients.LNBits
             return response?.Balance ?? 0;
         }
 
-        public Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
+        /// <summary>Creates the invoice.</summary>
+        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="description">The description will be appears in the invoice.</param>
+        /// <param name="options">Invoice creation options.</param>
+        /// <returns>The lightning invoice just created</returns>
+        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
         {
-            throw new System.NotImplementedException();
+            var request = new CreateInvoiceRequest
+            {
+
+                Out = true,
+                Amount = satoshis,
+                Memo = description
+            };
+
+            var response = await this.SendAsync<CreateInvoiceResponse>(HttpMethod.Post,
+                $"{address}/v1/payments",
+                request);
+
+            if (string.IsNullOrEmpty(response.PaymentRequest)
+                || string.IsNullOrEmpty(response.PaymentHash))
+            {
+                throw new ApiException("Cannot retrieve Payment request or request hash in the LNBits api response",
+                    System.Net.HttpStatusCode.BadRequest);
+            }
+
+            return response.ToLightningInvoice(satoshis, description, options);
         }
 
         /// <summary>Checks the payment of an invoice.</summary>

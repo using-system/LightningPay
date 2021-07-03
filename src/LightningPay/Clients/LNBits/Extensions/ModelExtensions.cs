@@ -1,8 +1,8 @@
-﻿namespace LightningPay.Clients.LndHub
+﻿namespace LightningPay.Clients.LNBits
 {
     internal static class ModelExtensions
     {
-        public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
+        internal static LightningInvoice ToLightningInvoice(this CreateInvoiceResponse source,
           long amount,
           string memo,
           CreateInvoiceOptions options)
@@ -14,7 +14,7 @@
 
             return new LightningInvoice
             {
-                Id = source.R_hash.Data.ToBitString(),
+                Id = source.PaymentHash,
                 Memo = memo,
                 Amount = amount,
                 BOLT11 = source.PaymentRequest,
