@@ -12,7 +12,7 @@ namespace LightningPay.Clients.LndHub
     /// </summary>
     public class LndHubClient : ApiServiceBase, ILightningClient
     {
-        private readonly string address;
+        protected readonly string address;
 
         private bool clientInternalBuilt = false;
 

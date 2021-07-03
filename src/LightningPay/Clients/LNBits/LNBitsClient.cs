@@ -11,7 +11,7 @@ namespace LightningPay.Clients.LNBits
     /// </summary>
     public class LNBitsClient : ApiServiceBase, ILightningClient
     {
-        private readonly string address;
+        protected readonly string address;
 
         private bool clientInternalBuilt = false;
 
