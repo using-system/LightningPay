@@ -56,7 +56,7 @@ The `AddLNBitsLightningClient` method has optionnal pamameters to configure your
 
 | Parameter name        | Type     | Required | Description                                                  |
 | --------------------- | -------- | -------- | ------------------------------------------------------------ |
-| address               | `Uri`    | Yes      | Address of your node server with port (example : https://lnbits.com/api/) |
+| address               | `Uri`    | Yes      | Address of the LNBits api (example : https://lnbits.com/api/) |
 | apiKey                | `String` | Yes      | LNBits api key                                               |
 | certificateThumbprint | `String` | No       | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
 | allowInsecure         | `bool`   | No       | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
