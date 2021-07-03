@@ -113,7 +113,7 @@ namespace LightningPay.Clients.LndHub
         }
 
         /// <summary>Instanciate a new LNDHub client.</summary>
-        /// <param name="address">The address of the LNDHub client.</param>
+        /// <param name="address">The address of the LNDHub api.</param>
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <param name="httpClient">The HTTP client.</param>
