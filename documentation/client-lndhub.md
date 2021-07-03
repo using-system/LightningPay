@@ -58,7 +58,7 @@ The `AddLndHubLightningClient` method has optionnal pamameters to configure your
 
 | Property name         | Type     | Description                                                  |
 | --------------------- | -------- | ------------------------------------------------------------ |
-| Address               | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
+| Address               | `Uri`    | Address of your node server with port (example : https://lndhub.herokuapp.com/) |
 | login                 | `String` | LNDHub login                                                 |
 | password              | `String` | LNDHub Password                                              |
 | certificateThumbprint | `String` | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
