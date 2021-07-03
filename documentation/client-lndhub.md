@@ -2,7 +2,7 @@
 
 ## Introduction
 
-LNDHub Client is shipped with `LightningPay` package (NET Standard 2.0 library).
+LNDHub Client is shipped with `LightningPay` package.
 
 [More info about LNDHUB](https://github.com/BlueWallet/LndHub) (Github Project)
 
@@ -54,15 +54,15 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Options
 
-The AddLndHubLightningClient method has optionnal pamameters to configure your client : 
+The `AddLndHubLightningClient` method has optionnal pamameters to configure your client : 
 
-| Property name         | Type     | Description                                                  |
-| --------------------- | -------- | ------------------------------------------------------------ |
-| Address               | `Uri`    | Address of your node server with port (example : http://localhost:42802/) |
-| login                 | `String` | LNDHub login                                                 |
-| password              | `String` | LNDHub Password                                              |
-| certificateThumbprint | `String` | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
-| allowInsecure         | `bool`   | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
+| Parameter name        | Type     | Required | Description                                                  |
+| --------------------- | -------- | -------- | ------------------------------------------------------------ |
+| address               | `Uri`    | Yes      | Address of the LNDHub api (example : https://lndhub.herokuapp.com/) |
+| login                 | `String` | Yes      | LNDHub login                                                 |
+| password              | `String` | Yes      | LNDHub Password                                              |
+| certificateThumbprint | `String` | No       | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
+| allowInsecure         | `bool`   | No       | If you use https address, determine if you allow non secure transport (certificateThumbprint parameter will be ignored) |
 
 ### Use to the LightningPay Client
 

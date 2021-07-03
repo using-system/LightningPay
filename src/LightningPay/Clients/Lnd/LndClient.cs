@@ -119,7 +119,7 @@ namespace LightningPay.Clients.Lnd
         }
 
         /// <summary>Instanciate a new LND Client.</summary>
-        /// <param name="address">The address of the lnd api server.</param>
+        /// <param name="address">The address of the lnd api api.</param>
         /// <param name="macaroonHexString">The macaroon hexadecimal string.</param>
         /// <param name="macaroonBytes">The macaroon bytes.</param>
         /// <param name="httpClient">The HTTP client.</param>

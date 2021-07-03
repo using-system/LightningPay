@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 using NSubstitute;
@@ -17,7 +19,7 @@ namespace LightningPay.DependencyInjection.Test
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLndLightningClient(new System.Uri("http://localhost:42802/"), macaroonHexString: "971a5512");
+            serviceCollection.AddLndLightningClient(new Uri("http://localhost:42802/"), macaroonHexString: "971a5512");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
@@ -41,7 +43,7 @@ namespace LightningPay.DependencyInjection.Test
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLndLightningClient(new System.Uri("http://localhost:42802/"));
+            serviceCollection.AddLndLightningClient(new Uri("http://localhost:42802/"));
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert

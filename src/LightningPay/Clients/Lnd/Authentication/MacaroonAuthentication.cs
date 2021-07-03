@@ -10,6 +10,8 @@ namespace LightningPay.Clients.Lnd
     /// </summary>
     public class MacaroonAuthentication : AuthenticationBase
     {
+        internal const string HEADER_KEY = "Grpc-Metadata-macaroon";
+
         private readonly byte[] macaroon;
 
         /// <summary>Initializes a new instance of the <see cref="MacaroonAuthentication" /> class.</summary>
@@ -30,7 +32,7 @@ namespace LightningPay.Clients.Lnd
         {
             if(this.macaroon != null)
             {
-                request.Headers.Add("Grpc-Metadata-macaroon", this.macaroon.ToBitString());
+                request.Headers.Add(HEADER_KEY, this.macaroon.ToBitString());
             }            
 
             return Task.CompletedTask;

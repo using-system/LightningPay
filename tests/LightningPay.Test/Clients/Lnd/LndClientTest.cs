@@ -35,7 +35,7 @@ namespace LightningPay.Test.Clients.Lnd
 
             //Assert
             Assert.Single(mockMessageHandler.Requests);
-            Assert.True(mockMessageHandler.Requests[0].Headers.Contains("Grpc-Metadata-macaroon") == withMacaroon);
+            Assert.True(mockMessageHandler.Requests[0].Headers.Contains(MacaroonAuthentication.HEADER_KEY) == withMacaroon);
             Assert.Equal("http://localhost:42802/v1/invoices", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(1000, invoice.Amount);
             Assert.Equal("Test", invoice.Memo);
@@ -106,7 +106,7 @@ namespace LightningPay.Test.Clients.Lnd
             //Assert
             Assert.True(actual == expectedResult);
             Assert.Single(mockMessageHandler.Requests);
-            Assert.True(mockMessageHandler.Requests[0].Headers.Contains("Grpc-Metadata-macaroon") == withMacaroon);
+            Assert.True(mockMessageHandler.Requests[0].Headers.Contains(MacaroonAuthentication.HEADER_KEY) == withMacaroon);
             Assert.Equal("http://localhost:42802/v1/invoice/id", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
 

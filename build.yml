@@ -8,7 +8,7 @@ variables:
 
 trigger:
   branches:
-    include: [ 'develop', 'master' ]
+    include: [ 'develop', 'main' ]
   paths:
     include: [ 'src', 'samples' ]
 

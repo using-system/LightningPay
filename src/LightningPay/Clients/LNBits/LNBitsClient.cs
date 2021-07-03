@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Globalization;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 using LightningPay.Infrastructure.Api;
 
-namespace LightningPay.Clients.LndHub
+namespace LightningPay.Clients.LNBits
 {
     /// <summary>
-    ///   LNDHub client
+    ///   LNBits client
     /// </summary>
-    public class LndHubClient : ApiServiceBase, ILightningClient
+    public class LNBitsClient : ApiServiceBase, ILightningClient
     {
         private readonly string address;
 
         private bool clientInternalBuilt = false;
 
-        /// <summary>Initializes a new instance of the <see cref="LndHubClient" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="LNBitsClient" /> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="options">The options.</param>
-        public LndHubClient(HttpClient client, 
-            LndHubOptions options) : base(client,
-            BuildAuthentication(options))
+        public LNBitsClient(HttpClient client,
+            LNBitsOptions options) : base(client, BuildAuthentication(options))
         {
             this.address = options.Address.ToBaseUrl();
         }
@@ -30,42 +28,36 @@ namespace LightningPay.Clients.LndHub
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
-                $"{address}/balance");
+            var response = await this.SendAsync<GetWallletDetailsResponse>(HttpMethod.Get,
+                 $"{address}/v1/wallet");
 
-            return response?.BTC?.AvailableBalance ?? 0;
+            return response?.Balance / 1000 ?? 0;
         }
-
 
         /// <summary>Creates the invoice.</summary>
         /// <param name="satoshis">The amount in satoshis.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the LNDHub api response</exception>
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, 
-            string description, 
-            CreateInvoiceOptions options = null)
+        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
         {
-            var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
-            var strExpiry = options.ToExpiryString();
-
-
-            var request = new AddInvoiceRequest
+            var request = new CreateInvoiceRequest
             {
-                Amount = strAmount,
-                Memo = description,
-                Expiry = strExpiry
+
+                Out = false,
+                Amount = satoshis,
+                Memo = description
             };
 
-            var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{address}/addinvoice",
+            var response = await this.SendAsync<CreateInvoiceResponse>(HttpMethod.Post,
+                $"{address}/v1/payments",
                 request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
-                || response.R_hash == null)
+                || string.IsNullOrEmpty(response.PaymentHash))
             {
-                throw new ApiException("Cannot retrieve Payment request or request hash in the LNDHub api response",
+                throw new ApiException("Cannot retrieve Payment request or request hash in the LNBits api response",
                     System.Net.HttpStatusCode.BadRequest);
             }
 
@@ -78,7 +70,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"{address}/checkpayment/{invoiceId}");
+                $"{address}/v1/payments/{invoiceId}");
 
             return response.Paid;
         }
@@ -86,44 +78,42 @@ namespace LightningPay.Clients.LndHub
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>True on the payment success, false otherwise</returns>
+        /// <exception cref="LightningPay.ApiException">Cannot proceed to the payment</exception>
         public async Task<bool> Pay(string paymentRequest)
         {
             var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                $"{address}/payinvoice",
-                new PayRequest() { PaymentRequest = paymentRequest });
+                $"{address}/v1/payments",
+                new PayRequest() { Out = true, PaymentRequest = paymentRequest });
 
-            if (!string.IsNullOrEmpty(response.Error))
+            if (string.IsNullOrEmpty(response.PaymentHash))
             {
-                throw new ApiException($"Cannot proceed to the payment : {response.Error}",
+                throw new ApiException($"Cannot proceed to the payment",
                     System.Net.HttpStatusCode.BadRequest);
             }
 
             return true;
         }
 
-        internal static AuthenticationBase BuildAuthentication(LndHubOptions options)
+        internal static AuthenticationBase BuildAuthentication(LNBitsOptions options)
         {
-            if(string.IsNullOrEmpty(options?.Login)
-                || string.IsNullOrEmpty(options?.Password))
+            if(string.IsNullOrEmpty(options?.ApiKey))
             {
-                throw new ArgumentException("Login and Password are mandatory for lndhub authentication");
+                throw new ArgumentException("Api key required for LNBits authentication");
             }
 
-            return new LndHubAuthentication(options);
+            return new LNBitsAuthentication(options.ApiKey);
         }
 
-        /// <summary>Instanciate a new LNDHub client.</summary>
-        /// <param name="address">The address of the LNDHub api.</param>
-        /// <param name="login">The login.</param>
-        /// <param name="password">The password.</param>
+        /// <summary>>Instanciate a new LNBits api.</summary>
+        /// <param name="address">The address.</param>
+        /// <param name="apiKey">The API key.</param>
         /// <param name="httpClient">The HTTP client.</param>
         /// <returns>
-        ///   Return the LNDHub client
+        ///   Return the LNBits client
         /// </returns>
-        public static LndHubClient New(string address = "https://lndhub.herokuapp.com/",
-           string login = "",
-           string password = "",
-           HttpClient httpClient = null)
+        public static LNBitsClient New(string address = "https://lnbits.com/api/",
+            string apiKey = "",
+            HttpClient httpClient = null)
         {
             bool clientInternalBuilt = false;
 
@@ -133,11 +123,10 @@ namespace LightningPay.Clients.LndHub
                 clientInternalBuilt = true;
             }
 
-            LndHubClient client = new LndHubClient(httpClient, new LndHubOptions()
+            LNBitsClient client = new LNBitsClient(httpClient, new LNBitsOptions()
             {
                 Address = new Uri(address),
-                Login = login,
-                Password = password
+                ApiKey = apiKey
             });
 
             client.clientInternalBuilt = clientInternalBuilt;
