@@ -24,9 +24,14 @@ namespace LightningPay.Clients.LNBits
             this.address = options.Address.ToBaseUrl();
         }
 
-        public Task<long> GetBalance()
+        /// <summary>Gets the wallet balance in satoshis.</summary>
+        /// <returns>Balance is satoshis</returns>
+        public async Task<long> GetBalance()
         {
-            throw new System.NotImplementedException();
+            var response = await this.SendAsync<GetWallletDetailsResponse>(HttpMethod.Get,
+                 $"{address}/v1/wallet");
+
+            return response?.Balance ?? 0;
         }
 
         public Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
@@ -34,9 +39,15 @@ namespace LightningPay.Clients.LNBits
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> CheckPayment(string invoiceId)
+        /// <summary>Checks the payment of an invoice.</summary>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <returns>True of the invoice is paid, false otherwise</returns>
+        public async Task<bool> CheckPayment(string invoiceId)
         {
-            throw new System.NotImplementedException();
+            var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
+                $"{address}/v1/payments/{invoiceId}");
+
+            return response.Paid;
         }
 
         public Task<bool> Pay(string paymentRequest)
