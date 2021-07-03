@@ -7,7 +7,6 @@ Bitcoin Lightning Network Payment .NET library
 - [x] Create an invoice ([Documentation](documentation/client.md#create-an-invoice))
 - [x] Check payment ([Documentation](documentation/client.md#check-invoice-payment))
 - [x] Pay an invoice ([Documentation](documentation/client.md#pay))
-- [ ] Send money  (Not supported yet)
 
 More features will be supported in futures versions. 
 
