@@ -16,6 +16,8 @@ More features will be supported in futures versions.
 - `LightningPay` [![NuGet](https://img.shields.io/nuget/v/LightningPay.svg)](https://www.nuget.org/packages/LightningPay) : Core library with all Lightning clients
 - `LightningPay.DependencyInjection` [![NuGet](https://img.shields.io/nuget/v/LightningPay.DependencyInjection.svg)](https://www.nuget.org/packages/LightningPay.DependencyInjection) : Extension methods for .NET DI
 
+See [Which package to use ?](documentation/packages.md) for more details.
+
 ## Integration
 
 Connect to your lightning nodes : 
