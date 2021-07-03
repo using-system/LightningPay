@@ -10,6 +10,8 @@ namespace LightningPay.Clients.LNBits
     /// </summary>
     public class LNBitsAuthentication : AuthenticationBase
     {
+        internal const string HEADER_KEY = "X-Api-Key";
+
         private readonly string apiKey;
 
         /// <summary>Initializes a new instance of the <see cref="LNBitsAuthentication" /> class.</summary>
@@ -29,7 +31,7 @@ namespace LightningPay.Clients.LNBits
         {
             if(!string.IsNullOrEmpty(this.apiKey))
             {
-                request.Headers.Add("X-Api-Key", this.apiKey);
+                request.Headers.Add(HEADER_KEY, this.apiKey);
             }
 
             return Task.CompletedTask;

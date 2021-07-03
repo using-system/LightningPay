@@ -21,7 +21,7 @@ namespace LightningPay.Test.Clients.Lnd
             macaroonAuth.AddAuthentication(null, request);
 
             //Assert
-            Assert.False(request.Headers.Contains("Grpc-Metadata-macaroon"));
+            Assert.False(request.Headers.Contains(MacaroonAuthentication.HEADER_KEY));
         }
 
         [Fact]
@@ -36,8 +36,8 @@ namespace LightningPay.Test.Clients.Lnd
             macaroonAuth.AddAuthentication(null, request);
 
             //Assert
-            Assert.True(request.Headers.Contains("Grpc-Metadata-macaroon"));
-            var headerValues = request.Headers.GetValues("Grpc-Metadata-macaroon");
+            Assert.True(request.Headers.Contains(MacaroonAuthentication.HEADER_KEY));
+            var headerValues = request.Headers.GetValues(MacaroonAuthentication.HEADER_KEY);
             Assert.Single(headerValues, macaroon.ToBitString());
         }
     }
