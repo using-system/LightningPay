@@ -63,6 +63,7 @@ stages:
       inputs:
         sourceFolder: '$(Build.SourcesDirectory)/src'
         contents: |
+            **/LightningPay.Abstractions.dll
             **/LightningPay.dll
             **/LightningPay.DependencyInjection.dll
         targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
