@@ -45,7 +45,7 @@ namespace LightningPay.Clients.LNBits
             var request = new CreateInvoiceRequest
             {
 
-                Out = true,
+                Out = false,
                 Amount = satoshis,
                 Memo = description
             };

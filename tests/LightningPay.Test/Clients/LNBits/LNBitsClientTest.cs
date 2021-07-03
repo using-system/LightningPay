@@ -35,6 +35,11 @@ namespace LightningPay.Test.Clients.LNBits
             Assert.Single(mockMessageHandler.Requests);
             Assert.True(mockMessageHandler.Requests[0].Headers.Contains("X-Api-Key"));
             Assert.Single(mockMessageHandler.Requests[0].Headers.GetValues("X-Api-Key"), "apikey");
+            Assert.NotNull(mockMessageHandler.Requests[0].Content);
+            var request = Json.Deserialize<CreateInvoiceRequest>(await mockMessageHandler.Requests[0].Content.ReadAsStringAsync());
+            Assert.False(request.Out);
+            Assert.Equal(1000, request.Amount);
+            Assert.Equal("Test", request.Memo);
             Assert.Equal("https://lnbits.com/api/v1/payments", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(1000, invoice.Amount);
             Assert.Equal("Test", invoice.Memo);
