@@ -14,7 +14,7 @@ More features will be supported in futures versions.
 
 - `LightningPay.Abstractions` [![NuGet](https://img.shields.io/nuget/v/LightningPay.Abstractions.svg)](https://www.nuget.org/packages/LightningPay.Abstractions) : Interfaces and model used by `LightningPay` 
 - `LightningPay` [![NuGet](https://img.shields.io/nuget/v/LightningPay.svg)](https://www.nuget.org/packages/LightningPay) : Core library with all Lightning clients
-- `LightningPay.DependencyInjection` [![NuGet](https://img.shields.io/nuget/v/LightningPay.DependencyInjection.svg)](https://www.nuget.org/packages/LightningPay.DependencyInjection) : Extension methods for .NET Core DI
+- `LightningPay.DependencyInjection` [![NuGet](https://img.shields.io/nuget/v/LightningPay.DependencyInjection.svg)](https://www.nuget.org/packages/LightningPay.DependencyInjection) : Extension methods for .NET DI
 
 ## Integration
 
