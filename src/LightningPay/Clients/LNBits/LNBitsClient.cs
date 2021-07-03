@@ -50,9 +50,23 @@ namespace LightningPay.Clients.LNBits
             return response.Paid;
         }
 
-        public Task<bool> Pay(string paymentRequest)
+        /// <summary>Pay.</summary>
+        /// <param name="paymentRequest">The payment request (aka bolt11).</param>
+        /// <returns>True on the payment success, false otherwise</returns>
+        /// <exception cref="LightningPay.ApiException">Cannot proceed to the payment</exception>
+        public async Task<bool> Pay(string paymentRequest)
         {
-            throw new System.NotImplementedException();
+            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
+                $"{address}/v1/payments",
+                new PayRequest() { Out = true, PaymentRequest = paymentRequest });
+
+            if (string.IsNullOrEmpty(response.PaymentHash))
+            {
+                throw new ApiException($"Cannot proceed to the payment",
+                    System.Net.HttpStatusCode.BadRequest);
+            }
+
+            return true;
         }
 
         internal static AuthenticationBase BuildAuthentication(LNBitsOptions options)
