@@ -31,7 +31,7 @@ namespace LightningPay.Clients.LNBits
             var response = await this.SendAsync<GetWallletDetailsResponse>(HttpMethod.Get,
                  $"{address}/v1/wallet");
 
-            return response?.Balance ?? 0;
+            return response?.Balance / 1000 ?? 0;
         }
 
         /// <summary>Creates the invoice.</summary>

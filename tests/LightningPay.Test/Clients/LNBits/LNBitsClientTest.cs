@@ -136,7 +136,7 @@ namespace LightningPay.Test.Clients.LNBits
                 (
                     Json.Serialize(new GetWallletDetailsResponse()
                     {
-                        Balance = 2050
+                        Balance = 5000
                     }), HttpStatusCode.OK
                 ));
 
@@ -147,7 +147,7 @@ namespace LightningPay.Test.Clients.LNBits
             var actual = await lnBitsClient.GetBalance();
 
             //Assert
-            Assert.Equal(2050, actual);
+            Assert.Equal(5, actual);
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://lnbits.com/api/v1/wallet", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
