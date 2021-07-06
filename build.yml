@@ -32,13 +32,13 @@ stages:
       displayName: 'Build sources'
       inputs:
         command: build
-        configuration: '$(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
         projects: '$(srcPattern)'
     - task: DotNetCoreCLI@2
       displayName: 'Build samples'
       inputs:
         command: build
-        configuration: '$(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
         projects: '$(samplesPattern)'
     - task: DotNetCoreCLI@2
       displayName: 'Run unit tests'
