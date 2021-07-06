@@ -58,15 +58,12 @@ stages:
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
-    - task: CopyFiles@2
-      displayName: 'Copy dll Artifact'
+    - task: ArchiveFiles@2
+      displayName: 'Archive binaries'
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/src'
-        contents: |
-            **/LightningPay.DependencyInjection/bin/Release/**
-        targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
-        overWrite: true
-        flattenFolders: true
+        rootFolderOrFile: '$(Build.SourcesDirectory)/src/LightningPay.DependencyInjection/bin/Release/'
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/binaries.zip'
     - task: DotNetCoreCLI@2
       displayName: 'Build nuget packages'
       inputs:
@@ -77,8 +74,8 @@ stages:
         packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
     - publish: '$(Build.ArtifactStagingDirectory)/nuget'
       artifact: 'nuget'
-    - publish: '$(Build.ArtifactStagingDirectory)/dll'
-      artifact: 'dll'
+    - publish: '$(Build.ArtifactStagingDirectory)/binaries.zip'
+      artifact: 'binaries'
 
 - stage : Release
   dependsOn:
