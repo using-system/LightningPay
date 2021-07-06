@@ -63,7 +63,7 @@ stages:
       inputs:
         sourceFolder: '$(Build.SourcesDirectory)/src'
         contents: |
-            **/LightningPay.DependencyInjection/bin/Release
+            **/LightningPay.DependencyInjection/bin/Release/**
         targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
         overWrite: true
         flattenFolders: true
