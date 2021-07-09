@@ -9,7 +9,7 @@ namespace LightningPay.Clients.LNBits
     /// <summary>
     ///   LNBits client
     /// </summary>
-    public class LNBitsClient : ApiServiceBase, ILightningClient
+    public class LNBitsClient : ApiServiceBase, IRestLightningClient
     {
         private bool clientInternalBuilt = false;
 
@@ -26,8 +26,7 @@ namespace LightningPay.Clients.LNBits
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.SendAsync<GetWallletDetailsResponse>(HttpMethod.Get,
-                 "api/v1/wallet");
+            var response = await this.Get<GetWallletDetailsResponse>("api/v1/wallet");
 
             return response?.Balance / 1000 ?? 0;
         }
@@ -48,9 +47,7 @@ namespace LightningPay.Clients.LNBits
                 Memo = description
             };
 
-            var response = await this.SendAsync<CreateInvoiceResponse>(HttpMethod.Post,
-                "api/v1/payments",
-                request);
+            var response = await this.Post<CreateInvoiceResponse>("api/v1/payments", request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
                 || string.IsNullOrEmpty(response.PaymentHash))
@@ -67,8 +64,7 @@ namespace LightningPay.Clients.LNBits
         /// <returns>True of the invoice is paid, false otherwise</returns>
         public async Task<bool> CheckPayment(string invoiceId)
         {
-            var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"api/v1/payments/{invoiceId}");
+            var response = await this.Get<CheckPaymentResponse>($"api/v1/payments/{invoiceId}");
 
             return response.Paid;
         }
@@ -79,8 +75,7 @@ namespace LightningPay.Clients.LNBits
         /// <exception cref="LightningPay.ApiException">Cannot proceed to the payment</exception>
         public async Task<bool> Pay(string paymentRequest)
         {
-            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                "api/v1/payments",
+            var response = await this.Post<PayResponse>("api/v1/payments",
                 new PayRequest() { Out = true, PaymentRequest = paymentRequest });
 
             if (string.IsNullOrEmpty(response.PaymentHash))

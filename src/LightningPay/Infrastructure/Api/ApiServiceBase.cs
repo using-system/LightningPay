@@ -32,7 +32,32 @@ namespace LightningPay.Infrastructure.Api
             this.authentication = authentication;
         }
 
-        /// <summary>Sends the asynchronous.</summary>
+        /// <summary>Request the specified URL with GET verb.</summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="url">The URL to request.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public async Task<TResponse> Get<TResponse>(string url)
+           where TResponse : class
+        {
+            return await this.Send<TResponse>(HttpMethod.Get, url);
+        }
+
+        /// <summary>Request the specified URL with POST verb.</summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="url">The URL to request.</param>
+        /// <param name="body">The body to post.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public async Task<TResponse> Post<TResponse>(string url, object body = null)
+           where TResponse : class
+        {
+            return await this.Send<TResponse>(HttpMethod.Post, url, body);
+        }
+
+        /// <summary>Send web request.</summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
         /// <param name="method">The method.</param>
         /// <param name="url">The URL.</param>
@@ -43,7 +68,7 @@ namespace LightningPay.Infrastructure.Api
         /// <exception cref="LightningPay.ApiException">Http error with status code {response.StatusCode} and response {errorContent}
         /// or
         /// Internal Error on request the url : {url} : {exc.Message}</exception>
-        public async Task<TResponse> SendAsync<TResponse>(HttpMethod method,
+        protected async Task<TResponse> Send<TResponse>(HttpMethod method,
            string url,
            object body = null)
            where TResponse : class

@@ -10,7 +10,7 @@ namespace LightningPay.Clients.LndHub
     /// <summary>
     ///   LNDHub client
     /// </summary>
-    public class LndHubClient : ApiServiceBase, ILightningClient
+    public class LndHubClient : ApiServiceBase, IRestLightningClient
     {
         private bool clientInternalBuilt = false;
 
@@ -26,8 +26,7 @@ namespace LightningPay.Clients.LndHub
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
-                "balance");
+            var response = await this.Get<GetBalanceResponse>("balance");
 
             return response?.BTC?.AvailableBalance ?? 0;
         }
@@ -54,8 +53,7 @@ namespace LightningPay.Clients.LndHub
                 Expiry = strExpiry
             };
 
-            var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                "addinvoice",
+            var response = await this.Post<AddInvoiceResponse>("addinvoice",
                 request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
@@ -73,8 +71,7 @@ namespace LightningPay.Clients.LndHub
         /// <returns>True of the invoice is paid, false otherwise</returns>
         public async Task<bool> CheckPayment(string invoiceId)
         {
-            var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"checkpayment/{invoiceId}");
+            var response = await this.Get<CheckPaymentResponse>($"checkpayment/{invoiceId}");
 
             return response.Paid;
         }
@@ -84,8 +81,7 @@ namespace LightningPay.Clients.LndHub
         /// <returns>True on the payment success, false otherwise</returns>
         public async Task<bool> Pay(string paymentRequest)
         {
-            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                "payinvoice",
+            var response = await this.Post<PayResponse>("payinvoice",
                 new PayRequest() { PaymentRequest = paymentRequest });
 
             if (!string.IsNullOrEmpty(response.Error))
