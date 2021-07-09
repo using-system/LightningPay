@@ -10,10 +10,13 @@ namespace LightningPay.Samples.LNBitsExtensions.Library
             string description)
         {
             var response = await client.ToRestClient()
-                .Post<CreatePayLinkResponse>("lnurlp/api/v1/links", new CreateFixedAmountPayLinkRequest()
+                .Post<CreatePayLinkResponse>("lnurlp/api/v1/links", new CreatePayLinkRequest()
             {
                 Amount = amount,
-                Description = description
+                Min = amount,
+                Max = amount,
+                Description = description,
+                MaxCommentChars = 20
             });
 
             return response.Url;

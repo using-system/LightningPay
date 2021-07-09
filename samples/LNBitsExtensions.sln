@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay", "..\src\Ligh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Abstractions", "..\src\LightningPay.Abstractions\LightningPay.Abstractions.csproj", "{94CA43D7-3193-4040-9608-B8FE074D0F2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.Samples.LNBitsExtensions.Library", "LightningPay.Samples.LNBitsExtensions\LightningPay.Samples.LNBitsExtensions.Library\LightningPay.Samples.LNBitsExtensions.Library.csproj", "{BCB3B9D8-511E-4044-95A7-CAE25AAD429C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Samples.LNBitsExtensions.Library", "LightningPay.Samples.LNBitsExtensions\LightningPay.Samples.LNBitsExtensions.Library\LightningPay.Samples.LNBitsExtensions.Library.csproj", "{BCB3B9D8-511E-4044-95A7-CAE25AAD429C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.Samples.LNBitsExtensions.Console", "LightningPay.Samples.LNBitsExtensions\LightningPay.Samples.LNBitsExtensions.Console\LightningPay.Samples.LNBitsExtensions.Console.csproj", "{6E550068-4D6A-445F-AACA-41268836DA30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{BCB3B9D8-511E-4044-95A7-CAE25AAD429C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB3B9D8-511E-4044-95A7-CAE25AAD429C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB3B9D8-511E-4044-95A7-CAE25AAD429C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E550068-4D6A-445F-AACA-41268836DA30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E550068-4D6A-445F-AACA-41268836DA30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E550068-4D6A-445F-AACA-41268836DA30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E550068-4D6A-445F-AACA-41268836DA30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
