@@ -77,3 +77,47 @@ public HomeController(ILightningClient lightningClient)
 ### Sample
 
 You can retrieve a code samples used Dependency Injection in the Visual Studio Solution [`WebApp.sln`](/samples)
+
+## LNBits extensions
+
+### Build your extension methods
+
+LNBits has a lot of extensions ! You can easly add your own method to implements the extension of your choice by add extension methods to the `ILightningClient` interface.
+
+You just need the `LightningPay.Abstractions` package to create your extension methods.
+
+### Sample
+
+You can retrieve a code samples in the Visual Studio Solution  [`LNBitsExtensions.sln`](/samples)
+
+```c#
+public static async Task<string> AddLNUrlp(this ILightningClient client, 
+            long amount,
+            string description)
+     {
+            var response = await client.ToRestClient()
+                .Post<CreatePayLinkResponse>("lnurlp/api/v1/links", new CreatePayLinkRequest()
+            {
+                Amount = amount,
+                Min = amount,
+                Max = amount,
+                Description = description,
+                MaxCommentChars = 20
+            });
+
+         return response.Url;
+    }
+
+ internal static IRestLightningClient ToRestClient(this ILightningClient client)
+        {
+            var restClient = client as IRestLightningClient;
+
+            if(client == null)
+            {
+                throw new ArgumentException("Lighntning client is not a rest LBBits client !");
+            }
+
+            return restClient;
+        }
+```
+
