@@ -59,31 +59,6 @@ stages:
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
-    - task: DockerCompose@0
-      displayName: 'Docker Compose up'
-      inputs:
-        dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
-        action: 'Run a Docker Compose command'
-        dockerComposeCommand: 'up -d'
-    - task: PowerShell@2
-      displayName: 'Delay'
-      inputs:
-        targetType: 'inline' 
-        script: 'Start-Sleep -Seconds 120'
-    - task: DotNetCoreCLI@2
-      displayName: 'Run integration tests'
-      inputs:
-        command: test
-        arguments: >
-            --configuration $(buildConfiguration) 
-        projects: '$(integrationTestPattern)'
-    - task: DockerCompose@0
-      displayName: 'Docker Compose down'
-      condition: always()
-      inputs:
-        dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
-        action: 'Run a Docker Compose command'
-        dockerComposeCommand: 'down'
     - task: ArchiveFiles@2
       displayName: 'Archive binaries'
       inputs:
@@ -103,9 +78,41 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)/binaries.zip'
       artifact: 'binaries'
 
-- stage : Release
+- stage : IntegrationTest
   dependsOn:
   - Build
+  jobs:
+  - job: IntegrationTest
+    steps:
+    - task: DockerCompose@0
+      displayName: 'Docker Compose up'
+      inputs:
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
+        action: 'Run a Docker Compose command'
+        dockerComposeCommand: 'up -d'
+    - task: PowerShell@2
+      displayName: 'Delay'
+      inputs:
+        targetType: 'inline' 
+        script: 'Start-Sleep -Seconds 90'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run integration tests'
+      inputs:
+        command: test
+        arguments: >
+            --configuration $(buildConfiguration) 
+        projects: '$(integrationTestPattern)'
+    - task: DockerCompose@0
+      displayName: 'Docker Compose down'
+      condition: always()
+      inputs:
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
+        action: 'Run a Docker Compose command'
+        dockerComposeCommand: 'down'
+
+- stage : Release
+  dependsOn:
+  - IntegrationTest
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   jobs:
   - job: PublishNugetPackages
