@@ -10,27 +10,23 @@ namespace LightningPay.Clients.Lnd
     /// <summary>
     ///   LND Client
     /// </summary>
-    public class LndClient : ApiServiceBase, ILightningClient
+    public class LndClient : ApiServiceBase, IRestLightningClient
     {
-        private readonly string address;
-
         private bool clientInternalBuilt = false;
 
         /// <summary>Initializes a new instance of the <see cref="LndClient" /> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="options">The options.</param>
         public LndClient(HttpClient client,
-            LndOptions options) : base(client, BuildAuthentication(options))
+            LndOptions options) : base(options.Address.ToBaseUrl(), client, BuildAuthentication(options))
         {
-            this.address = options.Address.ToBaseUrl();
         }
 
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
-                $"{address}/v1/balance/blockchain");
+            var response = await this.Get<GetBalanceResponse>("v1/balance/blockchain");
 
             return response?.TotalBalance ?? 0;
         }
@@ -57,8 +53,7 @@ namespace LightningPay.Clients.Lnd
                 Private = false
             };
 
-            var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{address}/v1/invoices",
+            var response = await this.Post<AddInvoiceResponse>("v1/invoices",
                 request);
 
             if(string.IsNullOrEmpty(response.Payment_request)
@@ -84,8 +79,7 @@ namespace LightningPay.Clients.Lnd
         private async Task<LightningInvoice> GetInvoice(string invoiceId)
         {
             var hash = Uri.EscapeDataString(Convert.ToString(invoiceId, CultureInfo.InvariantCulture));
-            var response = await this.SendAsync<LnrpcInvoice>(HttpMethod.Get,
-                $"{address}/v1/invoice/{hash}");
+            var response = await this.Get<LnrpcInvoice>($"v1/invoice/{hash}");
 
             return response.ToLightningInvoice();
         }
@@ -95,8 +89,7 @@ namespace LightningPay.Clients.Lnd
         /// <returns>True on the payment success, false otherwise</returns>
         public async Task<bool> Pay(string paymentRequest)
         {
-            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                $"{address}/v1/channels/transactions",
+            var response = await this.Post<PayResponse>("v1/channels/transactions",
                 new PayRequest() { PaymentRequest = paymentRequest });
 
             if(!string.IsNullOrEmpty(response.Error))

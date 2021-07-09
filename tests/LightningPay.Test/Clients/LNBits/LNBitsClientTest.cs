@@ -26,7 +26,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act
             var invoice = await lnBitsClient.CreateInvoice(1000, "Test");
@@ -59,7 +59,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
             await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
@@ -78,7 +78,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
             await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
@@ -100,7 +100,7 @@ namespace LightningPay.Test.Clients.LNBits
                  ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act
             var actual = await lnBitsClient.CheckPayment("id");
@@ -121,7 +121,7 @@ namespace LightningPay.Test.Clients.LNBits
                ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
             await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CheckPayment("id"));
@@ -141,7 +141,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act
             var actual = await lnBitsClient.GetBalance();
@@ -165,7 +165,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act
             var actual = await lnBitsClient.Pay("request");
@@ -189,7 +189,7 @@ namespace LightningPay.Test.Clients.LNBits
                 ));
 
             HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lnBitsClient = LNBitsClient.New("https://lnbits.com/api/", "apikey", httpClient);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com", "apikey", httpClient);
 
             //Act
             await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.Pay("request"));

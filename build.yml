@@ -32,13 +32,13 @@ stages:
       displayName: 'Build sources'
       inputs:
         command: build
-        configuration: '$(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
         projects: '$(srcPattern)'
     - task: DotNetCoreCLI@2
       displayName: 'Build samples'
       inputs:
         command: build
-        configuration: '$(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
         projects: '$(samplesPattern)'
     - task: DotNetCoreCLI@2
       displayName: 'Run unit tests'
@@ -58,16 +58,12 @@ stages:
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
-    - task: CopyFiles@2
-      displayName: 'Copy dll Artifact'
+    - task: ArchiveFiles@2
+      displayName: 'Archive binaries'
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/src'
-        contents: |
-            **/LightningPay.dll
-            **/LightningPay.DependencyInjection.dll
-        targetFolder: '$(Build.ArtifactStagingDirectory)/dll'
-        overWrite: true
-        flattenFolders: true
+        rootFolderOrFile: '$(Build.SourcesDirectory)/src/LightningPay.DependencyInjection/bin/Release/'
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/binaries.zip'
     - task: DotNetCoreCLI@2
       displayName: 'Build nuget packages'
       inputs:
@@ -78,8 +74,8 @@ stages:
         packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
     - publish: '$(Build.ArtifactStagingDirectory)/nuget'
       artifact: 'nuget'
-    - publish: '$(Build.ArtifactStagingDirectory)/dll'
-      artifact: 'dll'
+    - publish: '$(Build.ArtifactStagingDirectory)/binaries.zip'
+      artifact: 'binaries'
 
 - stage : Release
   dependsOn:
@@ -100,13 +96,13 @@ stages:
   - job: AddGithubRelease
     steps:
     - download: current
-      artifact: 'dll'
+      artifact: 'binaries'
     - task: GithubRelease@0 
       displayName: 'Add github release'
       inputs:
         gitHubConnection: github.com_using-system
         packagesToPack: using-system/LightningPay
-        assets: $(Pipeline.Workspace)/dll/*.dll
+        assets: $(Pipeline.Workspace)/binaries/binaries.zip
         tagSource: manual
         tag: $(Build.BuildNumber)   
         title: $(Build.BuildNumber)

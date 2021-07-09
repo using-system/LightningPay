@@ -10,28 +10,23 @@ namespace LightningPay.Clients.LndHub
     /// <summary>
     ///   LNDHub client
     /// </summary>
-    public class LndHubClient : ApiServiceBase, ILightningClient
+    public class LndHubClient : ApiServiceBase, IRestLightningClient
     {
-        private readonly string address;
-
         private bool clientInternalBuilt = false;
 
         /// <summary>Initializes a new instance of the <see cref="LndHubClient" /> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="options">The options.</param>
         public LndHubClient(HttpClient client, 
-            LndHubOptions options) : base(client,
-            BuildAuthentication(options))
+            LndHubOptions options) : base(options.Address.ToBaseUrl(), client, BuildAuthentication(options))
         {
-            this.address = options.Address.ToBaseUrl();
         }
 
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
-                $"{address}/balance");
+            var response = await this.Get<GetBalanceResponse>("balance");
 
             return response?.BTC?.AvailableBalance ?? 0;
         }
@@ -58,8 +53,7 @@ namespace LightningPay.Clients.LndHub
                 Expiry = strExpiry
             };
 
-            var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{address}/addinvoice",
+            var response = await this.Post<AddInvoiceResponse>("addinvoice",
                 request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
@@ -77,8 +71,7 @@ namespace LightningPay.Clients.LndHub
         /// <returns>True of the invoice is paid, false otherwise</returns>
         public async Task<bool> CheckPayment(string invoiceId)
         {
-            var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"{address}/checkpayment/{invoiceId}");
+            var response = await this.Get<CheckPaymentResponse>($"checkpayment/{invoiceId}");
 
             return response.Paid;
         }
@@ -88,8 +81,7 @@ namespace LightningPay.Clients.LndHub
         /// <returns>True on the payment success, false otherwise</returns>
         public async Task<bool> Pay(string paymentRequest)
         {
-            var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                $"{address}/payinvoice",
+            var response = await this.Post<PayResponse>("payinvoice",
                 new PayRequest() { PaymentRequest = paymentRequest });
 
             if (!string.IsNullOrEmpty(response.Error))

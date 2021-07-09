@@ -1,6 +1,4 @@
-﻿using LightningPay.Tools;
-
-namespace LightningPay.Clients.LNBits
+﻿namespace LightningPay.Clients.LNBits
 {
     internal class CheckPaymentResponse
     {
