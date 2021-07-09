@@ -12,18 +12,14 @@ namespace LightningPay.Clients.LndHub
     /// </summary>
     public class LndHubClient : ApiServiceBase, ILightningClient
     {
-        protected readonly string address;
-
         private bool clientInternalBuilt = false;
 
         /// <summary>Initializes a new instance of the <see cref="LndHubClient" /> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="options">The options.</param>
         public LndHubClient(HttpClient client, 
-            LndHubOptions options) : base(client,
-            BuildAuthentication(options))
+            LndHubOptions options) : base(options.Address.ToBaseUrl(), client, BuildAuthentication(options))
         {
-            this.address = options.Address.ToBaseUrl();
         }
 
         /// <summary>Gets the wallet balance in satoshis.</summary>
@@ -31,7 +27,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<long> GetBalance()
         {
             var response = await this.SendAsync<GetBalanceResponse>(HttpMethod.Get,
-                $"{address}/balance");
+                "balance");
 
             return response?.BTC?.AvailableBalance ?? 0;
         }
@@ -59,7 +55,7 @@ namespace LightningPay.Clients.LndHub
             };
 
             var response = await this.SendAsync<AddInvoiceResponse>(HttpMethod.Post,
-                $"{address}/addinvoice",
+                "addinvoice",
                 request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
@@ -78,7 +74,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"{address}/checkpayment/{invoiceId}");
+                $"checkpayment/{invoiceId}");
 
             return response.Paid;
         }
@@ -89,7 +85,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<bool> Pay(string paymentRequest)
         {
             var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                $"{address}/payinvoice",
+                "payinvoice",
                 new PayRequest() { PaymentRequest = paymentRequest });
 
             if (!string.IsNullOrEmpty(response.Error))

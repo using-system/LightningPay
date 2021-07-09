@@ -13,16 +13,21 @@ namespace LightningPay.Infrastructure.Api
     /// </summary>
     public abstract class ApiServiceBase
     {
+        private readonly string baseUrl;
+
         protected readonly HttpClient httpClient;
 
         private readonly AuthenticationBase authentication;
 
         /// <summary>Initializes a new instance of the <see cref="ApiServiceBase" /> class.</summary>
+        /// <param name="baseurl">Base url of the api</param>
         /// <param name="httpClient">The HTTP client.</param>
         /// <param name="authentication">The authentication.</param>
-        public ApiServiceBase(HttpClient httpClient, 
+        public ApiServiceBase(string baseurl, 
+            HttpClient httpClient, 
             AuthenticationBase authentication)
         {
+            this.baseUrl = baseurl;
             this.httpClient = httpClient;
             this.authentication = authentication;
         }
@@ -38,11 +43,17 @@ namespace LightningPay.Infrastructure.Api
         /// <exception cref="LightningPay.ApiException">Http error with status code {response.StatusCode} and response {errorContent}
         /// or
         /// Internal Error on request the url : {url} : {exc.Message}</exception>
-        protected async Task<TResponse> SendAsync<TResponse>(HttpMethod method,
+        public async Task<TResponse> SendAsync<TResponse>(HttpMethod method,
            string url,
            object body = null)
            where TResponse : class
         {
+            if(!url.StartsWith("http")
+                && !string.IsNullOrEmpty(this.baseUrl))
+            {
+                url = $"{this.baseUrl}/{url.TrimStart('/')}";
+            }
+
             HttpContent content = null;
 
             if (body != null)

@@ -11,17 +11,15 @@ namespace LightningPay.Clients.LNBits
     /// </summary>
     public class LNBitsClient : ApiServiceBase, ILightningClient
     {
-        protected readonly string address;
-
         private bool clientInternalBuilt = false;
 
         /// <summary>Initializes a new instance of the <see cref="LNBitsClient" /> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="options">The options.</param>
         public LNBitsClient(HttpClient client,
-            LNBitsOptions options) : base(client, BuildAuthentication(options))
+            LNBitsOptions options) : base(options.Address.ToBaseUrl(), client, BuildAuthentication(options))
         {
-            this.address = options.Address.ToBaseUrl();
+
         }
 
         /// <summary>Gets the wallet balance in satoshis.</summary>
@@ -29,7 +27,7 @@ namespace LightningPay.Clients.LNBits
         public async Task<long> GetBalance()
         {
             var response = await this.SendAsync<GetWallletDetailsResponse>(HttpMethod.Get,
-                 $"{address}/v1/wallet");
+                 "api/v1/wallet");
 
             return response?.Balance / 1000 ?? 0;
         }
@@ -51,7 +49,7 @@ namespace LightningPay.Clients.LNBits
             };
 
             var response = await this.SendAsync<CreateInvoiceResponse>(HttpMethod.Post,
-                $"{address}/v1/payments",
+                "api/v1/payments",
                 request);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
@@ -70,7 +68,7 @@ namespace LightningPay.Clients.LNBits
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var response = await this.SendAsync<CheckPaymentResponse>(HttpMethod.Get,
-                $"{address}/v1/payments/{invoiceId}");
+                $"api/v1/payments/{invoiceId}");
 
             return response.Paid;
         }
@@ -82,7 +80,7 @@ namespace LightningPay.Clients.LNBits
         public async Task<bool> Pay(string paymentRequest)
         {
             var response = await this.SendAsync<PayResponse>(HttpMethod.Post,
-                $"{address}/v1/payments",
+                "api/v1/payments",
                 new PayRequest() { Out = true, PaymentRequest = paymentRequest });
 
             if (string.IsNullOrEmpty(response.PaymentHash))
@@ -111,7 +109,7 @@ namespace LightningPay.Clients.LNBits
         /// <returns>
         ///   Return the LNBits client
         /// </returns>
-        public static LNBitsClient New(string address = "https://lnbits.com/api/",
+        public static LNBitsClient New(string address = "https://lnbits.com/",
             string apiKey = "",
             HttpClient httpClient = null)
         {
