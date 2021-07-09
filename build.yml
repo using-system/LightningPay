@@ -65,9 +65,11 @@ stages:
         dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
         action: 'Run a Docker Compose command'
         dockerComposeCommand: 'up -d'
-    - task: Delay@1
+    - task: PowerShell@2
+      displayName: 'Delay'
       inputs:
-        delayForMinutes: '2' 
+        targetType: 'inline' 
+        script: 'Start-Sleep -Seconds 120'
     - task: DotNetCoreCLI@2
       displayName: 'Run integration tests'
       inputs:
