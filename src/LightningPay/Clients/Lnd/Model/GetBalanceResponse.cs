@@ -1,6 +1,4 @@
-﻿using LightningPay.Tools;
-
-namespace LightningPay.Clients.Lnd
+﻿namespace LightningPay.Clients.Lnd
 {
     internal class GetBalanceResponse
     {

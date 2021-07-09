@@ -1,6 +1,4 @@
-﻿using LightningPay.Tools;
-
-namespace LightningPay.Clients.LndHub{
+﻿namespace LightningPay.Clients.LndHub{
     internal class PayRequest
     {
         [Json("invoice")]
