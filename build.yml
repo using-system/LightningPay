@@ -4,6 +4,7 @@ variables:
   srcPattern: 'src/**/*.csproj'
   samplesPattern: 'samples/**/*.csproj'
   testPattern: 'tests/**/*.Test.csproj'
+  integrationTestPattern: 'tests/**/*.IntegrationTest.csproj'
   buildConfiguration: 'Release'
 
 trigger:
@@ -58,6 +59,19 @@ stages:
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coveragereport/Cobertura.xml'
+    - task: DockerCompose@0
+      displayName: 'Integration docker up'
+      inputs:
+        dockerComposeFile: '$(Build.SourcesDirectory)/docker/docker-compose.yml'
+        action: 'Run a Docker Compose command'
+        dockerComposeCommand: 'up -d'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run integration tests'
+      inputs:
+        command: test
+        arguments: >
+            --configuration $(buildConfiguration) 
+        projects: '$(integrationTestPattern)'
     - task: ArchiveFiles@2
       displayName: 'Archive binaries'
       inputs:
