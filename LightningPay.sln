@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Test", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.DependencyInjection.Test", "tests\LightningPay.DependencyInjection.Test\LightningPay.DependencyInjection.Test.csproj", "{520516C9-F314-4FF5-A86B-58C9DE5219C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.Abstractions", "src\LightningPay.Abstractions\LightningPay.Abstractions.csproj", "{1E745096-5E4B-4416-BEF4-539D941B7B3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightningPay.Abstractions", "src\LightningPay.Abstractions\LightningPay.Abstractions.csproj", "{1E745096-5E4B-4416-BEF4-539D941B7B3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningPay.IntegrationTest", "tests\LightningPay.IntegrationTest\LightningPay.IntegrationTest.csproj", "{1D82D328-CF5D-4E0F-AA36-257997A59780}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{1E745096-5E4B-4416-BEF4-539D941B7B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E745096-5E4B-4416-BEF4-539D941B7B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E745096-5E4B-4416-BEF4-539D941B7B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D82D328-CF5D-4E0F-AA36-257997A59780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D82D328-CF5D-4E0F-AA36-257997A59780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D82D328-CF5D-4E0F-AA36-257997A59780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D82D328-CF5D-4E0F-AA36-257997A59780}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{6E06E522-961C-47D0-91D3-DB0C6CB90679} = {AF5C9502-891A-443F-8A33-350B4920CC2C}
 		{520516C9-F314-4FF5-A86B-58C9DE5219C0} = {AF5C9502-891A-443F-8A33-350B4920CC2C}
 		{1E745096-5E4B-4416-BEF4-539D941B7B3B} = {6DAEE4F1-42F8-41CE-B852-F6F64C3D1A3C}
+		{1D82D328-CF5D-4E0F-AA36-257997A59780} = {AF5C9502-891A-443F-8A33-350B4920CC2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65D566AD-39E7-4F67-97BC-B59B9299935B}

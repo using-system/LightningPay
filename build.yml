@@ -3,7 +3,7 @@ name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
 variables:
   srcPattern: 'src/**/*.csproj'
   samplesPattern: 'samples/**/*.csproj'
-  testPattern: 'tests/**/*.csproj'
+  testPattern: 'tests/**/*.Test.csproj'
   buildConfiguration: 'Release'
 
 trigger:
