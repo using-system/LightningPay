@@ -58,7 +58,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -75,7 +75,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -124,7 +124,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lndClient.CheckPayment("id"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CheckPayment("id"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -192,7 +192,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", null, httpClient: httpClient);
 
             //Act
-            await Assert.ThrowsAsync<ApiException>(() => lndClient.Pay("request"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.Pay("request"));
 
             //Assert
             Assert.Single(mockMessageHandler.Requests);

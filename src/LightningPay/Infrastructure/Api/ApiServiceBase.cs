@@ -65,7 +65,7 @@ namespace LightningPay.Infrastructure.Api
         /// <returns>
         ///   <br />
         /// </returns>
-        /// <exception cref="LightningPay.ApiException">Http error with status code {response.StatusCode} and response {errorContent}
+        /// <exception cref="LightningPay.LightningPayException">Http error with status code {response.StatusCode} and response {errorContent}
         /// or
         /// Internal Error on request the url : {url} : {exc.Message}</exception>
         protected async Task<TResponse> Send<TResponse>(HttpMethod method,
@@ -119,20 +119,20 @@ namespace LightningPay.Infrastructure.Api
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new ApiException($"Http error with status code {response.StatusCode} and response {errorContent}",
-                        response.StatusCode,
+                    throw new LightningPayException($"Http error with status code {response.StatusCode} and response {errorContent}",
+                        LightningPayException.ErrorCode.BAD_REQUEST,
                         responseData: errorContent);
                 }
 
             }
-            catch(ApiException)
+            catch(LightningPayException)
             {
                 throw;
             }
             catch (Exception exc)
             {
-                throw new ApiException($"Internal Error on request the url : {url} : {exc.Message}", 
-                    HttpStatusCode.InternalServerError, 
+                throw new LightningPayException($"Internal Error on request the url : {url} : {exc.Message}",
+                    LightningPayException.ErrorCode.INTERNAL_ERROR, 
                     innerException: exc);
             }
 

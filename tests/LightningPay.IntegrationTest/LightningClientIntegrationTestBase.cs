@@ -34,8 +34,9 @@ namespace LightningPay.IntegrationTest
                 await client.Pay(invoice.BOLT11);
                 throw new Exception("self-payments not allowed");
             }
-            catch(ApiException exc)
+            catch(LightningPayException exc)
             {
+                Assert.Equal(LightningPayException.ErrorCode.BAD_REQUEST, exc.Code);
                 Assert.Contains(this.SelfPaymentErrorMesssage, exc.Message);
             }
             catch (Exception)

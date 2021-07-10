@@ -36,7 +36,7 @@ namespace LightningPay.Clients.LNBits
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
+        /// <exception cref="LightningPay.LightningPayException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
         public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
         {
             var request = new CreateInvoiceRequest
@@ -52,8 +52,8 @@ namespace LightningPay.Clients.LNBits
             if (string.IsNullOrEmpty(response.PaymentRequest)
                 || string.IsNullOrEmpty(response.PaymentHash))
             {
-                throw new ApiException("Cannot retrieve Payment request or request hash in the LNBits api response",
-                    System.Net.HttpStatusCode.BadRequest);
+                throw new LightningPayException("Cannot retrieve Payment request or request hash in the LNBits api response",
+                    LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
             return response.ToLightningInvoice(satoshis, description, options);
@@ -72,7 +72,7 @@ namespace LightningPay.Clients.LNBits
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>True on the payment success, false otherwise</returns>
-        /// <exception cref="LightningPay.ApiException">Cannot proceed to the payment</exception>
+        /// <exception cref="LightningPay.LightningPayException">Cannot proceed to the payment</exception>
         public async Task<bool> Pay(string paymentRequest)
         {
             var response = await this.Post<PayResponse>("api/v1/payments",
@@ -80,8 +80,8 @@ namespace LightningPay.Clients.LNBits
 
             if (string.IsNullOrEmpty(response.PaymentHash))
             {
-                throw new ApiException($"Cannot proceed to the payment",
-                    System.Net.HttpStatusCode.BadRequest);
+                throw new LightningPayException($"Cannot proceed to the payment",
+                    LightningPayException.ErrorCode.UNAUTHORIZED);
             }
 
             return true;
