@@ -6,7 +6,7 @@ namespace LightningPay.IntegrationTest
     {
         protected override ILightningClient GetClient()
         {
-            return LndClient.New("http://localhost:42802/");
+            return LndClient.New("http://localhost:32736/");
         }
     }
 }
