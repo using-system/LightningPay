@@ -41,7 +41,7 @@ namespace LightningPay.Infrastructure.Api
         public async Task<TResponse> Get<TResponse>(string url)
            where TResponse : class
         {
-            return await this.Send<TResponse>(HttpMethod.Get, url);
+            return await this.Request<TResponse>(HttpMethod.Get, url);
         }
 
         /// <summary>Request the specified URL with POST verb.</summary>
@@ -54,12 +54,43 @@ namespace LightningPay.Infrastructure.Api
         public async Task<TResponse> Post<TResponse>(string url, object body = null)
            where TResponse : class
         {
-            return await this.Send<TResponse>(HttpMethod.Post, url, body);
+            return await this.Request<TResponse>(HttpMethod.Post, url, body);
         }
+
+        /// <summary>Request the specified URL with PUT verb.</summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="url">The URL to request.</param>
+        /// <param name="body">The body to post.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public async Task<TResponse> Put<TResponse>(string url, object body = null)
+           where TResponse : class
+        {
+            return await this.Request<TResponse>(HttpMethod.Put, url, body);
+        }
+
+
+        /// <summary>Request the specified URL with custom verb.</summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="httpMethod">Http method</param>
+        /// <param name="url">The URL to request.</param>
+        /// <param name="body">The body to post.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public async Task<TResponse> Request<TResponse>(HttpMethod method,
+           string url,
+           object body = null)
+           where TResponse : class
+        {
+            return await this.Request<TResponse>(method.ToString(), url, body);
+        }
+
 
         /// <summary>Send web request.</summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
-        /// <param name="method">The method.</param>
+        /// <param name="method">Http method.</param>
         /// <param name="url">The URL.</param>
         /// <param name="body">The body.</param>
         /// <returns>
@@ -68,7 +99,7 @@ namespace LightningPay.Infrastructure.Api
         /// <exception cref="LightningPay.LightningPayException">Http error with status code {response.StatusCode} and response {errorContent}
         /// or
         /// Internal Error on request the url : {url} : {exc.Message}</exception>
-        protected async Task<TResponse> Send<TResponse>(HttpMethod method,
+        public async Task<TResponse> Request<TResponse>(string method,
            string url,
            object body = null)
            where TResponse : class
@@ -86,7 +117,7 @@ namespace LightningPay.Infrastructure.Api
                 content = new StringContent(Json.Serialize(body), Encoding.UTF8, "application/json");
             }
 
-            var request = new HttpRequestMessage(method, url)
+            var request = new HttpRequestMessage(new HttpMethod(method), url)
             {
                 Content = content
             };
