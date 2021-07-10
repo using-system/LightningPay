@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -26,8 +27,25 @@ namespace LightningPay.IntegrationTest
             //Check payment (not paid)
             var isPaid = await client.CheckPayment(invoice.Id);
             Assert.False(isPaid);
+
+            //Self payment is not allowed
+            try
+            {
+                await client.Pay(invoice.BOLT11);
+                throw new Exception("self-payments not allowed");
+            }
+            catch(ApiException exc)
+            {
+                Assert.Contains(this.SelfPaymentErrorMesssage, exc.Message);
+            }
+            catch (Exception)
+            {
+                throw new Exception("self-payments not allowed");
+            }
         }
 
         protected abstract ILightningClient GetClient();
+
+        protected abstract string SelfPaymentErrorMesssage { get; }
     }
 }
