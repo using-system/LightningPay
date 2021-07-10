@@ -15,6 +15,7 @@ namespace LightningPay.Infrastructure.Api
     {
         private readonly string baseUrl;
 
+        /// <summary>The HTTP client</summary>
         protected readonly HttpClient httpClient;
 
         private readonly AuthenticationBase authentication;
@@ -73,7 +74,7 @@ namespace LightningPay.Infrastructure.Api
 
         /// <summary>Request the specified URL with custom verb.</summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
-        /// <param name="httpMethod">Http method</param>
+        /// <param name="method">Http method</param>
         /// <param name="url">The URL to request.</param>
         /// <param name="body">The body to post.</param>
         /// <returns>
