@@ -40,6 +40,10 @@ Need for code samples ? Go here : [Lightning samples](samples/)
 
 [Lightning Documentation](documentation/)
 
+## Local test
+
+You can use our [docker-compose file](docker/) to test the `LightningPay` clients.
+
 ## Continuous Integration
 
 [LightningPay build reports](https://dev.azure.com/NiawaCorp/LightningPay/_build?definitionId=24)
