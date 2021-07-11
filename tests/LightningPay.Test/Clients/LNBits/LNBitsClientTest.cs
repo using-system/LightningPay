@@ -62,7 +62,7 @@ namespace LightningPay.Test.Clients.LNBits
             var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -81,7 +81,7 @@ namespace LightningPay.Test.Clients.LNBits
             var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lnBitsClient.CreateInvoice(1000, "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -124,7 +124,7 @@ namespace LightningPay.Test.Clients.LNBits
             var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.CheckPayment("id"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lnBitsClient.CheckPayment("id"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -192,7 +192,7 @@ namespace LightningPay.Test.Clients.LNBits
             var lnBitsClient = LNBitsClient.New("https://lnbits.com", "apikey", httpClient);
 
             //Act
-            await Assert.ThrowsAsync<ApiException>(() => lnBitsClient.Pay("request"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lnBitsClient.Pay("request"));
 
             //Assert
             Assert.Single(mockMessageHandler.Requests);

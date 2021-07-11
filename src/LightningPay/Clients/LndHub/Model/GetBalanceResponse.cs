@@ -1,6 +1,6 @@
 ﻿namespace LightningPay.Clients.LndHub
 {
-    internal class GetBalanceResponse
+    internal class GetBalanceResponse : ResponseBase
     {
         [Json("BTC")]
         public BTCBalance BTC { get; set; }

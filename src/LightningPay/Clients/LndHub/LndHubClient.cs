@@ -37,7 +37,7 @@ namespace LightningPay.Clients.LndHub
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        /// <exception cref="LightningPay.ApiException">Cannot retrieve Payment request or request hash in the LNDHub api response</exception>
+        /// <exception cref="LightningPay.LightningPayException">Cannot retrieve Payment request or request hash in the LNDHub api response</exception>
         public async Task<LightningInvoice> CreateInvoice(long satoshis, 
             string description, 
             CreateInvoiceOptions options = null)
@@ -55,12 +55,13 @@ namespace LightningPay.Clients.LndHub
 
             var response = await this.Post<AddInvoiceResponse>("addinvoice",
                 request);
+            this.CheckResponse(response);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
                 || response.R_hash == null)
             {
-                throw new ApiException("Cannot retrieve Payment request or request hash in the LNDHub api response",
-                    System.Net.HttpStatusCode.BadRequest);
+                throw new LightningPayException("Cannot retrieve Payment request or request hash in the LNDHub api response",
+                    LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
             return response.ToLightningInvoice(satoshis, description, options);
@@ -72,6 +73,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var response = await this.Get<CheckPaymentResponse>($"checkpayment/{invoiceId}");
+            this.CheckResponse(response);
 
             return response.Paid;
         }
@@ -83,11 +85,12 @@ namespace LightningPay.Clients.LndHub
         {
             var response = await this.Post<PayResponse>("payinvoice",
                 new PayRequest() { PaymentRequest = paymentRequest });
+            this.CheckResponse(response);
 
             if (!string.IsNullOrEmpty(response.Error))
             {
-                throw new ApiException($"Cannot proceed to the payment : {response.Error}",
-                    System.Net.HttpStatusCode.BadRequest);
+                throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
+                    LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
             return true;
@@ -98,7 +101,7 @@ namespace LightningPay.Clients.LndHub
             if(string.IsNullOrEmpty(options?.Login)
                 || string.IsNullOrEmpty(options?.Password))
             {
-                throw new ArgumentException("Login and Password are mandatory for lndhub authentication");
+                return new NoAuthentication();
             }
 
             return new LndHubAuthentication(options);
@@ -135,6 +138,15 @@ namespace LightningPay.Clients.LndHub
             client.clientInternalBuilt = clientInternalBuilt;
 
             return client;
+        }
+
+        private void CheckResponse(ResponseBase response)
+        {
+            if(response.Failed)
+            {
+                throw new LightningPayException(response.Message,
+                    LightningPayException.ErrorCode.BAD_REQUEST);
+            }
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>

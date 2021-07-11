@@ -62,9 +62,9 @@ namespace LightningPay.Clients.LndHub
                     if (string.IsNullOrEmpty(tokenResponse.AccessToken)
                         || string.IsNullOrEmpty(tokenResponse.RefreshToken))
                     {
-                        throw new ApiException(
+                        throw new LightningPayException(
                             $"Bad Autentication to the lndhub : {this.options.Address}",
-                            HttpStatusCode.Unauthorized);
+                            LightningPayException.ErrorCode.UNAUTHORIZED);
                     }
 
                     this.token.AccessToken = tokenResponse.AccessToken;
@@ -75,19 +75,19 @@ namespace LightningPay.Clients.LndHub
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new ApiException(
+                    throw new LightningPayException(
                         $"Bad Autentication to the lndhub : {this.options.Address} with error status code {response.StatusCode} and response {errorContent}",
-                        HttpStatusCode.Unauthorized);
+                        LightningPayException.ErrorCode.UNAUTHORIZED);
                 }
             }
-            catch (ApiException)
+            catch (LightningPayException)
             {
                 throw;
             }
             catch (Exception exc)
             {
-                throw new ApiException($"Bad Autentication",
-                   HttpStatusCode.Unauthorized,
+                throw new LightningPayException($"Bad Autentication",
+                   LightningPayException.ErrorCode.UNAUTHORIZED,
                    innerException: exc);
             }
         }
@@ -108,9 +108,9 @@ namespace LightningPay.Clients.LndHub
                     if (string.IsNullOrEmpty(tokenResponse.AccessToken)
                         || string.IsNullOrEmpty(tokenResponse.RefreshToken))
                     {
-                        throw new ApiException(
+                        throw new LightningPayException(
                             $"Cannot refresh token for {this.options.Address}",
-                            HttpStatusCode.Unauthorized);
+                            LightningPayException.ErrorCode.UNAUTHORIZED);
                     }
 
                     this.token.AccessToken = tokenResponse.AccessToken;
@@ -121,19 +121,19 @@ namespace LightningPay.Clients.LndHub
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new ApiException(
+                    throw new LightningPayException(
                         $"Cannot refresh token to the lndhub : {this.options.Address} with error status code {response.StatusCode} and response {errorContent}",
-                        HttpStatusCode.Unauthorized);
+                        LightningPayException.ErrorCode.UNAUTHORIZED);
                 }
             }
-            catch (ApiException)
+            catch (LightningPayException)
             {
                 throw;
             }
             catch (Exception exc)
             {
-                throw new ApiException($"Cannot refresh token",
-                   HttpStatusCode.Unauthorized,
+                throw new LightningPayException($"Cannot refresh token",
+                   LightningPayException.ErrorCode.UNAUTHORIZED,
                    innerException: exc);
             }
         }

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-LNDHub Client is shipped with `LightningPay` package.
+LNDHub (BlueWallet) Client is shipped with `LightningPay` package.
 
 [More info about LNDHUB](https://github.com/BlueWallet/LndHub) (Github Project)
 

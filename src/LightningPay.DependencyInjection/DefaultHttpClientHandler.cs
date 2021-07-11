@@ -5,8 +5,13 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace LightningPay.DependencyInjection
 {
+    /// <summary>
+    ///   Default Http Client Handler
+    /// </summary>
     public class DefaultHttpClientHandler : HttpClientHandler
     {
+        /// <summary>Initializes a new instance of the <see cref="DefaultHttpClientHandler" /> class.</summary>
+        /// <param name="options">The options.</param>
         public DefaultHttpClientHandler(HttpClientHandlerOptions options)
         {
             if (options.AllowInsecure)

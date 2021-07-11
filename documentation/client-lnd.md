@@ -12,7 +12,7 @@ LND Client is shipped with `LightningPay` package.
 
 ```c#
 string macaroon = null; // Enter here your macaroon
-using (var client = LndClient.New("http://localhost:42802/", macaroon))
+using (var client = LndClient.New("http://localhost:8080/", macaroon))
 {
 	//Your code...
 }
@@ -23,7 +23,7 @@ If you wants to use your own HttpClient to request the Lnd API, you can send it 
 ```c#
 using (HttpClient httpClient = new HttpClient())
 {
-	var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+	var lndClient = LndClient.New("http://localhost:8080/", httpClient: httpClient);
     
 	//Your code...
 }
@@ -43,7 +43,7 @@ public void ConfigureServices(IServiceCollection services)
 	///...
 
 	string yourMacaroon = null;
-	services.AddLndLightningClient(new Uri("http://localhost:42802/"), yourMacaroon);
+	services.AddLndLightningClient(new Uri("http://localhost:8080/"), yourMacaroon);
 }
 
 
@@ -55,7 +55,7 @@ The `AddLndLightningClient` method has optionnal pamameters to configure your cl
 
 | Parameter name        | Type     | Required | Description                                                  |
 | --------------------- | -------- | -------- | ------------------------------------------------------------ |
-| address               | `Uri`    | Yes      | Address of your node server with port (example : http://localhost:42802/) |
+| address               | `Uri`    | Yes      | Address of your node server with port (example : http://localhost:8080/) |
 | macaroonHexString     | `String` | No       | Authentication assertion in hex string format<br /><u>Tip :</u> To get the hex string of your, type the command xxd -p -c2000 admin.macaroon to get the hex representation of your file. |
 | macaroonBytes         | `byte[]` | No       | Authentication assertion in Byte array (to load macaron from file with .NET code `File.ReadAllBytes(macaroonFilePath)` ) |
 | certificateThumbprint | `String` | No       | Certificate thumbprint used for your https address if the certificate is not public<br />Ex : "284800A04D0C046636EBE60C37A4F527B8B550F3" |
@@ -98,6 +98,6 @@ public void ConfigureServices(IServiceCollection services)
          * 
          */
 
-        services.AddLndLightningClient(new Uri("http://localhost:42802/"));
+        services.AddLndLightningClient(new Uri("http://localhost:8080/"));
     }
 ```

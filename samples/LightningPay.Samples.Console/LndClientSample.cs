@@ -8,7 +8,7 @@ namespace LightningPay.Samples.Console
     {
         public async override Task Execute()
         {
-            using (var lndClient = LndClient.New("http://localhost:42802/"))
+            using (var lndClient = LndClient.New("http://localhost:32736/"))
             {
                 var balance = await lndClient.GetBalance();
                 System.Console.WriteLine($"Wallet balance : {balance} sat ");
