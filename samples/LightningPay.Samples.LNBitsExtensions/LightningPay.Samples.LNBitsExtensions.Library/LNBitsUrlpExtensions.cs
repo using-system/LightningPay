@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace LightningPay.Samples.LNBitsExtensions.Library
 {
@@ -21,17 +20,6 @@ namespace LightningPay.Samples.LNBitsExtensions.Library
 
             return response.Url;
         }
-
-        internal static IRestLightningClient ToRestClient(this ILightningClient client)
-        {
-            var restClient = client as IRestLightningClient;
-
-            if(client == null)
-            {
-                throw new ArgumentException("Lighntning client is not a rest LBBits client !");
-            }
-
-            return restClient;
-        }
+    
     }
 }

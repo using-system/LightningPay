@@ -6,14 +6,14 @@ namespace LightningPay
     /// <summary>
     ///   Invoice exntension methods
     /// </summary>
-    internal static class InvoiceExtensions
+    public static class InvoiceExtensions
     {
         /// <summary>Converts to expirystring.</summary>
         /// <param name="source">The source.</param>
         /// <returns>
         ///   Expiry string
         /// </returns>
-        internal static string ToExpiryString(this CreateInvoiceOptions source)
+        public static string ToExpiryString(this CreateInvoiceOptions source)
         {
             TimeSpan expiry = Constants.INVOICE_DEFAULT_EXPIRY;
 
@@ -30,7 +30,7 @@ namespace LightningPay
         /// <returns>
         ///   Expiry date
         /// </returns>
-        internal static DateTimeOffset ToExpiryDate(this CreateInvoiceOptions source)
+        public static DateTimeOffset ToExpiryDate(this CreateInvoiceOptions source)
         {
             if (source == null
                 || !source.Expiry.HasValue)

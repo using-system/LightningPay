@@ -107,17 +107,5 @@ public static async Task<string> AddLNUrlp(this ILightningClient client,
 
          return response.Url;
     }
-
- internal static IRestLightningClient ToRestClient(this ILightningClient client)
-        {
-            var restClient = client as IRestLightningClient;
-
-            if(client == null)
-            {
-                throw new ArgumentException("Lighntning client is not a rest LBBits client !");
-            }
-
-            return restClient;
-        }
 ```
 
