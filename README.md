@@ -29,8 +29,8 @@ Connect to your lightning nodes :
 
 Or with custodial solution for lightning (without having a node  of your own) : 
 
-- [x] LNDHub ([Documentation](documentation/client-lndhub.md))
-- [x] LNbits ([Documentation](documentation/client-lnbits.md))
+- [x] LNDHub / BlueWallet ([Documentation](documentation/client-lndhub.md))
+- [x] LNBits ([Documentation](documentation/client-lnbits.md))
 
 ## Samples
 

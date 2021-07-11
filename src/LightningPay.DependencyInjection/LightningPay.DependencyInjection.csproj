@@ -7,7 +7,7 @@
 		<PackageProjectUrl>https://github.com/using-system/LightningPay</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/using-system/LightningPay</RepositoryUrl>
 		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-		<PackageTags>bitcoin;lightning;lnd;clightning;charge;eclair;lnbits;lndhub;lapps</PackageTags>
+		<PackageTags>bitcoin;lightning;lnd;clightning;charge;eclair;lnbits;lndhub;bluewallet;lapps</PackageTags>
 		<Authors>https://github.com/using-system</Authors>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageIconUrl />
