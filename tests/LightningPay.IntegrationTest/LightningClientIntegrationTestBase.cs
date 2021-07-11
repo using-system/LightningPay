@@ -10,11 +10,11 @@ namespace LightningPay.IntegrationTest
         [Fact]
         public async Task Run()
         {
-            var client = this.GetClient();
+            var client = await this.GetClient();
 
             //Get balance for the first time
             var balance = await client.GetBalance();
-            Assert.Equal(0, balance);
+            Assert.True(balance >= 0);
 
             //Create an invoice
             var invoice = await client.CreateInvoice(1000, "Test invoice");
@@ -45,7 +45,7 @@ namespace LightningPay.IntegrationTest
             }
         }
 
-        protected abstract ILightningClient GetClient();
+        protected abstract Task<ILightningClient> GetClient();
 
         protected abstract string SelfPaymentErrorMesssage { get; }
     }

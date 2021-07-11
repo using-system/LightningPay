@@ -55,6 +55,7 @@ namespace LightningPay.Clients.LndHub
 
             var response = await this.Post<AddInvoiceResponse>("addinvoice",
                 request);
+            this.CheckResponse(response);
 
             if (string.IsNullOrEmpty(response.PaymentRequest)
                 || response.R_hash == null)
@@ -72,6 +73,7 @@ namespace LightningPay.Clients.LndHub
         public async Task<bool> CheckPayment(string invoiceId)
         {
             var response = await this.Get<CheckPaymentResponse>($"checkpayment/{invoiceId}");
+            this.CheckResponse(response);
 
             return response.Paid;
         }
@@ -83,6 +85,7 @@ namespace LightningPay.Clients.LndHub
         {
             var response = await this.Post<PayResponse>("payinvoice",
                 new PayRequest() { PaymentRequest = paymentRequest });
+            this.CheckResponse(response);
 
             if (!string.IsNullOrEmpty(response.Error))
             {
@@ -98,7 +101,7 @@ namespace LightningPay.Clients.LndHub
             if(string.IsNullOrEmpty(options?.Login)
                 || string.IsNullOrEmpty(options?.Password))
             {
-                throw new ArgumentException("Login and Password are mandatory for lndhub authentication");
+                return new NoAuthentication();
             }
 
             return new LndHubAuthentication(options);
@@ -135,6 +138,15 @@ namespace LightningPay.Clients.LndHub
             client.clientInternalBuilt = clientInternalBuilt;
 
             return client;
+        }
+
+        private void CheckResponse(ResponseBase response)
+        {
+            if(response.Failed)
+            {
+                throw new LightningPayException(response.Message,
+                    LightningPayException.ErrorCode.BAD_REQUEST);
+            }
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>

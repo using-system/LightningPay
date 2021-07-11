@@ -1,4 +1,6 @@
-﻿using LightningPay.Clients.Lnd;
+﻿using System.Threading.Tasks;
+
+using LightningPay.Clients.Lnd;
 
 namespace LightningPay.IntegrationTest
 {
@@ -6,9 +8,11 @@ namespace LightningPay.IntegrationTest
     {
         protected override string SelfPaymentErrorMesssage => "self-payments not allowed";
 
-        protected override ILightningClient GetClient()
+        protected override Task<ILightningClient> GetClient()
         {
-            return LndClient.New("http://localhost:32736/");
+            ILightningClient client = LndClient.New("http://localhost:32736/");
+
+            return Task.FromResult(client);
         }
     }
 }

@@ -7,6 +7,7 @@ using Xunit;
 
 using LightningPay.Clients.LndHub;
 using LightningPay.Tools;
+using LightningPay.Infrastructure.Api;
 
 namespace LightningPay.Test.Clients.LndHub
 {
@@ -70,6 +71,33 @@ namespace LightningPay.Test.Clients.LndHub
             //Act & Assert
             await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
             Assert.Single(mockMessageHandler.Requests);
+        }
+
+        [Fact]
+        public async Task CreateInvoice_Should_Throw_ApiException_If_Response_Failed()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetTokenResponse()
+                    {
+                        AccessToken = "AccessToken",
+                        RefreshToken = "RefreshToken"
+                    }), HttpStatusCode.OK
+                ),
+                (
+                    Json.Serialize(new AddInvoiceResponse()
+                    {
+                        Failed = true
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
+
+            //Act & Assert
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            Assert.Equal(2, mockMessageHandler.Requests.Count);
         }
 
         [Fact]
@@ -267,13 +295,16 @@ namespace LightningPay.Test.Clients.LndHub
         }
 
         [Fact]
-        public void BuildAuthentication_Should_Throw_ArgumentException_If_Options_Not_Contains_Login_And_Password()
+        public void BuildAuthentication_Should_Return_NoAuthentication_If_Options_Not_Contains_Login_And_Password()
         {
             //Arrange
             var options = new LndHubOptions();
 
-            //Act && Assert
-            Assert.Throws<ArgumentException>(() => LndHubClient.BuildAuthentication(options));
+            //Act
+            var authentication = LndHubClient.BuildAuthentication(options);
+
+            //Assert
+            Assert.IsType<NoAuthentication>(authentication);
         }
 
     }

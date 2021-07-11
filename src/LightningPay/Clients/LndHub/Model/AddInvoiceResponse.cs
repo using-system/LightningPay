@@ -1,6 +1,6 @@
 ﻿namespace LightningPay.Clients.LndHub
 {
-    internal class AddInvoiceResponse
+    internal class AddInvoiceResponse : ResponseBase
     {
         [Json("r_hash")]
         public Hash R_hash { get; set; }
