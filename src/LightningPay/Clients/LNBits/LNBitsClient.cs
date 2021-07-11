@@ -97,7 +97,7 @@ namespace LightningPay.Clients.LNBits
             return new LNBitsAuthentication(options.ApiKey);
         }
 
-        /// <summary>>Instanciate a new LNBits api.</summary>
+        /// <summary>>Instanciate a new LNBits client.</summary>
         /// <param name="address">The address.</param>
         /// <param name="apiKey">The API key.</param>
         /// <param name="httpClient">The HTTP client.</param>
