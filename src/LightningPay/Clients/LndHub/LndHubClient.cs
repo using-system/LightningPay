@@ -89,8 +89,7 @@ namespace LightningPay.Clients.LndHub
 
             if (!string.IsNullOrEmpty(response.Error))
             {
-                throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
-                    LightningPayException.ErrorCode.BAD_REQUEST);
+                return false;
             }
 
             return true;

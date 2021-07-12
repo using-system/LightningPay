@@ -248,7 +248,7 @@ namespace LightningPay.Test.Clients.LndHub
         }
 
         [Fact]
-        public async Task Pay_Should_Throw_ApiException_If_An_Payment_Error_Occurs()
+        public async Task Pay_Should_Return_False_If_An_Payment_Error_Occurs()
         {
             //Arrange
             var mockMessageHandler = new MockHttpMessageHandler(
@@ -270,9 +270,10 @@ namespace LightningPay.Test.Clients.LndHub
             var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient: httpClient);
 
             //Act
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.Pay("request"));
+            var actual = await lndClient.Pay("request");
 
             //Assert
+            Assert.False(actual);
             Assert.Equal(2, mockMessageHandler.Requests.Count);
             Assert.Equal("https://lndhub.herokuapp.com/payinvoice", mockMessageHandler.Requests[1].RequestUri.ToString());
         }

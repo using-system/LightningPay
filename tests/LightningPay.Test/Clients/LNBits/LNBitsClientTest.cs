@@ -177,7 +177,7 @@ namespace LightningPay.Test.Clients.LNBits
         }
 
         [Fact]
-        public async Task Pay_Should_Throw_ApiException_If_No_Payment_Hash()
+        public async Task Pay_Should_Return_False_If_No_Payment_Hash()
         {
             //Arrange
             var mockMessageHandler = new MockHttpMessageHandler(
@@ -192,9 +192,10 @@ namespace LightningPay.Test.Clients.LNBits
             var lnBitsClient = LNBitsClient.New("https://lnbits.com", "apikey", httpClient);
 
             //Act
-            await Assert.ThrowsAsync<LightningPayException>(() => lnBitsClient.Pay("request"));
+            var actual = await lnBitsClient.Pay("request");
 
             //Assert
+            Assert.False(actual);
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://lnbits.com/api/v1/payments", mockMessageHandler.Requests[0].RequestUri.ToString());
         }

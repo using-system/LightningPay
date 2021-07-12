@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -73,19 +74,44 @@ namespace LightningPay.Clients.Eclair
         /// <returns>True on the payment success, false otherwise</returns>
         public async Task<bool> Pay(string paymentRequest)
         {
-            string response  = await this.Post<string>("payinvoice",
+            string id  = await this.Post<string>("payinvoice",
                 new PayRequest()
                 {
                     PaymentRequest = paymentRequest
                 }, formUrlEncoded: true);
 
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(id))
             {
                 throw new LightningPayException("Cannot proceed to the payment",
                     LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
-            return true;
+            while(true)
+            {
+                var paymentResponse = await this.Post<GetSentInfoResponse>("getsentinfo",
+                    new GetSentInfoRequest()
+                    {
+                        Id = id
+                    }, formUrlEncoded: true);
+                if(paymentResponse?.Any() == false)
+                {
+                    continue;
+                }
+                var status = paymentResponse.FirstOrDefault().Status?.Type;
+                switch(status)
+                {
+                    case "sent":
+                        return true;
+                    case "failed":
+                        throw new LightningPayException("Cannot process to the payment",
+                            LightningPayException.ErrorCode.BAD_REQUEST);
+                    case "pending":
+                        await Task.Delay(200);
+                        break;
+                    default:
+                        return false;
+                }
+            }
         }
 
         internal static AuthenticationBase BuildAuthentication(EclairOptions options)

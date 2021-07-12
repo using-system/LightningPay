@@ -15,6 +15,6 @@ namespace LightningPay.IntegrationTest
             return Task.FromResult(client);
         }
 
-        protected override string SelfPaymentErrorMesssage => "self-payments not allowed";
+        protected override string SelfPaymentErrorMesssage => "Cannot process to the payment";
     }
 }

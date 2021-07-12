@@ -80,8 +80,7 @@ namespace LightningPay.Clients.LNBits
 
             if (string.IsNullOrEmpty(response.PaymentHash))
             {
-                throw new LightningPayException($"Cannot proceed to the payment",
-                    LightningPayException.ErrorCode.UNAUTHORIZED);
+                return false;
             }
 
             return true;
