@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 
 using LightningPay.Tools;
+using System.Collections.Generic;
 
 namespace LightningPay.Infrastructure.Api
 {
@@ -49,26 +50,14 @@ namespace LightningPay.Infrastructure.Api
         /// <typeparam name="TResponse">The type of the response.</typeparam>
         /// <param name="url">The URL to request.</param>
         /// <param name="body">The body to post.</param>
+        /// <param name="formUrlEncoded">if set to <c>true</c> [form URL encoded].</param>
         /// <returns>
         ///   <br />
         /// </returns>
-        public async Task<TResponse> Post<TResponse>(string url, object body = null)
+        public async Task<TResponse> Post<TResponse>(string url, object body = null, bool formUrlEncoded = false)
            where TResponse : class
         {
-            return await this.Request<TResponse>(HttpMethod.Post, url, body);
-        }
-
-        /// <summary>Request the specified URL with PUT verb.</summary>
-        /// <typeparam name="TResponse">The type of the response.</typeparam>
-        /// <param name="url">The URL to request.</param>
-        /// <param name="body">The body to post.</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        public async Task<TResponse> Put<TResponse>(string url, object body = null)
-           where TResponse : class
-        {
-            return await this.Request<TResponse>(HttpMethod.Put, url, body);
+            return await this.Request<TResponse>(HttpMethod.Post, url, body, formUrlEncoded);
         }
 
 
@@ -77,15 +66,17 @@ namespace LightningPay.Infrastructure.Api
         /// <param name="method">Http method</param>
         /// <param name="url">The URL to request.</param>
         /// <param name="body">The body to post.</param>
+        /// <param name="formUrlEncoded">if set to <c>true</c> [form URL encoded].</param>
         /// <returns>
         ///   <br />
         /// </returns>
         public async Task<TResponse> Request<TResponse>(HttpMethod method,
            string url,
-           object body = null)
+           object body = null,
+           bool formUrlEncoded = false)
            where TResponse : class
         {
-            return await this.Request<TResponse>(method.ToString(), url, body);
+            return await this.Request<TResponse>(method.ToString(), url, body, formUrlEncoded);
         }
 
 
@@ -94,6 +85,8 @@ namespace LightningPay.Infrastructure.Api
         /// <param name="method">Http method.</param>
         /// <param name="url">The URL.</param>
         /// <param name="body">The body.</param>
+        /// <param name="body">The body to post.</param>
+        /// <param name="formUrlEncoded">if set to <c>true</c> [form URL encoded].</param>
         /// <returns>
         ///   <br />
         /// </returns>
@@ -102,7 +95,8 @@ namespace LightningPay.Infrastructure.Api
         /// Internal Error on request the url : {url} : {exc.Message}</exception>
         public async Task<TResponse> Request<TResponse>(string method,
            string url,
-           object body = null)
+           object body = null,
+           bool  formUrlEncoded = false)
            where TResponse : class
         {
             if(!url.StartsWith("http")
@@ -115,7 +109,25 @@ namespace LightningPay.Infrastructure.Api
 
             if (body != null)
             {
-                content = new StringContent(Json.Serialize(body), Encoding.UTF8, "application/json");
+                if(!formUrlEncoded)
+                {
+                    content = new StringContent(Json.Serialize(body), Encoding.UTF8, "application/json");
+                }
+                else
+                {
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+                    foreach(var property in body.GetType().GetProperties())
+                    {
+                        var jsonAttr = property.GetCustomAttributes(typeof(JsonAttribute), false).FirstOrDefault() as JsonAttribute;
+                        if(jsonAttr != null)
+                        {
+                            parameters.Add(jsonAttr.Name, property.GetValue(body).ToString());
+                        }
+                    }
+
+                    content = new FormUrlEncodedContent(parameters);
+                }
             }
 
             var request = new HttpRequestMessage(new HttpMethod(method), url)

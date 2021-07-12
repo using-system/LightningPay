@@ -26,7 +26,7 @@ namespace LightningPay.Clients.Eclair
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-            var response = await this.Post<GetBalanceResponse>("onchaintransactions");
+            var response = await this.Post<GetBalanceResponse>("onchainbalance");
 
             return response?.Confirmed ?? 0;
         }
@@ -44,7 +44,7 @@ namespace LightningPay.Clients.Eclair
                     Description = description,
                     AmountMsat = satoshis * 1000,
                     ExpireIn = int.Parse(options.ToExpiryString())
-                });
+                }, formUrlEncoded: true);
 
             return response.ToLightningInvoice();
         }
@@ -58,7 +58,7 @@ namespace LightningPay.Clients.Eclair
                 new GetReceivedInfoRequest()
                 {
                     PaymentHash = invoiceId
-                });
+                }, formUrlEncoded: true);
 
             return response?.Status?.Type == "received"
                 && response?.Amount > 0
@@ -74,7 +74,7 @@ namespace LightningPay.Clients.Eclair
                 new PayRequest()
                 {
                     PaymentRequest = paymentRequest
-                });
+                }, formUrlEncoded: true);
 
             if (string.IsNullOrEmpty(response))
             {
