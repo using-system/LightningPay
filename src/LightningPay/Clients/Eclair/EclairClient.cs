@@ -27,7 +27,6 @@ namespace LightningPay.Clients.Eclair
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
-
             return 0;
 
             var response = await this.Post<GetBalanceResponse>("onchainbalance");
@@ -71,8 +70,10 @@ namespace LightningPay.Clients.Eclair
 
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
-        /// <returns>True on the payment success, false otherwise</returns>
-        public async Task<bool> Pay(string paymentRequest)
+        /// <returns>
+        ///   PaymentResponse
+        /// </returns>
+        public async Task<PaymentResponse> Pay(string paymentRequest)
         {
             string id  = await this.Post<string>("payinvoice",
                 new PayRequest()
@@ -101,15 +102,14 @@ namespace LightningPay.Clients.Eclair
                 switch(status)
                 {
                     case "sent":
-                        return true;
+                        return new PaymentResponse(PayResult.Ok);
                     case "failed":
-                        throw new LightningPayException("Cannot process to the payment",
-                            LightningPayException.ErrorCode.BAD_REQUEST);
+                        return new PaymentResponse(PayResult.Error, "Cannot process to the payment");
                     case "pending":
                         await Task.Delay(200);
                         break;
                     default:
-                        return false;
+                        return new PaymentResponse(PayResult.Error, "Cannot process to the payment");
                 }
             }
         }

@@ -33,8 +33,8 @@ namespace LightningPay
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>
-        ///    True on the payment success, false otherwise
+        ///   PaymentResponse
         /// </returns>
-        Task<bool> Pay(string paymentRequest);
+        Task<PaymentResponse> Pay(string paymentRequest);
     }
 }

@@ -242,7 +242,7 @@ namespace LightningPay.Test.Clients.LndHub
             var actual = await lndClient.Pay("request");
 
             //Assert
-            Assert.True(actual);
+            Assert.Equal(PayResult.Ok, actual.Result);
             Assert.Equal(2, mockMessageHandler.Requests.Count);
             Assert.Equal("https://lndhub.herokuapp.com/payinvoice", mockMessageHandler.Requests[1].RequestUri.ToString());
         }
@@ -273,7 +273,7 @@ namespace LightningPay.Test.Clients.LndHub
             var actual = await lndClient.Pay("request");
 
             //Assert
-            Assert.False(actual);
+            Assert.Equal(PayResult.Error, actual.Result);
             Assert.Equal(2, mockMessageHandler.Requests.Count);
             Assert.Equal("https://lndhub.herokuapp.com/payinvoice", mockMessageHandler.Requests[1].RequestUri.ToString());
         }

@@ -33,20 +33,9 @@ namespace LightningPay.IntegrationTest
             Assert.False(isPaid);
 
             //Self payment is not allowed
-            try
-            {
-                await client.Pay(invoice.BOLT11);
-                throw new Exception("self-payments not allowed");
-            }
-            catch(LightningPayException exc)
-            {
-                Assert.Equal(LightningPayException.ErrorCode.BAD_REQUEST, exc.Code);
-                Assert.Contains(this.SelfPaymentErrorMesssage, exc.Message);
-            }
-            catch (Exception)
-            {
-                throw new Exception("self-payments not allowed");
-            }
+            var response = await client.Pay(invoice.BOLT11);
+            Assert.Equal(PayResult.Error, response.Result);
+            Assert.Contains(this.SelfPaymentErrorMesssage, response.Error);
         }
 
         protected async Task WaitServersAreUp(ILightningClient client)

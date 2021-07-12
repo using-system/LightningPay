@@ -13,7 +13,7 @@ public interface ILightningClient : IDisposable
 
 	Task<bool> CheckPayment(string invoiceId);
     
-	Task<bool> Pay(string paymentRequest);
+	Task<PaymentResponse> Pay(string paymentRequest);
 }
 ```
 
@@ -59,7 +59,7 @@ var invoice = await client.CreateInvoice(100, "My First Invoice");
 
 while (! await client.CheckPayment(invoice.Id))
 {
-	System.Console.WriteLine("Waiting for invoice payment....");
+	Console.WriteLine("Waiting for invoice payment....");
 	await Task.Delay(5000);
 }
 ```
@@ -69,6 +69,23 @@ while (! await client.CheckPayment(invoice.Id))
 To pay an invoice with a payment request (BOLT11), call the method `Pay` : 
 
 ```c#
-bool result = await client.Pay("lnbc1....d84c");
+var response = await client.Pay("lnbc1....d84c");
+Console.WriteLine($"Payment result : {response.Result}");
 ```
 
+Response object contains the result of the payment (an enumeration) and the error message if the payment failed :
+
+```c#
+public class PaymentResponse
+{
+	public PayResult Result { get; set; }
+
+	public string Error { get; set; }
+}
+
+public enum PayResult
+{
+	Ok,
+	Error
+}
+```

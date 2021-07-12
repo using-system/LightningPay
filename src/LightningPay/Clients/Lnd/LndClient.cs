@@ -86,19 +86,30 @@ namespace LightningPay.Clients.Lnd
 
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
-        /// <returns>True on the payment success, false otherwise</returns>
-        public async Task<bool> Pay(string paymentRequest)
+        /// <returns>
+        ///   PaymentResponse
+        /// </returns>
+        public async Task<PaymentResponse> Pay(string paymentRequest)
         {
-            var response = await this.Post<PayResponse>("v1/channels/transactions",
-                new PayRequest() { PaymentRequest = paymentRequest });
-
-            if(!string.IsNullOrEmpty(response.Error))
+            try
             {
-                throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
-                    LightningPayException.ErrorCode.BAD_REQUEST);
+                var response = await this.Post<PayResponse>("v1/channels/transactions",
+                    new PayRequest() { PaymentRequest = paymentRequest });
+
+                if (!string.IsNullOrEmpty(response.Error))
+                {
+                    throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
+                        LightningPayException.ErrorCode.BAD_REQUEST);
+                }
+            }
+            catch (LightningPayException exc)
+            {
+                return new PaymentResponse(PayResult.Error, exc.Message);
             }
 
-            return true;
+
+            return new PaymentResponse(PayResult.Ok);
+
         }
 
         internal static AuthenticationBase BuildAuthentication(LndOptions options)

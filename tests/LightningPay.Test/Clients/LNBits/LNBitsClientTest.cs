@@ -171,7 +171,7 @@ namespace LightningPay.Test.Clients.LNBits
             var actual = await lnBitsClient.Pay("request");
 
             //Assert
-            Assert.True(actual);
+            Assert.Equal(PayResult.Ok, actual.Result);
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://lnbits.com/api/v1/payments", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
@@ -195,7 +195,7 @@ namespace LightningPay.Test.Clients.LNBits
             var actual = await lnBitsClient.Pay("request");
 
             //Assert
-            Assert.False(actual);
+            Assert.Equal(PayResult.Error, actual.Result);
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://lnbits.com/api/v1/payments", mockMessageHandler.Requests[0].RequestUri.ToString());
         }
