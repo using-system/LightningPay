@@ -6,7 +6,7 @@
 		<Description>Dependency injection extension methods for LightningPay</Description>
 		<PackageProjectUrl>https://github.com/using-system/LightningPay</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/using-system/LightningPay</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 		<PackageTags>bitcoin;lightning;lnd;clightning;charge;eclair;lnbits;lndhub;bluewallet;lapps</PackageTags>
 		<Authors>https://github.com/using-system</Authors>
 		<PackageIcon>icon.png</PackageIcon>
