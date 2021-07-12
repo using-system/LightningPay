@@ -6,7 +6,7 @@ namespace LightningPay.IntegrationTest
 {
     public class LNHubClientIntegrationTest : LightningClientIntegrationTestBase
     {
-        protected override string SelfPaymentErrorMesssage => "not enough balance";
+        protected override bool NeedBitcoind => false;
 
         protected async override Task<ILightningClient> GetClient()
         {
@@ -20,6 +20,8 @@ namespace LightningPay.IntegrationTest
 
             return client;
         }
+
+        protected override string SelfPaymentErrorMesssage => "not enough balance";
     }
 
     internal static class LNHubClientIntegrationTestExtensions

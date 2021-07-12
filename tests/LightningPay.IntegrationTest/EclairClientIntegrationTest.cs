@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 
-using LightningPay.Clients.Lnd;
+using LightningPay.Clients.Eclair;
 
 namespace LightningPay.IntegrationTest
 {
-    public class LndClientIntegrationTest : LightningClientIntegrationTestBase
+    public class EclairClientIntegrationTest : LightningClientIntegrationTestBase
     {
         protected override bool NeedBitcoind => true;
 
         protected override Task<ILightningClient> GetClient()
         {
-            ILightningClient client = LndClient.New("http://localhost:32736/");
+            ILightningClient client = EclairClient.New("http://localhost:4570/", "eclairpassword");
 
             return Task.FromResult(client);
         }

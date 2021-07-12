@@ -26,6 +26,9 @@ namespace LightningPay.Clients.Eclair
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()
         {
+
+            return 0;
+
             var response = await this.Post<GetBalanceResponse>("onchainbalance");
 
             return response?.Confirmed ?? 0;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NBitcoin;
+using NBitcoin.RPC;
+using System;
 using System.Threading.Tasks;
 
 using Xunit;
@@ -7,10 +9,12 @@ namespace LightningPay.IntegrationTest
 {
     public abstract class LightningClientIntegrationTestBase
     {
-        [Fact]
+        [Fact(Timeout =(2 * 60 * 1000))]
         public async Task Run()
         {
             var client = await this.GetClient();
+
+            await this.WaitServersAreUp(client);
 
             //Get balance for the first time
             var balance = await client.GetBalance();
@@ -45,8 +49,32 @@ namespace LightningPay.IntegrationTest
             }
         }
 
+        protected async Task WaitServersAreUp(ILightningClient client)
+        {
+            var rpc = new RPCClient("ceiwHEbqWI83:DwubwWsoo3", "127.0.0.1:37393", Network.RegTest);
+            await rpc.ScanRPCCapabilitiesAsync();
+            await rpc.GenerateAsync(1);
+
+            while(true)
+            {
+                try
+                {
+                    await client.GetBalance();
+                    break;
+                }
+                catch
+                {
+                    await Task.Delay(5000);
+                    continue;
+                }
+            }
+        }
+
+        protected abstract bool NeedBitcoind { get; }
+
         protected abstract Task<ILightningClient> GetClient();
 
         protected abstract string SelfPaymentErrorMesssage { get; }
+
     }
 }
