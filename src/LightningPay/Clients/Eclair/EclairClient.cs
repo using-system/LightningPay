@@ -38,7 +38,7 @@ namespace LightningPay.Clients.Eclair
         /// <returns>The lightning invoice just created</returns>
         public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
         {
-            var response = await this.Post<GetInvoiceResponse>("createinvoice",
+            var response = await this.Post<CreateInvoiceResponse>("createinvoice",
                 new CreateInvoiceRequest()
                 {
                     Description = description,
@@ -54,20 +54,15 @@ namespace LightningPay.Clients.Eclair
         /// <returns>True of the invoice is paid, false otherwise</returns>
         public async Task<bool> CheckPayment(string invoiceId)
         {
-            var invoice = await this.GetInvoice(invoiceId);
-
-            return invoice.Status == LightningInvoiceStatus.Paid;
-        }
-
-        private async Task<LightningInvoice> GetInvoice(string invoiceId)
-        {
-            var response = await this.Post<GetInvoiceResponse>("getinvoice",
-                new GetInvoiceRequest()
+            var response = await this.Post<GetReceivedInfoResponse>("getreceivedinfo",
+                new GetReceivedInfoRequest()
                 {
                     PaymentHash = invoiceId
                 });
 
-            return response.ToLightningInvoice();
+            return response?.Status?.Type == "received"
+                && response?.Amount > 0
+                && response.Amount == response.Status.Amount;
         }
 
         /// <summary>Pay.</summary>

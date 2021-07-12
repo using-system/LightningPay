@@ -1,6 +1,6 @@
 ﻿namespace LightningPay.Clients.Eclair
 {
-    internal class GetInvoiceRequest
+    internal class GetReceivedInfoRequest
     {
         [Json("paymentHash")]
         public string PaymentHash { get; set; }
