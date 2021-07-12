@@ -24,9 +24,11 @@ namespace LightningPay.Clients.Eclair
 
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
-        public Task<long> GetBalance()
+        public async Task<long> GetBalance()
         {
-            throw new System.NotImplementedException();
+            var response = await this.Post<GetBalanceResponse>("onchaintransactions");
+
+            return response?.Confirmed ?? 0;
         }
 
         /// <summary>Creates the invoice.</summary>
@@ -34,25 +36,58 @@ namespace LightningPay.Clients.Eclair
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        public Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
+        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
         {
-            throw new System.NotImplementedException();
+            var response = await this.Post<GetInvoiceResponse>("createinvoice",
+                new CreateInvoiceRequest()
+                {
+                    Description = description,
+                    AmountMsat = satoshis * 1000,
+                    ExpireIn = int.Parse(options.ToExpiryString())
+                });
+
+            return response.ToLightningInvoice();
         }
 
         /// <summary>Checks the payment of an invoice.</summary>
         /// <param name="invoiceId">The invoice identifier.</param>
         /// <returns>True of the invoice is paid, false otherwise</returns>
-        public Task<bool> CheckPayment(string invoiceId)
+        public async Task<bool> CheckPayment(string invoiceId)
         {
-            throw new System.NotImplementedException();
+            var invoice = await this.GetInvoice(invoiceId);
+
+            return invoice.Status == LightningInvoiceStatus.Paid;
+        }
+
+        private async Task<LightningInvoice> GetInvoice(string invoiceId)
+        {
+            var response = await this.Post<GetInvoiceResponse>("getinvoice",
+                new GetInvoiceRequest()
+                {
+                    PaymentHash = invoiceId
+                });
+
+            return response.ToLightningInvoice();
         }
 
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>True on the payment success, false otherwise</returns>
-        public Task<bool> Pay(string paymentRequest)
+        public async Task<bool> Pay(string paymentRequest)
         {
-            throw new System.NotImplementedException();
+            string response  = await this.Post<string>("payinvoice",
+                new PayRequest()
+                {
+                    PaymentRequest = paymentRequest
+                });
+
+            if (string.IsNullOrEmpty(response))
+            {
+                throw new LightningPayException("Cannot proceed to the payment",
+                    LightningPayException.ErrorCode.BAD_REQUEST);
+            }
+
+            return true;
         }
 
         internal static AuthenticationBase BuildAuthentication(EclairOptions options)
