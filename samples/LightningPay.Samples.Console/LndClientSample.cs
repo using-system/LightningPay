@@ -13,7 +13,8 @@ namespace LightningPay.Samples.Console
                 var balance = await lndClient.GetBalance();
                 System.Console.WriteLine($"Wallet balance : {balance.ToSatoshis()} sat ");
 
-                var invoice = await lndClient.CreateInvoice(100 , "My First invoice");
+                var invoice = await lndClient.CreateInvoice(Money.FromSatoshis(100), 
+                    "My First invoice");
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");
