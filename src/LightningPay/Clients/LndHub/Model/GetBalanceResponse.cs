@@ -2,12 +2,12 @@
 {
     internal class GetBalanceResponse : ResponseBase
     {
-        [Json("BTC")]
+        [Serializable("BTC")]
         public BTCBalance BTC { get; set; }
 
         internal class BTCBalance
         {
-            [Json("AvailableBalance")]
+            [Serializable("AvailableBalance")]
             public long AvailableBalance { get; set; }
         }
     }

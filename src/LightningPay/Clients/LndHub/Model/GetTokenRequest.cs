@@ -2,10 +2,10 @@
 {
     internal class GetTokenRequest
     {
-        [Json("login")]
+        [Serializable("login")]
         public string Login { get; set; }
 
-        [Json("password")]
+        [Serializable("password")]
         public string Password { get; set; }
     }
 }

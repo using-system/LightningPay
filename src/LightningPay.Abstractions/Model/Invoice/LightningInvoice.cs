@@ -27,9 +27,9 @@ namespace LightningPay
         /// <value>The expires at.</value>
         public DateTimeOffset ExpiresAt { get; set; }
 
-        /// <summary>Gets or sets the amount in satoshis.</summary>
-        /// <value>The amount in satoshis.</value>
-        public long Amount { get; set; }
+        /// <summary>Gets or sets the amount.</summary>
+        /// <value>The amount.</value>
+        public Money Amount { get; set; }
 
         /// <summary>Gets the URI.</summary>
         /// <value>The URI.</value>

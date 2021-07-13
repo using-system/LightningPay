@@ -2,13 +2,13 @@
 {
     internal class AddInvoiceRequest
     {
-        [Json("amt")]
+        [Serializable("amt")]
         public string Amount { get; set; }
 
-        [Json("memo")]
+        [Serializable("memo")]
         public string Memo { get; set; }
 
-        [Json("expiry")]
+        [Serializable("expiry")]
         public string Expiry { get; set; } // not supported actually by the api. Actually hard coded with value : 3600 * 24 (1 day)
     }
 }

@@ -2,7 +2,7 @@
 {
     internal class PayResponse
     {
-        [Json("payment_hash")]
+        [Serializable("payment_hash")]
         public string PaymentHash { get; set; }
     }
 }

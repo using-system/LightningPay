@@ -33,7 +33,8 @@ namespace LightningPay.Samples.WebAppMvc.Controllers
         {
             if(ModelState.IsValid)
             {
-                var invoice = await this.lightningClient.CreateInvoice(request.Amount, request.Description);
+                var invoice = await this.lightningClient.CreateInvoice(Money.FromSatoshis(request.Amount), 
+                    request.Description);
 
                 return View("Invoice", new InvoiceModel()
                 {

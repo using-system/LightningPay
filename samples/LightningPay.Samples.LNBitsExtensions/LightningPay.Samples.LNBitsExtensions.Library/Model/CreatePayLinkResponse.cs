@@ -2,7 +2,7 @@
 {
     internal class CreatePayLinkResponse
     {
-        [Json("lnurl")]
+        [Serializable("lnurl")]
         public string Url { get; set; }
     }
 }

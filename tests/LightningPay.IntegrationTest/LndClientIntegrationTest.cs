@@ -6,7 +6,7 @@ namespace LightningPay.IntegrationTest
 {
     public class LndClientIntegrationTest : LightningClientIntegrationTestBase
     {
-        protected override string SelfPaymentErrorMesssage => "self-payments not allowed";
+        protected override bool NeedBitcoind => true;
 
         protected override Task<ILightningClient> GetClient()
         {
@@ -14,5 +14,7 @@ namespace LightningPay.IntegrationTest
 
             return Task.FromResult(client);
         }
+
+        protected override string SelfPaymentErrorMesssage => "self-payments not allowed";
     }
 }

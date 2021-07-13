@@ -8,20 +8,26 @@ namespace LightningPay
     /// </summary>
     public interface ILightningClient : IDisposable
     {
-        /// <summary>Gets the wallet balance in satoshis.</summary>
+        /// <summary>Checks the connectivity.</summary>
         /// <returns>
-        ///   Balance is satoshis
+        ///    True of the connectivity is ok, false otherwise 
         /// </returns>
-        Task<long> GetBalance();
+        Task<CheckConnectivityResponse> CheckConnectivity();
+
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        Task<Money> GetBalance();
 
         /// <summary>Creates the invoice.</summary>
-        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="amount">The amount to receive.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>
         ///   The lightning invoice just created
         /// </returns>
-        Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
+        Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null);
 
         /// <summary>Checks the payment of an invoice.</summary>
         /// <param name="invoiceId">The invoice identifier.</param>
@@ -33,8 +39,8 @@ namespace LightningPay
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>
-        ///    True on the payment success, false otherwise
+        ///   PaymentResponse
         /// </returns>
-        Task<bool> Pay(string paymentRequest);
+        Task<PaymentResponse> Pay(string paymentRequest);
     }
 }

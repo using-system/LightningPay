@@ -55,7 +55,6 @@ namespace LightningPay
                 Login = login,
                 Password = password
             });
-            services.AddSingleton<ILightningClient, LndHubClient>();
             
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {

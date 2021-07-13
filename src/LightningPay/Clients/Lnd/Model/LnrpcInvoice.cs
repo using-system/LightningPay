@@ -2,51 +2,51 @@
 {
     internal class LnrpcInvoice
     {
-        [Json("memo")]
+        [Serializable("memo")]
         public string Memo { get; set; }
 
-        [Json("receipt")]
+        [Serializable("receipt")]
         public byte[] Receipt { get; set; }
 
-        [Json("r_preimage")]
+        [Serializable("r_preimage")]
         public byte[] R_preimage { get; set; }
 
-        [Json("r_hash")]
+        [Serializable("r_hash")]
         public byte[] R_hash { get; set; }
 
-        [Json("value")]
+        [Serializable("value")]
         public string Value { get; set; }
 
-        [Json("amt_paid_msat")]
+        [Serializable("amt_paid_msat")]
         public string AmountPaid { get; set; }
 
-        [Json("settled")]
+        [Serializable("settled")]
         public bool? Settled { get; set; }
 
-        [Json("creation_date")]
+        [Serializable("creation_date")]
         public string Creation_date { get; set; }
 
-        [Json("settle_date")]
+        [Serializable("settle_date")]
         public string Settle_date { get; set; }
 
-        [Json("payment_request")]
+        [Serializable("payment_request")]
         public string Payment_request { get; set; }
 
-        [Json("description_hash")]
+        [Serializable("description_hash")]
         public byte[] Description_hash { get; set; }
 
-        [Json("expiry")]
+        [Serializable("expiry")]
         public string Expiry { get; set; }
 
 
-        [Json("fallback_addr")]
+        [Serializable("fallback_addr")]
         public string Fallback_addr { get; set; }
 
 
-        [Json("cltv_expiry")]
+        [Serializable("cltv_expiry")]
         public string Cltv_expiry { get; set; }
 
-        [Json("private")]
+        [Serializable("private")]
         public bool? Private { get; set; }
 
     }

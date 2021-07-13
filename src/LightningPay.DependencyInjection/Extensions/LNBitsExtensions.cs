@@ -7,7 +7,7 @@ using LightningPay.Clients.LNBits;
 namespace LightningPay
 {
     /// <summary>
-    ///   LNBits dependency injection extension methods
+    /// LNBits dependency injection extension methods
     /// </summary>
     public static class LNBitsExtensions
     {
@@ -50,7 +50,6 @@ namespace LightningPay
                 Address = address,
                 ApiKey = apiKey
             });
-            services.AddSingleton<ILightningClient, LNBitsClient>();
 
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {

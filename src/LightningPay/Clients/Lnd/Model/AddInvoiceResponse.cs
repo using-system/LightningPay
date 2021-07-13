@@ -2,10 +2,10 @@
 {
     internal class AddInvoiceResponse
     {
-        [Json("r_hash")]
+        [Serializable("r_hash")]
         public byte[] R_hash { get; set; }
 
-        [Json("payment_request")]
+        [Serializable("payment_request")]
         public string Payment_request { get; set; }
     }
 }

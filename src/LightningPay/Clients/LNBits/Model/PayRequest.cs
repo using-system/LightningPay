@@ -2,10 +2,10 @@
 {
     internal class PayRequest
     {
-        [Json("out")]
+        [Serializable("out")]
         public bool Out { get; set; }
 
-        [Json("bolt11")]
+        [Serializable("bolt11")]
         public string PaymentRequest { get; set; }
     }
 }

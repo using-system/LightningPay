@@ -455,7 +455,7 @@ namespace LightningPay.Tools
 
         private static bool TryGetObjectDefaultValue(Attribute att, out object value)
         {
-            if (att is JsonAttribute jsa && jsa.HasDefaultValue)
+            if (att is SerializableAttribute jsa && jsa.HasDefaultValue)
             {
                 value = jsa.DefaultValue;
                 return true;
@@ -473,7 +473,7 @@ namespace LightningPay.Tools
 
         private static string GetObjectName(Attribute att)
         {
-            if (att is JsonAttribute jsa && !string.IsNullOrEmpty(jsa.Name))
+            if (att is SerializableAttribute jsa && !string.IsNullOrEmpty(jsa.Name))
                 return jsa.Name;
 
             if (att is XmlAttributeAttribute xaa && !string.IsNullOrEmpty(xaa.AttributeName))
@@ -629,7 +629,7 @@ namespace LightningPay.Tools
             }
         }
 
-        private static JsonAttribute GetJsonAttribute(MemberInfo pi)
+        private static SerializableAttribute GetJsonAttribute(MemberInfo pi)
         {
             var atts = pi.GetCustomAttributes(true);
             if (atts == null || atts.Length == 0)
@@ -642,7 +642,7 @@ namespace LightningPay.Tools
 #pragma warning restore IDE0083 // Use pattern matching
                     continue;
 
-                if (att is JsonAttribute xatt)
+                if (att is SerializableAttribute xatt)
                     return xatt;
 
             }
@@ -3317,7 +3317,7 @@ namespace LightningPay.Tools
                 {
                     if (options.SerializationOptions.HasFlag(JsonSerializationOptions.UseJsonAttribute))
                     {
-                        var ja = descriptor.GetAttribute<JsonAttribute>();
+                        var ja = descriptor.GetAttribute<SerializableAttribute>();
                         if (ja != null)
                         {
                             if (serialization && ja.IgnoreWhenSerializing)
@@ -5194,7 +5194,7 @@ namespace LightningPay.Tools
     /// The exception that is thrown when a JSON error occurs.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    [Serializable]
+    [System.Serializable]
     internal class JsonException : Exception
     {
         /// <summary>

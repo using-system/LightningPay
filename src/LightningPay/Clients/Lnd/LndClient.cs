@@ -22,26 +22,50 @@ namespace LightningPay.Clients.Lnd
         {
         }
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
-        /// <returns>Balance is satoshis</returns>
-        public async Task<long> GetBalance()
+        /// <summary>Checks the connectivity.</summary>
+        public async Task<CheckConnectivityResponse> CheckConnectivity()
+        {
+            try
+            {
+                var response = await this.Get<GetInfoResponse>("/v1/getinfo");
+
+                if (string.IsNullOrEmpty(response.Alias))
+                {
+                    return new CheckConnectivityResponse(CheckConnectivityResult.Error, "Unable to retrieve the node alias");
+                }
+            }
+            catch (Exception exc)
+            {
+                return new CheckConnectivityResponse(CheckConnectivityResult.Error, exc.Message);
+            }
+
+            return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
+        }
+
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        public async Task<Money> GetBalance()
         {
             var response = await this.Get<GetBalanceResponse>("v1/balance/blockchain");
 
-            return response?.TotalBalance ?? 0;
+            var satoshis = response?.TotalBalance ?? 0;
+
+            return Money.FromSatoshis(satoshis);
         }
 
         /// <summary>Creates the invoice.</summary>
-        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="amount">The amount to receive.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
         /// <exception cref="LightningPay.LightningPayException">Cannot retrieve Payment request or request hash in the lnd api response</exception>
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, 
+        public async Task<LightningInvoice> CreateInvoice(Money amount, 
             string description, 
             CreateInvoiceOptions options = null)
         {
-            var strAmount = satoshis.ToString(CultureInfo.InvariantCulture);
+            var strAmount = ((long)amount.ToSatoshis()).ToString(CultureInfo.InvariantCulture);
             var strExpiry = options.ToExpiryString();
 
 
@@ -63,7 +87,7 @@ namespace LightningPay.Clients.Lnd
                     LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
-            return response.ToLightningInvoice(satoshis, description, options);
+            return response.ToLightningInvoice(amount, description, options);
         }
 
         /// <summary>Checks the payment of an invoice.</summary>
@@ -86,19 +110,30 @@ namespace LightningPay.Clients.Lnd
 
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
-        /// <returns>True on the payment success, false otherwise</returns>
-        public async Task<bool> Pay(string paymentRequest)
+        /// <returns>
+        ///   PaymentResponse
+        /// </returns>
+        public async Task<PaymentResponse> Pay(string paymentRequest)
         {
-            var response = await this.Post<PayResponse>("v1/channels/transactions",
-                new PayRequest() { PaymentRequest = paymentRequest });
-
-            if(!string.IsNullOrEmpty(response.Error))
+            try
             {
-                throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
-                    LightningPayException.ErrorCode.BAD_REQUEST);
+                var response = await this.Post<PayResponse>("v1/channels/transactions",
+                    new PayRequest() { PaymentRequest = paymentRequest });
+
+                if (!string.IsNullOrEmpty(response.Error))
+                {
+                    throw new LightningPayException($"Cannot proceed to the payment : {response.Error}",
+                        LightningPayException.ErrorCode.BAD_REQUEST);
+                }
+            }
+            catch (LightningPayException exc)
+            {
+                return new PaymentResponse(PayResult.Error, exc.Message);
             }
 
-            return true;
+
+            return new PaymentResponse(PayResult.Ok);
+
         }
 
         internal static AuthenticationBase BuildAuthentication(LndOptions options)

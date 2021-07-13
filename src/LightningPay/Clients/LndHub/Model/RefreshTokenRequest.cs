@@ -2,7 +2,7 @@
 {
     internal class RefreshTokenRequest
     {
-        [Json("refresh_token")]
+        [Serializable("refresh_token")]
         public string ResfreshToken { get; set; }
     }
 }

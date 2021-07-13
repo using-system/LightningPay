@@ -23,8 +23,8 @@ See [Which package to use ?](documentation/packages.md) for more details.
 Connect to your lightning nodes : 
 
 - [x] LND ([Documentation](documentation/client-lnd.md))
+- [x] Eclair  ([Documentation](documentation/client-eclair.md))
 - [ ] C-Lightning  (Not supported yet)
-- [ ] Eclair  (Not supported yet)
 - [ ] Charge (Not supported yet)
 
 Or with custodial solution for lightning (without having a node  of your own) : 

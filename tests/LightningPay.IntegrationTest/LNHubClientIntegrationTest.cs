@@ -6,7 +6,7 @@ namespace LightningPay.IntegrationTest
 {
     public class LNHubClientIntegrationTest : LightningClientIntegrationTestBase
     {
-        protected override string SelfPaymentErrorMesssage => "not enough balance";
+        protected override bool NeedBitcoind => false;
 
         protected async override Task<ILightningClient> GetClient()
         {
@@ -20,6 +20,8 @@ namespace LightningPay.IntegrationTest
 
             return client;
         }
+
+        protected override string SelfPaymentErrorMesssage => "not enough balance";
     }
 
     internal static class LNHubClientIntegrationTestExtensions
@@ -36,19 +38,19 @@ namespace LightningPay.IntegrationTest
 
         internal class CreateWalletRequest
         {
-            [Json("partnerid")]
+            [Serializable("partnerid")]
             public string PartnerId { get; set; }
 
-            [Json("accounttype")]
+            [Serializable("accounttype")]
             public string AccountType { get; set; }
         }
 
         internal class CreateWalletResponse
         {
-            [Json("login")]
+            [Serializable("login")]
             public string Login { get; set; }
 
-            [Json("password")]
+            [Serializable("password")]
             public string Password { get; set; }
         }
     }

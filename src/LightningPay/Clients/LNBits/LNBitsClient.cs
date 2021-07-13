@@ -22,28 +22,53 @@ namespace LightningPay.Clients.LNBits
 
         }
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
-        /// <returns>Balance is satoshis</returns>
-        public async Task<long> GetBalance()
+        /// <summary>Checks the connectivity.</summary>
+        public async Task<CheckConnectivityResponse> CheckConnectivity()
+        {
+            try
+            {
+                var response = await this.Get<GetWallletDetailsResponse>("api/v1/wallet");
+
+                if (string.IsNullOrEmpty(response.Id))
+                {
+                    return new CheckConnectivityResponse(CheckConnectivityResult.Error, "Unable to retrieve the wallet id");
+                }
+            }
+            catch (Exception exc)
+            {
+                return new CheckConnectivityResponse(CheckConnectivityResult.Error, exc.Message);
+            }
+
+
+            return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
+        }
+
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        public async Task<Money> GetBalance()
         {
             var response = await this.Get<GetWallletDetailsResponse>("api/v1/wallet");
 
-            return response?.Balance / 1000 ?? 0;
+            var milliSatoshis =  response?.Balance ?? 0;
+
+            return Money.FromMilliSatoshis(milliSatoshis);
         }
 
         /// <summary>Creates the invoice.</summary>
-        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="amount">The amount to receive.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
         /// <exception cref="LightningPay.LightningPayException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
+        public async Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
         {
             var request = new CreateInvoiceRequest
             {
 
                 Out = false,
-                Amount = satoshis,
+                Amount = (long) amount.ToSatoshis(),
                 Memo = description
             };
 
@@ -56,7 +81,7 @@ namespace LightningPay.Clients.LNBits
                     LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
-            return response.ToLightningInvoice(satoshis, description, options);
+            return response.ToLightningInvoice(amount, description, options);
         }
 
         /// <summary>Checks the payment of an invoice.</summary>
@@ -72,19 +97,29 @@ namespace LightningPay.Clients.LNBits
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>True on the payment success, false otherwise</returns>
-        /// <exception cref="LightningPay.LightningPayException">Cannot proceed to the payment</exception>
-        public async Task<bool> Pay(string paymentRequest)
+        /// <returns>
+        ///   PaymentResponse
+        /// </returns>
+        public async Task<PaymentResponse> Pay(string paymentRequest)
         {
-            var response = await this.Post<PayResponse>("api/v1/payments",
-                new PayRequest() { Out = true, PaymentRequest = paymentRequest });
-
-            if (string.IsNullOrEmpty(response.PaymentHash))
+            try
             {
-                throw new LightningPayException($"Cannot proceed to the payment",
-                    LightningPayException.ErrorCode.UNAUTHORIZED);
+                var response = await this.Post<PayResponse>("api/v1/payments",
+                    new PayRequest() { Out = true, PaymentRequest = paymentRequest });
+
+                if (string.IsNullOrEmpty(response.PaymentHash))
+                {
+                    throw new LightningPayException($"Cannot proceed to the payment",
+                       LightningPayException.ErrorCode.UNAUTHORIZED);
+                }
+            }
+            catch(LightningPayException exc)
+            {
+                return new PaymentResponse(PayResult.Error, exc.Message);
             }
 
-            return true;
+
+            return new PaymentResponse(PayResult.Ok);
         }
 
         internal static AuthenticationBase BuildAuthentication(LNBitsOptions options)
@@ -97,7 +132,7 @@ namespace LightningPay.Clients.LNBits
             return new LNBitsAuthentication(options.ApiKey);
         }
 
-        /// <summary>>Instanciate a new LNBits api.</summary>
+        /// <summary>>Instanciate a new LNBits client.</summary>
         /// <param name="address">The address.</param>
         /// <param name="apiKey">The API key.</param>
         /// <param name="httpClient">The HTTP client.</param>

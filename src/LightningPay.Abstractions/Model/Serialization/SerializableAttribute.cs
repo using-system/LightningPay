@@ -8,20 +8,20 @@ namespace LightningPay
     /// </summary>
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.All)]
-    public sealed class JsonAttribute : Attribute
+    public sealed class SerializableAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonAttribute"/> class.
+        /// Initializes a new instance of the <see cref="SerializableAttribute"/> class.
         /// </summary>
-        public JsonAttribute()
+        public SerializableAttribute()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonAttribute"/> class.
+        /// Initializes a new instance of the <see cref="SerializableAttribute"/> class.
         /// </summary>
         /// <param name="name">The name to use for JSON serialization and deserialization.</param>
-        public JsonAttribute(string name)
+        public SerializableAttribute(string name)
         {
             Name = name;
         }

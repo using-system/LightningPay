@@ -1,4 +1,5 @@
 version: '2'
+
 services:
 
   bitcoind:
@@ -28,6 +29,33 @@ services:
       - "39388" # P2P
     volumes:
       - "bitcoind_dir:/data"
+
+  lightningd:
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    image: btcpayserver/lightning:v0.9.3-1-dev
+    environment:
+      EXPOSE_TCP: "true"
+      LIGHTNINGD_NETWORK: regtest
+      LIGHTNINGD_CHAIN: btc
+      LIGHTNINGD_OPT: |
+        bitcoin-datadir=/etc/bitcoin
+        bitcoin-rpcconnect=bitcoind
+        network=regtest
+        announce-addr=lightningd
+        log-level=debug
+        dev-fast-gossip
+        dev-bitcoind-poll=1
+    ports:
+      - "48532:9835" # api port
+    expose:
+      - "9735" # server port
+      - "9835" # api port
+    volumes:
+      - "bitcoind_dir:/etc/bitcoin"
+      - "lightningd_dir:/root/.lightning"
+    links:
+      - bitcoind
 
   lnd:
     restart: unless-stopped
@@ -61,7 +89,55 @@ services:
       - "bitcoind_dir:/deps/.bitcoin"
     links:
       - bitcoind
+      
+  eclair:
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    image: acinq/eclair:v0.3.3
+    environment:
+      JAVA_OPTS: |
+        -Xmx256m
+        -Declair.printToConsole
+        -Declair.headless
+        -Declair.chain=regtest
+        -Declair.server.binding-ip=0.0.0.0
+        -Declair.server.public-ips.0=eclair
+        -Declair.server.port=9735
+        -Declair.api.enabled=true
+        -Declair.api.binding-ip=0.0.0.0
+        -Declair.api.port=8080
+        -Declair.node-alias=eclair
+        -Declair.api.password=eclairpassword
+        -Declair.bitcoind.host=bitcoind
+        -Declair.bitcoind.rpcport=43782
+        -Declair.bitcoind.rpcuser=ceiwHEbqWI83
+        -Declair.bitcoind.rpcpassword=DwubwWsoo3
+        -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
+        -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
+        -Declair.on-chain-fees.max-feerate-mismatch=10000
+        -Declair.mindepth-blocks=1
+        -Declair.ping-disconnect=false
+    ports:
+      - "4570:8080" # api port
+      - "9735:9735" # server port
+    expose:
+      - "9735" # server port
+      - "8080" # api port
+    volumes:
+      - "bitcoind_dir:/etc/bitcoin"
+      - "eclair_dir:/data"
+    links:
+      - bitcoind
 
+  dev:
+    image: coscale/docker-sleep
+    depends_on:
+      - bitcoind
+      - eclair
+      - lightningd
+      - lnd
 volumes:
-  bitcoind_dir:
   lnd_dir:
+  bitcoind_dir:
+  lightningd_dir:
+  eclair_dir:
