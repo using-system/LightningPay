@@ -26,7 +26,7 @@ namespace LightningPay
         /// </returns>
         public decimal ToUnit(MoneyUnit unit)
         {
-            return this.MilliSatoshis / (long) unit;
+            return  (decimal)this.MilliSatoshis / (long) unit;
         }
 
         /// <summary>Converts to satoshis.</summary>
