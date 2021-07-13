@@ -7,7 +7,7 @@ Every clients of the `LightningPay` package implements the interface [`ILightnin
 ```c#
 public interface ILightningClient : IDisposable
 {
-    Task<CheckConnectivityResponse> CheckConnectivity();
+	Task<CheckConnectivityResponse> CheckConnectivity();
     
 	Task<long> GetBalance();
     
