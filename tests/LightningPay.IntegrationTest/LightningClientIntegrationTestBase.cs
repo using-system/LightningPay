@@ -17,8 +17,12 @@ namespace LightningPay.IntegrationTest
             await this.WaitServersAreUp(client);
 
             //Get balance for the first time
-            var balance = await client.GetBalance();
-            Assert.True(balance >= 0);
+            if (!(client is Clients.Eclair.EclairClient))
+            {
+                var balance = await client.GetBalance();
+                Assert.True(balance >= 0);
+            }
+
 
             //Create an invoice
             var invoice = await client.CreateInvoice(1000, "Test invoice");
@@ -46,12 +50,12 @@ namespace LightningPay.IntegrationTest
 
             while(true)
             {
-                try
+                var checkConnectivty = await client.CheckConnectivity();
+                if(checkConnectivty.Result == CheckConnectivityResult.Ok)
                 {
-                    await client.GetBalance();
                     break;
                 }
-                catch
+                else
                 {
                     await Task.Delay(5000);
                     continue;

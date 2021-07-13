@@ -22,6 +22,26 @@ namespace LightningPay.Clients.LndHub
         {
         }
 
+        /// <summary>Checks the connectivity.</summary>
+        public async Task<CheckConnectivityResponse> CheckConnectivity()
+        {
+            try
+            {
+                var response = await this.Get<GetInfoResponse>("getinfo");
+
+                if (string.IsNullOrEmpty(response.Alias))
+                {
+                    return new CheckConnectivityResponse(CheckConnectivityResult.Error, "Unable to retrieve the node alias");
+                }
+            }
+            catch (Exception exc)
+            {
+                return new CheckConnectivityResponse(CheckConnectivityResult.Error, exc.Message);
+            }
+
+            return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
+        }
+
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()

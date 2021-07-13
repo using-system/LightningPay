@@ -22,6 +22,27 @@ namespace LightningPay.Clients.LNBits
 
         }
 
+        /// <summary>Checks the connectivity.</summary>
+        public async Task<CheckConnectivityResponse> CheckConnectivity()
+        {
+            try
+            {
+                var response = await this.Get<GetWallletDetailsResponse>("api/v1/wallet");
+
+                if (string.IsNullOrEmpty(response.Id))
+                {
+                    return new CheckConnectivityResponse(CheckConnectivityResult.Error, "Unable to retrieve the wallet id");
+                }
+            }
+            catch (Exception exc)
+            {
+                return new CheckConnectivityResponse(CheckConnectivityResult.Error, exc.Message);
+            }
+
+
+            return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
+        }
+
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
         public async Task<long> GetBalance()

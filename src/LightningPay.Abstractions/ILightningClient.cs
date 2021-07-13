@@ -8,6 +8,12 @@ namespace LightningPay
     /// </summary>
     public interface ILightningClient : IDisposable
     {
+        /// <summary>Checks the connectivity.</summary>
+        /// <returns>
+        ///    True of the connectivity is ok, false otherwise 
+        /// </returns>
+        Task<CheckConnectivityResponse> CheckConnectivity();
+
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>
         ///   Balance is satoshis

@@ -23,11 +23,34 @@ namespace LightningPay.Clients.Eclair
 
         }
 
+        /// <summary>Checks the connectivity.</summary>
+        /// <returns>True of the connectivity is ok, false otherwise</returns>
+        public async Task<CheckConnectivityResponse> CheckConnectivity()
+        {
+            try
+            {
+                var response = await this.Post<GetInfoResponse>("getinfo", formUrlEncoded: true);
+
+                if (string.IsNullOrEmpty(response.NodeId))
+                {
+                    return new CheckConnectivityResponse(CheckConnectivityResult.Error, "Unable to retrieve the node id");
+                }
+            }
+            catch(Exception exc)
+            {
+                return new CheckConnectivityResponse(CheckConnectivityResult.Error, exc.Message);
+            }
+
+            return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
+        }
+
         /// <summary>Gets the wallet balance in satoshis.</summary>
         /// <returns>Balance is satoshis</returns>
-        /// <exception cref="System.NotImplementedException">Eclair client does not support GetBlance</exception>
         public async Task<long> GetBalance()
         {
+            var response = await this.Post<GetBalanceResponse>("onchainbalance");
+
+            return response?.Confirmed ?? 0;
             throw new NotImplementedException("Eclair client does not support GetBlance");
         }
 
