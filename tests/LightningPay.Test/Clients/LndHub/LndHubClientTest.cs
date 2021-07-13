@@ -14,6 +14,109 @@ namespace LightningPay.Test.Clients.LndHub
     public class LndHubClientTest
     {
         [Fact]
+        public async Task CheckConnectivity_Should_Return_Ok_If_NodeAlias_NotEmpty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetTokenResponse()
+                    {
+                        AccessToken = "AccessToken",
+                        RefreshToken = "RefreshToken"
+                    }), HttpStatusCode.OK
+                ),
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                        Alias = "alias"
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Equal(2, mockMessageHandler.Requests.Count);
+            Assert.True(mockMessageHandler.Requests[1].Headers.Contains("Authorization"));
+            Assert.Single(mockMessageHandler.Requests[1].Headers.GetValues("Authorization"), "Bearer AccessToken");
+            Assert.Equal("https://lndhub.herokuapp.com/auth?type=auth", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal("https://lndhub.herokuapp.com/getinfo", mockMessageHandler.Requests[1].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Ok, actual.Result);
+            Assert.Null(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_NodeAlias_Empty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetTokenResponse()
+                    {
+                        AccessToken = "AccessToken",
+                        RefreshToken = "RefreshToken"
+                    }), HttpStatusCode.OK
+                ),
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Equal(2, mockMessageHandler.Requests.Count);
+            Assert.True(mockMessageHandler.Requests[1].Headers.Contains("Authorization"));
+            Assert.Single(mockMessageHandler.Requests[1].Headers.GetValues("Authorization"), "Bearer AccessToken");
+            Assert.Equal("https://lndhub.herokuapp.com/auth?type=auth", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal("https://lndhub.herokuapp.com/getinfo", mockMessageHandler.Requests[1].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_Http_Error()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetTokenResponse()
+                    {
+                        AccessToken = "AccessToken",
+                        RefreshToken = "RefreshToken"
+                    }), HttpStatusCode.OK
+                ),
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                    }), HttpStatusCode.ServiceUnavailable
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Equal(2, mockMessageHandler.Requests.Count);
+            Assert.True(mockMessageHandler.Requests[1].Headers.Contains("Authorization"));
+            Assert.Single(mockMessageHandler.Requests[1].Headers.GetValues("Authorization"), "Bearer AccessToken");
+            Assert.Equal("https://lndhub.herokuapp.com/auth?type=auth", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal("https://lndhub.herokuapp.com/getinfo", mockMessageHandler.Requests[1].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
+        [Fact]
         public async Task CreateInvoice_Should_Return_Lightning_Invoice()
         {
             //Arrange

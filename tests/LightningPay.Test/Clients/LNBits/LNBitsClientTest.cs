@@ -13,6 +13,85 @@ namespace LightningPay.Test.Clients.LNBits
     public class LNBitsClientTest
     {
         [Fact]
+        public async Task CheckConnectivity_Should_Return_Ok_If_WalletId_NotEmpty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetWallletDetailsResponse()
+                    {
+                        Id = "id"
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
+
+            //Act
+            var actual = await lnBitsClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("https://lnbits.com/api/v1/wallet", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.True(mockMessageHandler.Requests[0].Headers.Contains("X-Api-Key"));
+            Assert.Single(mockMessageHandler.Requests[0].Headers.GetValues("X-Api-Key"), "apikey");
+            Assert.Equal(CheckConnectivityResult.Ok, actual.Result);
+            Assert.Null(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_WalletId_Empty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetWallletDetailsResponse()
+                    {
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
+
+            //Act
+            var actual = await lnBitsClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("https://lnbits.com/api/v1/wallet", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.True(mockMessageHandler.Requests[0].Headers.Contains("X-Api-Key"));
+            Assert.Single(mockMessageHandler.Requests[0].Headers.GetValues("X-Api-Key"), "apikey");
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_Http_Error()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetWallletDetailsResponse()
+                    {
+                    }), HttpStatusCode.ServiceUnavailable
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lnBitsClient = LNBitsClient.New("https://lnbits.com/", "apikey", httpClient);
+
+            //Act
+            var actual = await lnBitsClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("https://lnbits.com/api/v1/wallet", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.True(mockMessageHandler.Requests[0].Headers.Contains("X-Api-Key"));
+            Assert.Single(mockMessageHandler.Requests[0].Headers.GetValues("X-Api-Key"), "apikey");
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
+        [Fact]
         public async Task CreateInvoice_Should_Return_Lightning_Invoice()
         {
             //Arrange

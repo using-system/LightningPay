@@ -12,6 +12,79 @@ namespace LightningPay.Test.Clients.Lnd
 {
     public class LndClientTest
     {
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Ok_If_NodeAlias_NotEmpty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                        Alias = "alias"
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Ok, actual.Result);
+            Assert.Null(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_NodeAlias_Empty()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                    }), HttpStatusCode.OK
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
+        [Fact]
+        public async Task CheckConnectivity_Should_Return_Error_If_Http_Error()
+        {
+            //Arrange
+            var mockMessageHandler = new MockHttpMessageHandler(
+                (
+                    Json.Serialize(new GetInfoResponse()
+                    {
+                    }), HttpStatusCode.ServiceUnavailable
+                ));
+
+            HttpClient httpClient = new HttpClient(mockMessageHandler);
+            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+
+            //Act
+            var actual = await lndClient.CheckConnectivity();
+
+            //Assert
+            Assert.Single(mockMessageHandler.Requests);
+            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
+            Assert.Equal(CheckConnectivityResult.Error, actual.Result);
+            Assert.NotNull(actual.Error);
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
