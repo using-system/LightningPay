@@ -50,7 +50,6 @@ namespace LightningPay
                 Address = address,
                 Password = password
             });
-            services.AddSingleton<ILightningClient, EclairClient>();
 
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {

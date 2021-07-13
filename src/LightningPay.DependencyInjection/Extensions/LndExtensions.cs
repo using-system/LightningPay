@@ -88,7 +88,6 @@ namespace LightningPay
                 Address = address,
                 Macaroon = macaroonBytes
             });
-            services.AddSingleton<ILightningClient, LndClient>();
 
 
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()

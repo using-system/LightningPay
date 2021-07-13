@@ -50,7 +50,6 @@ namespace LightningPay
                 Address = address,
                 ApiKey = apiKey
             });
-            services.AddSingleton<ILightningClient, LNBitsClient>();
 
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
