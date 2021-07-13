@@ -118,7 +118,7 @@ namespace LightningPay.Infrastructure.Api
 
                     foreach(var property in body.GetType().GetProperties())
                     {
-                        var jsonAttr = property.GetCustomAttributes(typeof(JsonAttribute), false).FirstOrDefault() as JsonAttribute;
+                        var jsonAttr = property.GetCustomAttributes(typeof(SerializableAttribute), false).FirstOrDefault() as SerializableAttribute;
                         if(jsonAttr != null)
                         {
                             parameters.Add(jsonAttr.Name, property.GetValue(body).ToString());

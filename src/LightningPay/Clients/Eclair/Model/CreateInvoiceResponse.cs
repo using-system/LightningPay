@@ -2,22 +2,22 @@
 {
     internal class CreateInvoiceResponse
     {
-        [Json("description")]
+        [Serializable("description")]
         public string Description { get; set; }
 
-        [Json("paymentHash")]
+        [Serializable("paymentHash")]
         public string PaymentHash { get; set; }
 
-        [Json("amount")]
+        [Serializable("amount")]
         public long Amount { get; set; }
 
-        [Json("expiry")]
+        [Serializable("expiry")]
         public int Expiry { get; set; }
 
-        [Json("serialized")]
+        [Serializable("serialized")]
         public string Serialized { get; set; }
 
-        [Json("createdAt")]
+        [Serializable("createdAt")]
         public long CreatedAt { get; set; }
     }
 }

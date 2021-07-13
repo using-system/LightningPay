@@ -2,13 +2,13 @@
 {
     internal class CreateInvoiceRequest
     {
-        [Json("out")]
+        [Serializable("out")]
         public bool Out { get; set; }
 
-        [Json("amount")]
+        [Serializable("amount")]
         public long Amount { get; set; }
 
-        [Json("memo")]
+        [Serializable("memo")]
         public string Memo { get; set; }
     }
 }

@@ -9,15 +9,15 @@ namespace LightningPay.Clients.Eclair
 
     internal class SentInfoResponse
     {
-        [Json("amount")]
+        [Serializable("amount")]
         public long Amount { get; set; }
 
-        [Json("status")]
+        [Serializable("status")]
         public GetReceivedInfoStatusResponse Status { get; set; }
 
         internal class GetReceivedInfoStatusResponse
         {
-            [Json("type")]
+            [Serializable("type")]
             public string Type { get; set; }
         }
     }

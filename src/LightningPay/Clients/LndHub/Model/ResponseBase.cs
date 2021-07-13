@@ -2,10 +2,10 @@
 {
     internal abstract class ResponseBase
     {
-        [Json("error")]
+        [Serializable("error")]
         public bool Failed { get; set; }
 
-        [Json("message")]
+        [Serializable("message")]
         public string Message { get; set; }
     }
 }

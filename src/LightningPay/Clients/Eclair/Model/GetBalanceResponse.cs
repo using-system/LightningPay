@@ -2,7 +2,7 @@
 {
     internal class GetBalanceResponse
     {
-        [Json("confirmed")]
+        [Serializable("confirmed")]
         public long Confirmed { get; set; }
     }
 }

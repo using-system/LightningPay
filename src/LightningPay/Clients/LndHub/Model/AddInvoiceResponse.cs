@@ -2,18 +2,18 @@
 {
     internal class AddInvoiceResponse : ResponseBase
     {
-        [Json("r_hash")]
+        [Serializable("r_hash")]
         public Hash R_hash { get; set; }
 
-        [Json("payment_request")]
+        [Serializable("payment_request")]
         public string PaymentRequest { get; set; }
 
         internal class Hash
         {
-            [Json("type")]
+            [Serializable("type")]
             public string Type { get; set; }
 
-            [Json("data")]
+            [Serializable("data")]
             public byte[] Data { get; set; }
         }
     }

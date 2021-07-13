@@ -2,7 +2,7 @@
 {
     internal class GetReceivedInfoRequest
     {
-        [Json("paymentHash")]
+        [Serializable("paymentHash")]
         public string PaymentHash { get; set; }
     }
 }

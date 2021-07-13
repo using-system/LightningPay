@@ -2,7 +2,7 @@
 {
     internal class GetSentInfoRequest
     {
-        [Json("id")]
+        [Serializable("id")]
         public string Id { get; set; }
     }
 }

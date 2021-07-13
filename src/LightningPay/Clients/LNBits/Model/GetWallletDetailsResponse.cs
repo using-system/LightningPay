@@ -2,10 +2,10 @@
 {
     internal class GetWallletDetailsResponse
     {
-        [Json("id")]
+        [Serializable("id")]
         public string Id { get; set; }
 
-        [Json("balance")]
+        [Serializable("balance")]
         public long Balance { get; set; }
     }
 }

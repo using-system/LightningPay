@@ -2,7 +2,7 @@
 {
     internal class GetInfoResponse
     {
-        [Json("nodeId")]
+        [Serializable("nodeId")]
         public string NodeId { get; set; }
     }
 }

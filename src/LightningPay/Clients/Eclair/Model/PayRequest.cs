@@ -2,7 +2,7 @@
 {
     internal class PayRequest
     {
-        [Json("invoice")]
+        [Serializable("invoice")]
         public string PaymentRequest { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 {
     internal class CheckPaymentResponse : ResponseBase
     {
-        [Json("paid")]
+        [Serializable("paid")]
         public bool Paid { get; set; }
     }
 }

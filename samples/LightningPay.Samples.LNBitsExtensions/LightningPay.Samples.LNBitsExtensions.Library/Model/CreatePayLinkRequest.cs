@@ -2,21 +2,21 @@
 {
     internal class CreatePayLinkRequest
     {
-        [Json("description")]
+        [Serializable("description")]
         public string Description { get; set; }
 
-        [Json("amount")]
+        [Serializable("amount")]
         public long Amount { get; set; }
 
 
-        [Json("min")]
+        [Serializable("min")]
         public long Min { get; set; }
 
 
-        [Json("max")]
+        [Serializable("max")]
         public long Max { get; set; }
 
-        [Json("comment_chars")]
+        [Serializable("comment_chars")]
         public int MaxCommentChars { get; set; }
 
     }

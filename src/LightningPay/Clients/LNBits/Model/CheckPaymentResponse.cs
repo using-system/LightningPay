@@ -2,7 +2,7 @@
 {
     internal class CheckPaymentResponse
     {
-        [Json("paid")]
+        [Serializable("paid")]
         public bool Paid { get; set; }
     }
 }

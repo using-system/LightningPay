@@ -2,7 +2,7 @@
 {
     internal class PayResponse
     {
-        [Json("payment_error")]
+        [Serializable("payment_error")]
         public string Error { get; set; }
     }
 }
