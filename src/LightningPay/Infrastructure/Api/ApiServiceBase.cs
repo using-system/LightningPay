@@ -85,7 +85,6 @@ namespace LightningPay.Infrastructure.Api
         /// <param name="method">Http method.</param>
         /// <param name="url">The URL.</param>
         /// <param name="body">The body.</param>
-        /// <param name="body">The body to post.</param>
         /// <param name="formUrlEncoded">if set to <c>true</c> [form URL encoded].</param>
         /// <returns>
         ///   <br />
