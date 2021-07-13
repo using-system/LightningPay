@@ -2,55 +2,55 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using LightningPay.Clients.LNBits;
+using LightningPay.Clients.Eclair;
 
 namespace LightningPay
 {
     /// <summary>
-    /// LNBits dependency injection extension methods
+    ///  Eclair dependency injection extension methods
     /// </summary>
-    public static class LNBitsExtensions
+    public static class EclairExtensions
     {
         /// <summary>Adds the LNBits lightning client.</summary>
         /// <param name="services">The services.</param>
         /// <param name="address">The address of the LNBits api.</param>
-        /// <param name="apiKey">The API key.</param>
+        /// <param name="password">The password.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddLNBitsLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddEclairLightningClient(this IServiceCollection services,
             Uri address,
-            string apiKey)
+            string password)
         {
-            return AddLNBitsLightningClient(services,
+            return AddEclairLightningClient(services,
                 address,
-                apiKey,
+                password,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
 
-        /// <summary>Adds the LNBits lightning client.</summary>
+        /// <summary>Adds the Eclair lightning client.</summary>
         /// <param name="services">The services.</param>
         /// <param name="address">The address of the LNBits api.</param>
-        /// <param name="apiKey">The api key.</param>
+        /// <param name="password">The password.</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddLNBitsLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddEclairLightningClient(this IServiceCollection services,
             Uri address,
-            string apiKey,
+            string password,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
-            services.AddSingleton(new LNBitsOptions()
+            services.AddSingleton(new EclairOptions()
             {
                 Address = address,
-                ApiKey = apiKey
+                Password = password
             });
-            services.AddSingleton<ILightningClient, LNBitsClient>();
+            services.AddSingleton<ILightningClient, EclairClient>();
 
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
@@ -58,7 +58,7 @@ namespace LightningPay
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
-            services.AddHttpClient<ILightningClient, LNBitsClient>()
+            services.AddHttpClient<ILightningClient, EclairClient>()
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;

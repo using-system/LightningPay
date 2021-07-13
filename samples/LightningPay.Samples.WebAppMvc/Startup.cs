@@ -32,7 +32,11 @@ namespace LightningPay.Samples.WebAppMvc
                - With macaroon authentication (Load macaroon file) : 
                      services.AddLndLightningClient(new Uri("http://localhost:8080/"),
                         macaroonBytes: File.ReadAllBytes("/root/.lnd/data/chain/bitcoin/mainnet/invoice.macaroon"));
-               
+
+               ############## Eclair Samples ##################
+               services.AddEclairLightningClient(new Uri("http://localhost:8080/"), 
+                    password: "YourPassword");
+
                ############## LNBits Samples ##################
                services.AddLNBitsLightningClient(new Uri("https://lnbits.com/api/"),
                     apiKey: "YourApiKey");
