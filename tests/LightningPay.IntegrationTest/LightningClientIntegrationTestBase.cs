@@ -20,7 +20,7 @@ namespace LightningPay.IntegrationTest
             if (!(client is Clients.Eclair.EclairClient))
             {
                 var balance = await client.GetBalance();
-                Assert.True(balance >= 0);
+                Assert.True(balance.MilliSatoshis >= 0);
             }
 
 

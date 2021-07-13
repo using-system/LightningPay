@@ -42,13 +42,17 @@ namespace LightningPay.Clients.LndHub
             return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
         }
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
-        /// <returns>Balance is satoshis</returns>
-        public async Task<long> GetBalance()
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        public async Task<Money> GetBalance()
         {
             var response = await this.Get<GetBalanceResponse>("balance");
 
-            return response?.BTC?.AvailableBalance ?? 0;
+            var satoshis = response?.BTC?.AvailableBalance ?? 0;
+
+            return Money.FromSatoshis(satoshis);
         }
 
 

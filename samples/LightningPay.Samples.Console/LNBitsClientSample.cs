@@ -13,7 +13,7 @@ namespace LightningPay.Samples.Console
                 LNBitsClient.New(apiKey: "YourApiKey"))
             {
                 var balance = await lnBitsClient.GetBalance();
-                System.Console.WriteLine($"Wallet balance : {balance} sat ");
+                System.Console.WriteLine($"Wallet balance : {balance.ToSatoshis()} sat ");
 
                 var invoice = await lnBitsClient.CreateInvoice(100, "My First invoice");
 

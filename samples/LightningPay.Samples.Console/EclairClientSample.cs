@@ -10,9 +10,6 @@ namespace LightningPay.Samples.Console
         {
             using (var eclairClient = EclairClient.New("http://localhost:4570/", "eclairpassword"))
             {
-                /*var balance = await eclairClient.GetBalance();
-                System.Console.WriteLine($"Wallet balance : {balance} sat ");*/
-
                 var invoice = await eclairClient.CreateInvoice(100, "My First invoice");
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");

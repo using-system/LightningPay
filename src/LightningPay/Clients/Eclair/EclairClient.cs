@@ -44,14 +44,17 @@ namespace LightningPay.Clients.Eclair
             return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
         }
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
-        /// <returns>Balance is satoshis</returns>
-        public async Task<long> GetBalance()
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        public async Task<Money> GetBalance()
         {
             var response = await this.Post<GetBalanceResponse>("onchainbalance");
 
-            return response?.Confirmed ?? 0;
-            throw new NotImplementedException("Eclair client does not support GetBlance");
+            var satoshis = response?.Confirmed ?? 0;
+
+            return Money.FromSatoshis(satoshis);
         }
 
         /// <summary>Creates the invoice.</summary>

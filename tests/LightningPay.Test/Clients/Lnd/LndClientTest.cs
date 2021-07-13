@@ -220,7 +220,7 @@ namespace LightningPay.Test.Clients.Lnd
             var actual = await lndClient.GetBalance();
 
             //Assert
-            Assert.Equal(5000, actual);
+            Assert.Equal(5000, actual.ToSatoshis());
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("http://localhost:42802/v1/balance/blockchain", mockMessageHandler.Requests[0].RequestUri.ToString());
         }

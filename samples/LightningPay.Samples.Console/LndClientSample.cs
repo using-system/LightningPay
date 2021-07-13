@@ -11,7 +11,7 @@ namespace LightningPay.Samples.Console
             using (var lndClient = LndClient.New("http://localhost:32736/"))
             {
                 var balance = await lndClient.GetBalance();
-                System.Console.WriteLine($"Wallet balance : {balance} sat ");
+                System.Console.WriteLine($"Wallet balance : {balance.ToSatoshis()} sat ");
 
                 var invoice = await lndClient.CreateInvoice(100 , "My First invoice");
 

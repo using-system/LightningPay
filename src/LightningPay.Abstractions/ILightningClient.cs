@@ -14,11 +14,11 @@ namespace LightningPay
         /// </returns>
         Task<CheckConnectivityResponse> CheckConnectivity();
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
+        /// <summary>Gets the node / wallet balance.</summary>
         /// <returns>
-        ///   Balance is satoshis
+        ///   Balance
         /// </returns>
-        Task<long> GetBalance();
+        Task<Money> GetBalance();
 
         /// <summary>Creates the invoice.</summary>
         /// <param name="satoshis">The amount in satoshis.</param>

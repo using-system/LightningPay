@@ -43,13 +43,17 @@ namespace LightningPay.Clients.LNBits
             return new CheckConnectivityResponse(CheckConnectivityResult.Ok);
         }
 
-        /// <summary>Gets the wallet balance in satoshis.</summary>
-        /// <returns>Balance is satoshis</returns>
-        public async Task<long> GetBalance()
+        /// <summary>Gets the node / wallet balance.</summary>
+        /// <returns>
+        ///   Balance
+        /// </returns>
+        public async Task<Money> GetBalance()
         {
             var response = await this.Get<GetWallletDetailsResponse>("api/v1/wallet");
 
-            return response?.Balance / 1000 ?? 0;
+            var milliSatoshis =  response?.Balance ?? 0;
+
+            return Money.FromMilliSatoshis(milliSatoshis);
         }
 
         /// <summary>Creates the invoice.</summary>

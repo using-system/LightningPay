@@ -246,7 +246,7 @@ namespace LightningPay.Test.Clients.Eclair
             var actual = await eclairClient.GetBalance();
 
             //Assert
-            Assert.Equal(5000, actual);
+            Assert.Equal(5000, actual.ToSatoshis());
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://localhost:8080/onchainbalance", mockMessageHandler.Requests[0].RequestUri.ToString());
         }

@@ -314,7 +314,7 @@ namespace LightningPay.Test.Clients.LndHub
             var actual = await lndClient.GetBalance();
 
             //Assert
-            Assert.Equal(1500, actual);
+            Assert.Equal(1500, actual.ToSatoshis());
             Assert.Equal(2, mockMessageHandler.Requests.Count);
             Assert.Equal("https://lndhub.herokuapp.com/balance", mockMessageHandler.Requests[1].RequestUri.ToString());
         }
