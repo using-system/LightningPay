@@ -2,7 +2,7 @@
 
 ## Interface
 
-Every clients of the `LightningPay` package implements the interface [`ILightningClient`](/src/LightningPay/ILightningClient.cs) : 
+Every clients of the `LightningPay` package implements the interface [`ILightningClient`](/src/LightningPay.Abstractions/ILightningClient.cs) : 
 
 ```c#
 public interface ILightningClient : IDisposable
