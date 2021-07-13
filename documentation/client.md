@@ -9,9 +9,9 @@ public interface ILightningClient : IDisposable
 {
 	Task<CheckConnectivityResponse> CheckConnectivity();
     
-	Task<long> GetBalance();
+	Task<Money> GetBalance();
     
-	Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
+	Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null);
 
 	Task<bool> CheckPayment(string invoiceId);
     
@@ -53,6 +53,7 @@ To get the wallet balance (amount in satoshis), call the method `GetBalance` :
 
 ```c#
 var balance = await client.GetBalance();
+Console.WriteLine($"Wallet balance : {balance.ToSatoshis()} sat");
 ```
 
 ## Create an invoice
@@ -62,7 +63,7 @@ var balance = await client.GetBalance();
 To create an invoice, call the method `CreateInvoice` with the 2 parameters required : satoshis and the description will be appear on the invoice : 
 
 ```c#
-var invoice = await client.CreateInvoice(100, "My First Invoice");
+var invoice = await client.CreateInvoice(Money.FromSatoshis(100), "My First Invoice");
 ```
 
 ### Optional parameters
@@ -74,7 +75,7 @@ You can add optional parameters with the CreateInvoiceOptions object :
 | Expiry   | TimeSpan? | Duration before which the invoice will expire (Default value : 1 Day) |
 
 ```c#
-var invoice = await client.CreateInvoice(100 , "My First invoice", 
+var invoice = await client.CreateInvoice(Money.FromSatoshis(100) , "My First invoice", 
          new CreateInvoiceOptions(TimeSpan.FromHours(2)));
 ```
 
@@ -85,7 +86,7 @@ Once the invoice is created, you can check the payment of the invoice simply by 
 You can retrieve the invoice identifier with the `LightningInvoice` object returned by the `CreateInvoice` method : 
 
 ```c#
-var invoice = await client.CreateInvoice(100, "My First Invoice");
+var invoice = await client.CreateInvoice(Money.FromSatoshis(100), "My First Invoice");
 
 while (! await client.CheckPayment(invoice.Id))
 {
