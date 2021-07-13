@@ -57,18 +57,18 @@ namespace LightningPay.Clients.LNBits
         }
 
         /// <summary>Creates the invoice.</summary>
-        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="amount">The amount to receive.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
         /// <exception cref="LightningPay.LightningPayException">Cannot retrieve Payment request or request hash in the LNBits api response</exception>
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
+        public async Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
         {
             var request = new CreateInvoiceRequest
             {
 
                 Out = false,
-                Amount = satoshis,
+                Amount = (long) amount.ToSatoshis(),
                 Memo = description
             };
 
@@ -81,7 +81,7 @@ namespace LightningPay.Clients.LNBits
                     LightningPayException.ErrorCode.BAD_REQUEST);
             }
 
-            return response.ToLightningInvoice(satoshis, description, options);
+            return response.ToLightningInvoice(amount, description, options);
         }
 
         /// <summary>Checks the payment of an invoice.</summary>

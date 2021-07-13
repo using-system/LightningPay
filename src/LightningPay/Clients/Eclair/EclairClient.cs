@@ -58,17 +58,17 @@ namespace LightningPay.Clients.Eclair
         }
 
         /// <summary>Creates the invoice.</summary>
-        /// <param name="satoshis">The amount in satoshis.</param>
+        /// <param name="amount">The amount to receive.</param>
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        public async Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null)
+        public async Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
         {
             var response = await this.Post<CreateInvoiceResponse>("createinvoice",
                 new CreateInvoiceRequest()
                 {
                     Description = description,
-                    AmountMsat = satoshis * 1000,
+                    AmountMsat = amount.MilliSatoshis,
                     ExpireIn = int.Parse(options.ToExpiryString())
                 }, formUrlEncoded: true);
 

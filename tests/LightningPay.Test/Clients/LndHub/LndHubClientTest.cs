@@ -143,7 +143,7 @@ namespace LightningPay.Test.Clients.LndHub
             var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
 
             //Act
-            var invoice = await lndClient.CreateInvoice(1000, "Test");
+            var invoice = await lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test");
 
             //Assert
             Assert.Equal(2, mockMessageHandler.Requests.Count);
@@ -151,7 +151,7 @@ namespace LightningPay.Test.Clients.LndHub
             Assert.Single(mockMessageHandler.Requests[1].Headers.GetValues("Authorization"), "Bearer AccessToken");
             Assert.Equal("https://lndhub.herokuapp.com/auth?type=auth", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal("https://lndhub.herokuapp.com/addinvoice", mockMessageHandler.Requests[1].RequestUri.ToString());
-            Assert.Equal(1000, invoice.Amount);
+            Assert.Equal(1000, invoice.Amount.ToSatoshis());
             Assert.Equal("Test", invoice.Memo);
             Assert.Equal(LightningInvoiceStatus.Unpaid, invoice.Status);
             Assert.Equal("0001", invoice.Id);
@@ -172,7 +172,7 @@ namespace LightningPay.Test.Clients.LndHub
             var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -199,7 +199,7 @@ namespace LightningPay.Test.Clients.LndHub
             var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Equal(2, mockMessageHandler.Requests.Count);
         }
 
@@ -223,7 +223,7 @@ namespace LightningPay.Test.Clients.LndHub
             var lndClient = LndHubClient.New("https://lndhub.herokuapp.com/", "login", "password", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Equal(2, mockMessageHandler.Requests.Count);
         }
 

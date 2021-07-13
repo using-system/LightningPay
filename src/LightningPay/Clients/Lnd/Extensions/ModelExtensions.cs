@@ -6,7 +6,7 @@ namespace LightningPay.Clients.Lnd
     internal static class ModelExtensions
     {
         public static LightningInvoice ToLightningInvoice(this AddInvoiceResponse source,
-            long amount,
+            Money amount,
             string memo,
             CreateInvoiceOptions options)
         {
@@ -37,7 +37,7 @@ namespace LightningPay.Clients.Lnd
             {
                 Id =  source.R_hash.ToBitString(),
                 Memo = source.Memo,
-                Amount = Convert.ToInt64(source.Value, CultureInfo.InvariantCulture.NumberFormat),
+                Amount = Money.FromSatoshis(Convert.ToInt64(source.Value, CultureInfo.InvariantCulture.NumberFormat)),
                 BOLT11 = source.Payment_request,
                 Status = LightningInvoiceStatus.Unpaid
             };

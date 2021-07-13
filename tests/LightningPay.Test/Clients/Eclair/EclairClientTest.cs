@@ -109,13 +109,13 @@ namespace LightningPay.Test.Clients.Eclair
             var eclairClient = EclairClient.New("https://localhost:8080", "password", httpClient);
 
             //Act
-            var invoice = await eclairClient.CreateInvoice(1000, "Test");
+            var invoice = await eclairClient.CreateInvoice(Money.FromSatoshis(1000), "Test");
 
             //Assert
             Assert.Single(mockMessageHandler.Requests);
             Assert.Equal("https://localhost:8080/createinvoice", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.NotNull(mockMessageHandler.Requests[0].Headers.Authorization);
-            Assert.Equal(1000, invoice.Amount);
+            Assert.Equal(1000, invoice.Amount.ToSatoshis());
             Assert.Equal("Test", invoice.Memo);
             Assert.Equal(LightningInvoiceStatus.Unpaid, invoice.Status);
             Assert.Equal("Id", invoice.Id);
@@ -136,7 +136,7 @@ namespace LightningPay.Test.Clients.Eclair
             var eclairClient = EclairClient.New("https://localhost:8080", "password", httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => eclairClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => eclairClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 

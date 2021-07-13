@@ -3,7 +3,7 @@
     internal static class ModelExtensions
     {
         internal static LightningInvoice ToLightningInvoice(this CreateInvoiceResponse source,
-          long amount,
+          Money amount,
           string memo,
           CreateInvoiceOptions options)
         {

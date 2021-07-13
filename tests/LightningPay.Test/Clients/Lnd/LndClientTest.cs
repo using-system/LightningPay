@@ -104,13 +104,13 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? "971a5512" : null, httpClient: httpClient);
 
             //Act
-            var invoice = await lndClient.CreateInvoice(1000, "Test");
+            var invoice = await lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test");
 
             //Assert
             Assert.Single(mockMessageHandler.Requests);
             Assert.True(mockMessageHandler.Requests[0].Headers.Contains(MacaroonAuthentication.HEADER_KEY) == withMacaroon);
             Assert.Equal("http://localhost:42802/v1/invoices", mockMessageHandler.Requests[0].RequestUri.ToString());
-            Assert.Equal(1000, invoice.Amount);
+            Assert.Equal(1000, invoice.Amount.ToSatoshis());
             Assert.Equal("Test", invoice.Memo);
             Assert.Equal(LightningInvoiceStatus.Unpaid, invoice.Status);
             Assert.Equal("0001", invoice.Id);
@@ -131,7 +131,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 
@@ -148,7 +148,7 @@ namespace LightningPay.Test.Clients.Lnd
             var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
 
             //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(1000, "Test"));
+            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
             Assert.Single(mockMessageHandler.Requests);
         }
 

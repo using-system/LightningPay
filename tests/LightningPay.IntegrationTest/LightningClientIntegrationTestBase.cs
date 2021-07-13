@@ -25,11 +25,11 @@ namespace LightningPay.IntegrationTest
 
 
             //Create an invoice
-            var invoice = await client.CreateInvoice(1000, "Test invoice");
+            var invoice = await client.CreateInvoice(Money.FromSatoshis(1000), "Test invoice");
             Assert.NotNull(invoice);
             Assert.NotNull(invoice.Id);
             Assert.NotNull(invoice.BOLT11);
-            Assert.Equal(1000, invoice.Amount);
+            Assert.Equal(1000, invoice.Amount.ToSatoshis());
             Assert.Equal("Test invoice", invoice.Memo);
 
             //Check payment (not paid)

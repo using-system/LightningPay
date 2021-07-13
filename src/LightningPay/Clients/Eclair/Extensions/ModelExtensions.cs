@@ -15,7 +15,7 @@ namespace LightningPay.Clients.Eclair
             {
                 Id = source.PaymentHash,
                 Memo = source.Description,
-                Amount = source.Amount / 1000,
+                Amount = Money.FromMilliSatoshis(source.Amount),
                 Status = LightningInvoiceStatus.Unpaid,
                 BOLT11 = source.Serialized,
                 ExpiresAt = DateTimeOffset.FromUnixTimeMilliseconds(source.CreatedAt)
