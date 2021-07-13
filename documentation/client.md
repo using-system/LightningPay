@@ -7,6 +7,8 @@ Every clients of the `LightningPay` package implements the interface [`ILightnin
 ```c#
 public interface ILightningClient : IDisposable
 {
+    Task<CheckConnectivityResponse> CheckConnectivity();
+    
 	Task<long> GetBalance();
     
 	Task<LightningInvoice> CreateInvoice(long satoshis, string description, CreateInvoiceOptions options = null);
@@ -16,6 +18,34 @@ public interface ILightningClient : IDisposable
 	Task<PaymentResponse> Pay(string paymentRequest);
 }
 ```
+
+## Check connectivity
+
+To check the connectivity of your node / wallet, call the method CheckConnectivity : 
+
+```c#
+var response = await client.CheckConnectivity();
+Console.WriteLine($"Check connectivity  result : {response.Result}");
+```
+
+Response object contains the result (an enumeration) and the error message if the connectivity is KO :
+
+```c#
+public class CheckConnectivityResponse
+{
+	public CheckConnectivityResult Result { get; set; }
+
+	public string Error { get; set; }
+}
+
+public enum CheckConnectivityResult
+{
+	Ok,
+	Error
+}
+```
+
+
 
 ## Get wallet balance
 
