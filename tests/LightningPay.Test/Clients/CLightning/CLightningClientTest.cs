@@ -3,37 +3,29 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 
-using LightningPay.Clients.Lnd;
+using LightningPay.Clients.CLightning;
 using LightningPay.Tools;
-using LightningPay.Infrastructure.Api;
 
+using NSubstitute;
 using Xunit;
 
-namespace LightningPay.Test.Clients.Lnd
+namespace LightningPay.Test.Clients.CLightning
 {
-    public class LndClientTest
+    public class CLightningClientTest
     {
         [Fact]
         public async Task CheckConnectivity_Should_Return_Ok_If_NodeAlias_NotEmpty()
         {
             //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                    Json.Serialize(new GetInfoResponse()
-                    {
-                        Alias = "alias"
-                    }), HttpStatusCode.OK
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+            IRpcClient rpcClient = Substitute.For<IRpcClient>();
+            rpcClient.SendCommandAsync<GetInfoResponse>("getinfo")
+                .Returns(new GetInfoResponse() { Id = "Id" });
+            var cLightningClient = new CLightningClient(rpcClient);
 
             //Act
-            var actual = await lndClient.CheckConnectivity();
+            var actual = await cLightningClient.CheckConnectivity();
 
             //Assert
-            Assert.Single(mockMessageHandler.Requests);
-            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(CheckConnectivityResult.Ok, actual.Result);
             Assert.Null(actual.Error);
         }
@@ -42,118 +34,66 @@ namespace LightningPay.Test.Clients.Lnd
         public async Task CheckConnectivity_Should_Return_Error_If_NodeAlias_Empty()
         {
             //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                    Json.Serialize(new GetInfoResponse()
-                    {
-                    }), HttpStatusCode.OK
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+            IRpcClient rpcClient = Substitute.For<IRpcClient>();
+            rpcClient.SendCommandAsync<GetInfoResponse>("getinfo")
+                .Returns(new GetInfoResponse());
+            var cLightningClient = new CLightningClient(rpcClient);
 
             //Act
-            var actual = await lndClient.CheckConnectivity();
+            var actual = await cLightningClient.CheckConnectivity();
 
             //Assert
-            Assert.Single(mockMessageHandler.Requests);
-            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(CheckConnectivityResult.Error, actual.Result);
             Assert.NotNull(actual.Error);
         }
 
         [Fact]
-        public async Task CheckConnectivity_Should_Return_Error_If_Http_Error()
+        public async Task CheckConnectivity_Should_Return_Error_On_Exception()
         {
             //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                    Json.Serialize(new GetInfoResponse()
-                    {
-                    }), HttpStatusCode.ServiceUnavailable
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
+            IRpcClient rpcClient = Substitute.For<IRpcClient>();
+            rpcClient.When(c => c.SendCommandAsync<GetInfoResponse>("getinfo"))
+                .Do(c => throw new Exception("an exception occurs"));
+            var cLightningClient = new CLightningClient(rpcClient);
 
             //Act
-            var actual = await lndClient.CheckConnectivity();
+            var actual = await cLightningClient.CheckConnectivity();
 
             //Assert
-            Assert.Single(mockMessageHandler.Requests);
-            Assert.Equal("http://localhost:42802/v1/getinfo", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(CheckConnectivityResult.Error, actual.Result);
             Assert.NotNull(actual.Error);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task CreateInvoice_Should_Return_Lightning_Invoice(bool withMacaroon)
+        [Fact]
+        public async Task CreateInvoice_Should_Return_Lightning_Invoice()
         {
             //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                    Json.Serialize(new AddInvoiceResponse()
-                    {
-                        Payment_request = "PaymentRequest",
-                        R_hash = new byte[] { 0, 1 }
-                    }), HttpStatusCode.OK
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", withMacaroon ? "971a5512" : null, httpClient: httpClient);
+            IRpcClient rpcClient = Substitute.For<IRpcClient>();
+            rpcClient.SendCommandAsync<CLightningInvoice>("invoice", (long)1000000, Arg.Any<string>(), "Test", "86400")
+                .Returns(new CLightningInvoice() 
+                {
+                    Label = "0001",
+                    Description = "Test",
+                    MilliSatoshi = Money.FromSatoshis(1000).MilliSatoshis,
+                    BOLT11 = "PaymentRequest",
+                    Status = "unpaid",
+                    ExpiryAt = DateTimeOffset.Now.AddHours(24)
+                });
+            var cLightningClient = new CLightningClient(rpcClient);
 
             //Act
-            var invoice = await lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test");
+            var invoice = await cLightningClient.CreateInvoice(Money.FromSatoshis(1000), "Test");
 
             //Assert
-            Assert.Single(mockMessageHandler.Requests);
-            Assert.True(mockMessageHandler.Requests[0].Headers.Contains(MacaroonAuthentication.HEADER_KEY) == withMacaroon);
-            Assert.Equal("http://localhost:42802/v1/invoices", mockMessageHandler.Requests[0].RequestUri.ToString());
             Assert.Equal(1000, invoice.Amount.ToSatoshis());
             Assert.Equal("Test", invoice.Memo);
             Assert.Equal(LightningInvoiceStatus.Unpaid, invoice.Status);
-            Assert.Equal("0001", invoice.Id);
+            Assert.NotNull(invoice.Id);
             Assert.Equal("PaymentRequest", invoice.BOLT11);
             Assert.True(invoice.ExpiresAt > DateTimeOffset.UtcNow.AddHours(23));
         }
 
-        [Fact]
-        public async Task CreateInvoice_Should_Throw_ApiException_If_Response_StatusCode_KO()
-        {
-            //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                   "error", HttpStatusCode.BadRequest
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
-
-            //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
-            Assert.Single(mockMessageHandler.Requests);
-        }
-
-        [Fact]
-        public async Task CreateInvoice_Should_Throw_ApiException_If_Response_Not_Contains_Payment_Request()
-        {
-            //Arrange
-            var mockMessageHandler = new MockHttpMessageHandler(
-                (
-                    Json.Serialize(new AddInvoiceResponse()), HttpStatusCode.OK
-                ));
-
-            HttpClient httpClient = new HttpClient(mockMessageHandler);
-            var lndClient = LndClient.New("http://localhost:42802/", httpClient: httpClient);
-
-            //Act & Assert
-            await Assert.ThrowsAsync<LightningPayException>(() => lndClient.CreateInvoice(Money.FromSatoshis(1000), "Test"));
-            Assert.Single(mockMessageHandler.Requests);
-        }
-
-        [Theory]
+        /*[Theory]
         [InlineData(true, true, true)]
         [InlineData(true, false, false)]
         public async Task CheckPayment_Should_Return_Settled_Property(bool withMacaroon, bool settled, bool expectedResult)
@@ -301,6 +241,6 @@ namespace LightningPay.Test.Clients.Lnd
 
             //Assert
             Assert.IsType<MacaroonAuthentication>(authentication);
-        }
+        }*/
     }
 }

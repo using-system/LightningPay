@@ -31,7 +31,7 @@
                 case "expired":
                     return LightningInvoiceStatus.Expired;
                 default:
-                    return LightningInvoiceStatus.Paid;
+                    return LightningInvoiceStatus.Unpaid;
             }
         }
     }

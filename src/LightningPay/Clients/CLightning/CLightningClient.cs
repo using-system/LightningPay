@@ -67,7 +67,7 @@ namespace LightningPay.Clients.CLightning
                 amount.MilliSatoshis, 
                 id, 
                 description, 
-                options.ToExpiryString() );
+                options.ToExpiryString());
             invoice.Label = id;
             invoice.Description = description;
             invoice.MilliSatoshi = amount.MilliSatoshis;
