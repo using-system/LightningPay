@@ -2,7 +2,9 @@
 
 namespace LightningPay.Clients.CLightning
 {
-    internal class ListInvoicesResponse : List<CLightningInvoice>
+    internal class ListInvoicesResponse
     {
+        [Serializable("invoices")]
+        public List<CLightningInvoice> Invoices { get; set; }
     }
 }

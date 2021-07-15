@@ -45,9 +45,15 @@ namespace LightningPay.Clients.CLightning
 
         /// <summary>Gets the node / wallet balance.</summary>
         /// <returns>Balance</returns>
-        public Task<Money> GetBalance()
+        public async Task<Money> GetBalance()
         {
-            throw new System.NotImplementedException();
+            var funds = await this.client.SendCommandAsync<ListFundsResponse>(this.address, "listfunds");
+
+            var balance = funds.Outputs
+                .Where(fund => fund.Status == "confirmed")
+                .Sum(fund => fund.Value);
+
+            return Money.FromSatoshis(balance);
         }
 
 
@@ -56,17 +62,27 @@ namespace LightningPay.Clients.CLightning
         /// <param name="description">The description will be appears in the invoice.</param>
         /// <param name="options">Invoice creation options.</param>
         /// <returns>The lightning invoice just created</returns>
-        public Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
+        public async Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
         {
-            throw new System.NotImplementedException();
+            string id = Guid.NewGuid().ToString();
+            var invoice =  await this.client.SendCommandAsync<CLightningInvoice>(this.address,
+                "invoice",
+                new object[] { amount.MilliSatoshis, id, description, options.ToExpiryString() });
+            invoice.Label = id;
+            invoice.MilliSatoshi = amount.MilliSatoshis;
+            invoice.Status = "unpaid";
+
+            return invoice.ToLightningInvoice();
         }
 
         /// <summary>Pay.</summary>
         /// <param name="paymentRequest">The payment request (aka bolt11).</param>
         /// <returns>PaymentResponse</returns>
-        public Task<PaymentResponse> Pay(string paymentRequest)
+        public async Task<PaymentResponse> Pay(string paymentRequest)
         {
-            throw new System.NotImplementedException();
+            await this.client.SendCommandAsync<object>(this.address, "pay", new object[] { paymentRequest });
+
+            return new PaymentResponse(PayResult.Ok);
         }
 
 
@@ -87,11 +103,11 @@ namespace LightningPay.Clients.CLightning
 
         private async Task<LightningInvoice> GetInvoice(string invoiceId)
         {
-            var invoices = await this.client.SendCommandAsync<ListInvoicesResponse>(this.address,
+            var response = await this.client.SendCommandAsync<ListInvoicesResponse>(this.address,
                 "listinvoices",
                 new[] { invoiceId });
 
-            return invoices.FirstOrDefault().ToLightningInvoice();
+            return response.Invoices.FirstOrDefault().ToLightningInvoice();
         }
 
 

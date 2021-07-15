@@ -4,6 +4,9 @@ namespace LightningPay.Clients.CLightning
 {
     internal class CLightningInvoice
     {
+        [Serializable("description")]
+        public string Description { get; set; }
+
         [Serializable("payment_hash")]
         public string PaymentHash { get; set; }
 

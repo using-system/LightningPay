@@ -12,6 +12,7 @@
             return new LightningInvoice
             {
                 Id = source.Label,
+                Memo = source.Description,
                 Amount = Money.FromMilliSatoshis(source.MilliSatoshi),
                 BOLT11 = source.BOLT11,
                 ExpiresAt = source.ExpiryAt,
