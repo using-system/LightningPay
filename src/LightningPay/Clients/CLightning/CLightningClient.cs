@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LightningPay.Clients.CLightning
@@ -47,13 +48,6 @@ namespace LightningPay.Clients.CLightning
             throw new System.NotImplementedException();
         }
 
-        /// <summary>Checks the payment of an invoice.</summary>
-        /// <param name="invoiceId">The invoice identifier.</param>
-        /// <returns>True of the invoice is paid, false otherwise</returns>
-        public Task<bool> CheckPayment(string invoiceId)
-        {
-            throw new System.NotImplementedException();
-        }
 
         /// <summary>Creates the invoice.</summary>
         /// <param name="amount">The amount to receive.</param>
@@ -72,6 +66,32 @@ namespace LightningPay.Clients.CLightning
         {
             throw new System.NotImplementedException();
         }
+
+
+        /// <summary>Checks the payment of an invoice.</summary>
+        /// <param name="invoiceId">The invoice identifier.</param>
+        /// <returns>True of the invoice is paid, false otherwise</returns>
+        public async Task<bool> CheckPayment(string invoiceId)
+        {
+            var invoice = await this.GetInvoice(invoiceId);
+
+            if(invoice == null)
+            {
+                return false;
+            }
+
+            return invoice.Status == LightningInvoiceStatus.Paid;
+        }
+
+        private async Task<LightningInvoice> GetInvoice(string invoiceId)
+        {
+            var invoices = await this.client.SendCommandAsync<ListInvoicesResponse>(this.address,
+                "listinvoices",
+                new[] { invoiceId });
+
+            return invoices.FirstOrDefault().ToLightningInvoice();
+        }
+
 
         /// <summary>Instanciate a new C-Lightning client.</summary>
         /// <param name="address">The address of the C-Lightning server.</param>
@@ -92,5 +112,5 @@ namespace LightningPay.Clients.CLightning
         {
 
         }
-	}
+    }
 }
