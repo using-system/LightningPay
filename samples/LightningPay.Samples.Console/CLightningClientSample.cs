@@ -10,7 +10,7 @@ namespace LightningPay.Samples.Console
     {
         public async override Task Execute()
         {
-            using (CLightningClient client = new CLightningClient(new Uri("tcp://127.0.0.1:48532"), new DefaultCLightningTcpClient()))
+            using (CLightningClient client = CLightningClient.New("tcp://127.0.0.1:48532"))
             {
                 System.Console.WriteLine($"check connectivity : {(await client.CheckConnectivity()).Result}");
             }
