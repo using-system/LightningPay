@@ -26,8 +26,9 @@ namespace LightningPay.DependencyInjection.Test.Extensions
             Assert.NotNull(options);
             Assert.Equal("tcp://127.0.0.1:48532/", options.Address.ToString());
 
-            var tcpClient = serviceProvider.GetService<ICLightningTcpClient>();
+            var tcpClient = serviceProvider.GetService<IRpcClient>();
             Assert.NotNull(tcpClient);
+            Assert.IsType<DefaultCLightningRpcClient>(tcpClient);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);

@@ -1,5 +1,4 @@
-﻿using LightningPay.Tools;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,25 +6,35 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+using LightningPay.Tools;
+
 namespace LightningPay.Clients.CLightning
 {
     /// <summary>
     ///  Default  C-Lightning tcp client
     /// </summary>
-    public class DefaultCLightningTcpClient : ICLightningTcpClient
+    public class DefaultCLightningRpcClient : IRpcClient
     {
+        private readonly Uri address;
+
+        /// <summary>Initializes a new instance of the <see cref="DefaultCLightningRpcClient" /> class.</summary>
+        /// <param name="options">The options.</param>
+        public DefaultCLightningRpcClient(CLightningOptions options)
+        {
+            this.address = options.Address;
+        }
+
 		static Encoding UTF8 = new UTF8Encoding(false);
 
         /// <summary>Sends the command asynchronous.</summary>
         /// <typeparam name="Response">The type of the esponse.</typeparam>
-        /// <param name="address">The address.</param>
         /// <param name="command">The command.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>
         ///   <br />
         /// </returns>
         /// <exception cref="LightningPay.LightningPayException">Error code {response.Error.Code} : {response.Error.Message}</exception>
-        public async Task<Response> SendCommandAsync<Response>(Uri address, string command, object[] parameters = null)
+        public async Task<Response> SendCommandAsync<Response>(string command, object[] parameters = null)
         {
 			parameters = parameters ?? Array.Empty<string>();
 			using (Socket socket = await Connect(address))

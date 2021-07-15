@@ -25,7 +25,7 @@ namespace LightningPay.DependencyInjection
             });
 
 
-            services.AddSingleton<ICLightningTcpClient, DefaultCLightningTcpClient>();
+            services.AddSingleton<IRpcClient, DefaultCLightningRpcClient>();
             services.AddSingleton<ILightningClient, CLightningClient>();
 
             return services;

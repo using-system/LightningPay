@@ -7,19 +7,17 @@ namespace LightningPay.Clients.CLightning
     /// <summary>
     ///   C-Lightning client
     /// </summary>
-    public class CLightningClient : ILightningClient
+    public class CLightningClient : IRpcLightningClient
     {
-		private readonly Uri address;
-
-        private ICLightningTcpClient client;
+        /// <summary>Gets the rpc client.</summary>
+        /// <value>The  rpc client.</value>
+        public IRpcClient Client { get; private set; }
 
         /// <summary>Initializes a new instance of the <see cref="CLightningClient" /> class.</summary>
-        /// <param name="options">The options.</param>
         /// <param name="client">The client.</param>
-        public CLightningClient(CLightningOptions options, ICLightningTcpClient client)
+        public CLightningClient(IRpcClient client)
         {
-            this.address = options.Address;
-            this.client = client;
+            this.Client = client;
         }
 
         /// <summary>Checks the connectivity.</summary>
@@ -28,7 +26,7 @@ namespace LightningPay.Clients.CLightning
         {
 			try
 			{
-				var response = await client.SendCommandAsync<GetInfoResponse>(address, "getinfo");
+				var response = await Client.SendCommandAsync<GetInfoResponse>("getinfo");
 
 				if (string.IsNullOrEmpty(response.Id))
 				{
@@ -47,7 +45,7 @@ namespace LightningPay.Clients.CLightning
         /// <returns>Balance</returns>
         public async Task<Money> GetBalance()
         {
-            var funds = await this.client.SendCommandAsync<ListFundsResponse>(this.address, "listfunds");
+            var funds = await this.Client.SendCommandAsync<ListFundsResponse>("listfunds");
 
             var balance = funds.Outputs
                 .Where(fund => fund.Status == "confirmed")
@@ -65,8 +63,7 @@ namespace LightningPay.Clients.CLightning
         public async Task<LightningInvoice> CreateInvoice(Money amount, string description, CreateInvoiceOptions options = null)
         {
             string id = Guid.NewGuid().ToString();
-            var invoice =  await this.client.SendCommandAsync<CLightningInvoice>(this.address,
-                "invoice",
+            var invoice =  await this.Client.SendCommandAsync<CLightningInvoice>("invoice",
                 new object[] { amount.MilliSatoshis, id, description, options.ToExpiryString() });
             invoice.Label = id;
             invoice.Description = description;
@@ -83,7 +80,7 @@ namespace LightningPay.Clients.CLightning
         {
             try
             {
-                await this.client.SendCommandAsync<object>(this.address, "pay", new object[] { paymentRequest });
+                await this.Client.SendCommandAsync<object>("pay", new object[] { paymentRequest });
 
 
                 return new PaymentResponse(PayResult.Ok);
@@ -112,8 +109,7 @@ namespace LightningPay.Clients.CLightning
 
         private async Task<LightningInvoice> GetInvoice(string invoiceId)
         {
-            var response = await this.client.SendCommandAsync<ListInvoicesResponse>(this.address,
-                "listinvoices",
+            var response = await this.Client.SendCommandAsync<ListInvoicesResponse>("listinvoices",
                 new[] { invoiceId });
 
             return response.Invoices.FirstOrDefault().ToLightningInvoice();
@@ -127,10 +123,10 @@ namespace LightningPay.Clients.CLightning
         /// </returns>
         public static CLightningClient New(string address)
         {
-            return new CLightningClient(new CLightningOptions()
+            return new CLightningClient(new DefaultCLightningRpcClient(new CLightningOptions()
             {
                 Address = new Uri(address)
-            }, new DefaultCLightningTcpClient());
+            }));
         }
 
 

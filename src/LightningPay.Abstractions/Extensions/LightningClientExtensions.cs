@@ -7,7 +7,7 @@ namespace LightningPay
     /// </summary>
     public static class LightningClientExtensions
     {
-        /// <summary>Converts to restclient.</summary>
+        /// <summary>Converts to a REST client.</summary>
         /// <param name="client">The  lightning client.</param>
         /// <returns>
         ///  Lightning Rest client
@@ -19,10 +19,28 @@ namespace LightningPay
 
             if (restClient == null)
             {
-                throw new ArgumentException("Lighntning client is not a rest LBBits client !");
+                throw new ArgumentException("Lighntning client is not a rest client !");
             }
 
             return restClient;
+        }
+
+        /// <summary>Converts to a rpc client.</summary>
+        /// <param name="client">The  lightning client.</param>
+        /// <returns>
+        ///  Lightning Rpc client
+        /// </returns>
+        /// <exception cref="System.ArgumentException">Lighntning client is not a rest LBBits client !</exception>
+        public static IRpcLightningClient ToRpcClient(this ILightningClient client)
+        {
+            var rpcClient = client as IRpcLightningClient;
+
+            if (rpcClient == null)
+            {
+                throw new ArgumentException("Lighntning client is not a rpc client !");
+            }
+
+            return rpcClient;
         }
     }
 }
