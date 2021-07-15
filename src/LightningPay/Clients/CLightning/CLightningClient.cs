@@ -22,6 +22,8 @@ namespace LightningPay.Clients.CLightning
             this.client = client;
         }
 
+        /// <summary>Checks the connectivity.</summary>
+        /// <returns>True of the connectivity is ok, false otherwise</returns>
         public async Task<CheckConnectivityResponse> CheckConnectivity()
         {
 			try
