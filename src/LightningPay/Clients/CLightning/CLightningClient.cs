@@ -69,6 +69,7 @@ namespace LightningPay.Clients.CLightning
                 "invoice",
                 new object[] { amount.MilliSatoshis, id, description, options.ToExpiryString() });
             invoice.Label = id;
+            invoice.Description = description;
             invoice.MilliSatoshi = amount.MilliSatoshis;
             invoice.Status = "unpaid";
 
@@ -80,9 +81,17 @@ namespace LightningPay.Clients.CLightning
         /// <returns>PaymentResponse</returns>
         public async Task<PaymentResponse> Pay(string paymentRequest)
         {
-            await this.client.SendCommandAsync<object>(this.address, "pay", new object[] { paymentRequest });
+            try
+            {
+                await this.client.SendCommandAsync<object>(this.address, "pay", new object[] { paymentRequest });
 
-            return new PaymentResponse(PayResult.Ok);
+
+                return new PaymentResponse(PayResult.Ok);
+            }
+            catch(LightningPayException exc)
+            {
+                return new PaymentResponse(PayResult.Error, exc.Message);
+            }
         }
 
 

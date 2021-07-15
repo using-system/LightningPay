@@ -14,8 +14,9 @@ docker-compose up
 
 One the docker-compose is up, you have access to : 
 
-- LND api : http://localhost:32736/ (No Macaroon authentication)
-- Eclair api :  http://localhost:4570/ (Password = "eclairpassword")
+- LND : http://localhost:32736/ (No Macaroon authentication)
+- C-Lightning : tcp://127.0.0.1:48532 
+- Eclair :  http://localhost:4570/ (Password = "eclairpassword")
 
 ## Credits
 
