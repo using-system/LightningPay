@@ -56,6 +56,6 @@ public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllersWithViews();
 
-        services.AddLndLightningClient(new Uri("http://localhost:8080/"));
+        services.AddCLightningClient(new Uri("tcp://127.0.0.1:9835"));
     }
 ```
