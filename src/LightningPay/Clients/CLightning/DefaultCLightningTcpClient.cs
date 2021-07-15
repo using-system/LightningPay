@@ -9,11 +9,23 @@ using System.Threading.Tasks;
 
 namespace LightningPay.Clients.CLightning
 {
+    /// <summary>
+    ///  Default  C-Lightning tcp client
+    /// </summary>
     public class DefaultCLightningTcpClient : ICLightningTcpClient
     {
 		static Encoding UTF8 = new UTF8Encoding(false);
 
-		public async Task<Response> SendCommandAsync<Response>(Uri address, string command, object[] parameters = null)
+        /// <summary>Sends the command asynchronous.</summary>
+        /// <typeparam name="Response">The type of the esponse.</typeparam>
+        /// <param name="address">The address.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        /// <exception cref="LightningPay.LightningPayException">Error code {response.Error.Code} : {response.Error.Message}</exception>
+        public async Task<Response> SendCommandAsync<Response>(Uri address, string command, object[] parameters = null)
         {
 			parameters = parameters ?? Array.Empty<string>();
 			using (Socket socket = await Connect(address))
