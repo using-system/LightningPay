@@ -33,6 +33,9 @@ namespace LightningPay.Samples.WebAppMvc
                      services.AddLndLightningClient(new Uri("http://localhost:8080/"),
                         macaroonBytes: File.ReadAllBytes("/root/.lnd/data/chain/bitcoin/mainnet/invoice.macaroon"));
 
+               ############## C-Lightning Samples ##################
+               services.AddLndLightningClient(new Uri("tcp://127.0.0.1:9835"));
+
                ############## Eclair Samples ##################
                services.AddEclairLightningClient(new Uri("http://localhost:8080/"), 
                     password: "YourPassword");
@@ -49,7 +52,7 @@ namespace LightningPay.Samples.WebAppMvc
                
              */
 
-            services.AddLndLightningClient(new Uri("http://localhost:32736/"));
+            services.AddLndLightningClient(new Uri("tcp://127.0.0.1:9835"));
         }
 
 

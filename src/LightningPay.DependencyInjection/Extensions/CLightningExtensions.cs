@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using LightningPay.Clients.CLightning;
 
-namespace LightningPay.DependencyInjection
+namespace LightningPay
 {
     /// <summary>
     ///  C-Lightning client dependency injection extension methods
