@@ -64,7 +64,10 @@ namespace LightningPay.Clients.CLightning
         {
             string id = Guid.NewGuid().ToString();
             var invoice =  await this.Client.SendCommandAsync<CLightningInvoice>("invoice",
-                new object[] { amount.MilliSatoshis, id, description, options.ToExpiryString() });
+                amount.MilliSatoshis, 
+                id, 
+                description, 
+                options.ToExpiryString() );
             invoice.Label = id;
             invoice.Description = description;
             invoice.MilliSatoshi = amount.MilliSatoshis;
@@ -80,7 +83,7 @@ namespace LightningPay.Clients.CLightning
         {
             try
             {
-                await this.Client.SendCommandAsync<object>("pay", new object[] { paymentRequest });
+                await this.Client.SendCommandAsync<object>("pay", paymentRequest);
 
 
                 return new PaymentResponse(PayResult.Ok);
@@ -109,8 +112,7 @@ namespace LightningPay.Clients.CLightning
 
         private async Task<LightningInvoice> GetInvoice(string invoiceId)
         {
-            var response = await this.Client.SendCommandAsync<ListInvoicesResponse>("listinvoices",
-                new[] { invoiceId });
+            var response = await this.Client.SendCommandAsync<ListInvoicesResponse>("listinvoices", invoiceId);
 
             return response.Invoices.FirstOrDefault().ToLightningInvoice();
         }
