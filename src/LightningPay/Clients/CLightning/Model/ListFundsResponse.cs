@@ -4,7 +4,7 @@ namespace LightningPay.Clients.CLightning
 {
     internal class ListFundsResponse
     {
-        internal ListFundsResponse()
+        public ListFundsResponse()
         {
             this.Outputs = new List<Output>();
         }
