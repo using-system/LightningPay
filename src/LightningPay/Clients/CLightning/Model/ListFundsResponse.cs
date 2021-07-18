@@ -4,6 +4,11 @@ namespace LightningPay.Clients.CLightning
 {
     internal class ListFundsResponse
     {
+        internal ListFundsResponse()
+        {
+            this.Outputs = new List<Output>();
+        }
+
         public List<Output> Outputs { get; set; }
 
         internal class Output
