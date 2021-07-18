@@ -1,4 +1,6 @@
-﻿namespace LightningPay.Clients.CLightning
+﻿using System;
+
+namespace LightningPay.Clients.CLightning
 {
     internal static class ModelExtensions
     {
@@ -15,7 +17,7 @@
                 Memo = source.Description,
                 Amount = Money.FromMilliSatoshis(source.MilliSatoshi),
                 BOLT11 = source.BOLT11,
-                ExpiresAt = source.ExpiryAt,
+                ExpiresAt = DateTimeOffset.FromUnixTimeSeconds(source.ExpiryAt),
                 Status = source.ToStatus()            
             };
         }

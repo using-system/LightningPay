@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using LightningPay.Clients.Lnd;
 
@@ -14,10 +15,11 @@ namespace LightningPay.Samples.Console
                 System.Console.WriteLine($"Wallet balance : {balance.ToSatoshis()} sat ");
 
                 var invoice = await lndClient.CreateInvoice(Money.FromSatoshis(100), 
-                    "My First invoice");
+                    "My First invoice", new CreateInvoiceOptions(expiry: TimeSpan.FromHours(12)));
 
                 System.Console.WriteLine($"Create a new invoice with id {invoice.Id}");
                 System.Console.WriteLine($"Payment request : {invoice.BOLT11}");
+                System.Console.WriteLine($"Expiration date : {invoice.ExpiresAt}");
                 System.Console.WriteLine($"Invoice Uri : {invoice.Uri}");
 
                 while (! await lndClient.CheckPayment(invoice.Id))
