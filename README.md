@@ -8,8 +8,6 @@ Bitcoin Lightning Network Payment .NET library
 - [x] Check payment ([Documentation](documentation/client.md#check-invoice-payment))
 - [x] Pay an invoice ([Documentation](documentation/client.md#pay))
 
-More features will be supported in futures versions. 
-
 ## Packages
 
 - `LightningPay.Abstractions` [![NuGet](https://img.shields.io/nuget/v/LightningPay.Abstractions.svg)](https://www.nuget.org/packages/LightningPay.Abstractions) : Interfaces and model used by `LightningPay` 
@@ -23,8 +21,8 @@ See [Which package to use ?](documentation/packages.md) for more details.
 Connect to your lightning nodes : 
 
 - [x] LND ([Documentation](documentation/client-lnd.md))
+- [x] C-Lightning ([Documentation](documentation/client-clightning.md))
 - [x] Eclair  ([Documentation](documentation/client-eclair.md))
-- [ ] C-Lightning  (Not supported yet)
 - [ ] Charge (Not supported yet)
 
 Or with custodial solution for lightning (without having a node  of your own) : 

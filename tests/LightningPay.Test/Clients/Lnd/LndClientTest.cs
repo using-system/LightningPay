@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-using Xunit;
 
 using LightningPay.Clients.Lnd;
 using LightningPay.Tools;
 using LightningPay.Infrastructure.Api;
+
+using Xunit;
 
 namespace LightningPay.Test.Clients.Lnd
 {

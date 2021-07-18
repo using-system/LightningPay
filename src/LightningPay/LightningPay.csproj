@@ -32,4 +32,8 @@
 		<ProjectReference Include="..\LightningPay.Abstractions\LightningPay.Abstractions.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Clients\CLightning\Socket\" />
+	</ItemGroup>
+
 </Project>

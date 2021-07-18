@@ -97,6 +97,11 @@ namespace LightningPay.Clients.Lnd
         {
             var invoice = await this.GetInvoice(invoiceId);
 
+            if (invoice == null)
+            {
+                return false;
+            }
+
             return invoice.Status == LightningInvoiceStatus.Paid;
         }
 
