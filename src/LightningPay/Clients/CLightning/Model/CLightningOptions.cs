@@ -1,14 +1,10 @@
-﻿using System;
-
-namespace LightningPay.Clients.CLightning
+﻿namespace LightningPay.Clients.CLightning
 {
     /// <summary>
     ///   C-Lightning Options
     /// </summary>
-    public class CLightningOptions
+    public class CLightningOptions : OptionsBase
     {
-        /// <summary>Gets or sets the address.</summary>
-        /// <value>The address of the LND server.</value>
-        public Uri Address { get; set; }
+
     }
 }

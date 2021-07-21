@@ -13,6 +13,18 @@ namespace LightningPay.Test.Clients.Eclair
     public class EclairClientTest
     {
         [Fact]
+        public void New_Should_Throw_Exception_If_Bad_Uri_Format()
+        {
+            Assert.Throws<LightningPayException>(() => EclairClient.New("bad_uri"));
+        }
+
+        [Fact]
+        public void New_Should_Throw_Exception_If_Uri_Is_Null()
+        {
+            Assert.Throws<LightningPayException>(() => EclairClient.New(null));
+        }
+
+        [Fact]
         public async Task CheckConnectivity_Should_Return_Ok_If_NodeId_NotEmpty()
         {
             //Arrange
