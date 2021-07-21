@@ -172,6 +172,12 @@ namespace LightningPay.Clients.Lnd
                 clientInternalBuilt = true;
             }
 
+            if(!Uri.TryCreate(address, UriKind.Absolute, out Uri uri))
+            {
+                throw new LightningPayException($"Invalid uri format for LND Client : {address}",
+                    LightningPayException.ErrorCode.BAD_CONFIGURATION);
+            }
+
             LndClient client = new LndClient(httpClient, new LndOptions()
             {
                 Address = new Uri(address),

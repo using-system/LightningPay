@@ -16,11 +16,8 @@ namespace LightningPay.Clients.CLightning
         [Serializable("msatoshi_received")]
         public long MilliSatoshiReceived { get; set; }
 
-        [Serializable("expiry_time")]
-        public DateTimeOffset ExpiryTime { get; set; }
-
         [Serializable("expires_at")]
-        public DateTimeOffset ExpiryAt { get; set; }
+        public long ExpiryAt { get; set; }
 
         [Serializable("bolt11")]
         public string BOLT11 { get; set; }

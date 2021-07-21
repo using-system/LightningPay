@@ -125,6 +125,12 @@ namespace LightningPay.Clients.CLightning
         /// </returns>
         public static CLightningClient New(string address)
         {
+            if (!Uri.TryCreate(address, UriKind.Absolute, out Uri uri))
+            {
+                throw new LightningPayException($"Invalid uri format for C-Lightning Client : {address}",
+                    LightningPayException.ErrorCode.BAD_CONFIGURATION);
+            }
+
             return new CLightningClient(new DefaultCLightningRpcClient(new CLightningOptions()
             {
                 Address = new Uri(address)

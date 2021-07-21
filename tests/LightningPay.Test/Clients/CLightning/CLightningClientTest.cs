@@ -14,6 +14,18 @@ namespace LightningPay.Test.Clients.CLightning
     public class CLightningClientTest
     {
         [Fact]
+        public void New_Should_Throw_Exception_If_Bad_Uri_Format()
+        {
+            Assert.Throws<LightningPayException>(() => CLightningClient.New("bad_uri"));
+        }
+
+        [Fact]
+        public void New_Should_Throw_Exception_If_Uri_Is_Null()
+        {
+            Assert.Throws<LightningPayException>(() => CLightningClient.New(null));
+        }
+
+        [Fact]
         public async Task CheckConnectivity_Should_Return_Ok_If_NodeAlias_NotEmpty()
         {
             //Arrange
@@ -77,7 +89,7 @@ namespace LightningPay.Test.Clients.CLightning
                     MilliSatoshi = Money.FromSatoshis(1000).MilliSatoshis,
                     BOLT11 = "PaymentRequest",
                     Status = "unpaid",
-                    ExpiryAt = DateTimeOffset.Now.AddHours(24)
+                    ExpiryAt = DateTimeOffset.Now.AddHours(24).ToUnixTimeSeconds()
                 });
             var cLightningClient = new CLightningClient(rpcClient);
 

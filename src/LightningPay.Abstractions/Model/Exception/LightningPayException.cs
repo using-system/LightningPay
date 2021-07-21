@@ -60,11 +60,13 @@ namespace LightningPay
         /// </summary>
         public enum ErrorCode
         {
-            /// <summary>unauthorized</summary>
+            /// <summary>Bad configuration</summary>
+            BAD_CONFIGURATION,
+            /// <summary>Unauthorized Access</summary>
             UNAUTHORIZED,
-            /// <summary>bad request</summary>
+            /// <summary>Bad request</summary>
             BAD_REQUEST,
-            /// <summary>internal error</summary>
+            /// <summary>Internal error</summary>
             INTERNAL_ERROR
         }
     }

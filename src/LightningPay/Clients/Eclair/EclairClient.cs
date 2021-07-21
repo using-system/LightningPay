@@ -166,6 +166,12 @@ namespace LightningPay.Clients.Eclair
                 clientInternalBuilt = true;
             }
 
+            if (!Uri.TryCreate(address, UriKind.Absolute, out Uri uri))
+            {
+                throw new LightningPayException($"Invalid uri format for Eclair Client : {address}",
+                    LightningPayException.ErrorCode.BAD_CONFIGURATION);
+            }
+
             EclairClient client = new EclairClient(httpClient, new EclairOptions()
             {
                 Address = new Uri(address),

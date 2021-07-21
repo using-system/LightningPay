@@ -14,6 +14,18 @@ namespace LightningPay.Test.Clients.Lnd
     public class LndClientTest
     {
         [Fact]
+        public void New_Should_Throw_Exception_If_Bad_Uri_Format()
+        {
+            Assert.Throws<LightningPayException>(() => LndClient.New("bad_uri"));
+        }
+
+        [Fact]
+        public void New_Should_Throw_Exception_If_Uri_Is_Null()
+        {
+            Assert.Throws<LightningPayException>(() => LndClient.New(null));
+        }
+
+        [Fact]
         public async Task CheckConnectivity_Should_Return_Ok_If_NodeAlias_NotEmpty()
         {
             //Arrange
