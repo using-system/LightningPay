@@ -3,7 +3,7 @@
     /// <summary>
     ///   LNBits Options
     /// </summary>
-    public class LNBitsOptions : OptionsBase
+    public class LNBitsOptions : LightningOptions
     {
         /// <summary>Gets or sets the API key.</summary>
         /// <value>The API key.</value>

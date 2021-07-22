@@ -3,7 +3,7 @@
     /// <summary>
     ///   Eclair options
     /// </summary>
-    public class EclairOptions : OptionsBase
+    public class EclairOptions : LightningOptions
     {
         /// <summary>Gets or sets the password.</summary>
         /// <value>The password.</value>

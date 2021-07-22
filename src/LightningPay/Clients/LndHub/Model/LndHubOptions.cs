@@ -3,7 +3,7 @@
     /// <summary>
     ///   LNDHub options
     /// </summary>
-    public class LndHubOptions : OptionsBase
+    public class LndHubOptions : LightningOptions
     {
         /// <summary>Gets or sets the login.</summary>
         /// <value>The login.</value>

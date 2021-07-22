@@ -3,7 +3,7 @@
     /// <summary>
     ///   LND options
     /// </summary>
-    public class LndOptions : OptionsBase
+    public class LndOptions : LightningOptions
     {
         /// <summary>Gets or sets the macaroon.</summary>
         /// <value>The authentication macaroon.</value>

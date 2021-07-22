@@ -3,7 +3,7 @@
     /// <summary>
     ///   C-Lightning Options
     /// </summary>
-    public class CLightningOptions : OptionsBase
+    public class CLightningOptions : LightningOptions
     {
 
     }
