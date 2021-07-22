@@ -12,5 +12,7 @@ Use directly `LightningPay.DependencyInjection` for all your app projects that u
 
 ## LightningPay.Abstractions [![NuGet](https://img.shields.io/nuget/v/LightningPay.Abstractions.svg)](https://www.nuget.org/packages/LightningPay.Abstractions)
 
-`LightningPay.Abstractions` is for your all library (non app projects) to avoid to add strong reference to the lightning clients.
+`LightningPay.Abstractions` is for your all library (non app projects) to avoid to add strong reference to the lightning clients. 
+
+You can built also your extension methods to the `ILightningClient` interface to extend your lightning client.
 
