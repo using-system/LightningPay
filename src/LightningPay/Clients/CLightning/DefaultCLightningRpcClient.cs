@@ -43,24 +43,17 @@ namespace LightningPay.Clients.CLightning
 				{
 					using (var textWriter = new StreamWriter(networkStream, UTF8, 1024 * 10, true))
 					{
-						textWriter.Write(Json.Serialize(new CommandRequest()
-						{
-							Id = 0,
-							Command = command,
-							Parameters = parameters
-						}));
-						await textWriter.FlushAsync();
+                        Json.Serialize(textWriter, new CommandRequest()
+                        {
+                            Id = 0,
+                            Command = command,
+                            Parameters = parameters
+                        });
 					}
 					await networkStream.FlushAsync();
 					using (var textReader = new StreamReader(networkStream, UTF8, false, 1024 * 10, true))
 					{
-						string json = "";
-						while (textReader.Peek() >= 0)
-						{
-							json += (char)(textReader.Read());
-						}
-
-						var response = Json.Deserialize<CommandResponse<Response>>(json, new JsonOptions()
+						var response = Json.Deserialize<CommandResponse<Response>>(textReader, new JsonOptions()
 						{
 							SerializationOptions = JsonSerializationOptions.ByteArrayAsBase64
 						});
