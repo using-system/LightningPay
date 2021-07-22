@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleToAttribute("LightningPay.Test")]
+[assembly: InternalsVisibleToAttribute("LightningPay.Abstractions.Test")]
