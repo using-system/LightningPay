@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace LightningPay
 {
@@ -26,5 +27,11 @@ namespace LightningPay
         void Unsubscribe<TEvent, THandler>()
           where TEvent : LightningEvent
           where THandler : ILightningEventHandler<TEvent>;
+
+        /// <summary>Starts listening the events.</summary>
+        Task StartListening();
+
+        /// <summary>Stops listening the events.</summary>
+        Task StopListening();
     }
 }

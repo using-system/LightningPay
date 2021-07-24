@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace LightningPay.Clients.Lnd
 {
@@ -28,6 +29,9 @@ namespace LightningPay.Clients.Lnd
             this.eventSubscriptionsManager.AddSubscription<TEvent, THandler>();
         }
 
+        /// <summary>Subscribes the specified handler.</summary>
+        /// <typeparam name="TEvent">The type of the event.</typeparam>
+        /// <param name="handler">The handler.</param>
         public void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : LightningEvent
         {
             throw new NotImplementedException();
@@ -41,6 +45,18 @@ namespace LightningPay.Clients.Lnd
             where THandler : ILightningEventHandler<TEvent>
         {
             this.eventSubscriptionsManager.RemoveEventSubscription<TEvent, THandler>();
+        }
+
+        /// <summary>Starts listening the events.</summary>
+        public Task StartListening()
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>Stops listening the events.</summary>
+        public Task StopListening()
+        {
+            return Task.CompletedTask;
         }
 
         /// <summary>Instanciate a new LND Listener.</summary>
