@@ -9,7 +9,7 @@ using LightningPay.Clients.CLightning;
 
 namespace LightningPay.DependencyInjection.Test.Extensions
 {
-    public class CLightningExtensionsTest
+    public class CLightningClientExtensionsTest
     {
         [Fact]
         public void AddCLightningClient_Should_Add_CLightningClient()

@@ -2,67 +2,62 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using LightningPay.Clients.LndHub;
+using LightningPay.Clients.LNBits;
 
 namespace LightningPay
 {
     /// <summary>
-    ///   LNDHub dependency injection extension methods
+    /// LNBits dependency injection extension methods
     /// </summary>
-    public static class LndHubExtensions
+    public static class LNBitsClientExtensions
     {
-        /// <summary>Adds the LND hub lightning client.</summary>
+        /// <summary>Adds the LNBits lightning client.</summary>
         /// <param name="services">The services.</param>
-        /// <param name="address">The address of the LNDHub.</param>
-        /// <param name="login">The login.</param>
-        /// <param name="password">The password.</param>
+        /// <param name="address">The address of the LNBits api.</param>
+        /// <param name="apiKey">The API key.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddLNBitsLightningClient(this IServiceCollection services,
             Uri address,
-            string login,
-            string password)
+            string apiKey)
         {
-            return AddLndHubLightningClient(services,
+            return AddLNBitsLightningClient(services,
                 address,
-                login,
-                password,
+                apiKey,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
-        /// <summary>Adds the LND hub lightning client.</summary>
+
+        /// <summary>Adds the LNBits lightning client.</summary>
         /// <param name="services">The services.</param>
-        /// <param name="address">The address of the LNDHub.</param>
-        /// <param name="login">The login.</param>
-        /// <param name="password">The password.</param>
+        /// <param name="address">The address of the LNBits api.</param>
+        /// <param name="apiKey">The api key.</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddLNBitsLightningClient(this IServiceCollection services,
             Uri address,
-            string login,
-            string password,
+            string apiKey,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
-            services.AddSingleton(new LndHubOptions()
+            services.AddSingleton(new LNBitsOptions()
             {
                 Address = address,
-                Login = login,
-                Password = password
+                ApiKey = apiKey
             });
-            
+
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
                 AllowInsecure = allowInsecure,
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
-            services.AddHttpClient<ILightningClient, LndHubClient>()
+            services.AddHttpClient<ILightningClient, LNBitsClient>()
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;

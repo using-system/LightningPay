@@ -2,62 +2,67 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using LightningPay.Clients.Eclair;
+using LightningPay.Clients.LndHub;
 
 namespace LightningPay
 {
     /// <summary>
-    ///  Eclair dependency injection extension methods
+    ///   LNDHub dependency injection extension methods
     /// </summary>
-    public static class EclairExtensions
+    public static class LndHubClientExtensions
     {
-        /// <summary>Adds the LNBits lightning client.</summary>
+        /// <summary>Adds the LND hub lightning client.</summary>
         /// <param name="services">The services.</param>
-        /// <param name="address">The address of the LNBits api.</param>
+        /// <param name="address">The address of the LNDHub.</param>
+        /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddEclairLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
             Uri address,
+            string login,
             string password)
         {
-            return AddEclairLightningClient(services,
+            return AddLndHubLightningClient(services,
                 address,
+                login,
                 password,
                 allowInsecure: false,
                 certificateThumbprint: null);
         }
 
-
-        /// <summary>Adds the Eclair lightning client.</summary>
+        /// <summary>Adds the LND hub lightning client.</summary>
         /// <param name="services">The services.</param>
-        /// <param name="address">The address of the LNBits api.</param>
+        /// <param name="address">The address of the LNDHub.</param>
+        /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
         /// <returns>
         ///   ServiceCollection
         /// </returns>
-        public static IServiceCollection AddEclairLightningClient(this IServiceCollection services,
+        public static IServiceCollection AddLndHubLightningClient(this IServiceCollection services,
             Uri address,
+            string login,
             string password,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
-            services.AddSingleton(new EclairOptions()
+            services.AddSingleton(new LndHubOptions()
             {
                 Address = address,
+                Login = login,
                 Password = password
             });
-
+            
             services.AddSingleton(new DependencyInjection.HttpClientHandlerOptions()
             {
                 AllowInsecure = allowInsecure,
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
-            services.AddHttpClient<ILightningClient, EclairClient>()
+            services.AddHttpClient<ILightningClient, LndHubClient>()
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;

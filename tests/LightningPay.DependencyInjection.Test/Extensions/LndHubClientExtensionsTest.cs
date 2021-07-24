@@ -6,31 +6,32 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using NSubstitute;
 
-using LightningPay.Clients.Eclair;
+using LightningPay.Clients.LndHub;
 
-namespace LightningPay.DependencyInjection.Test.Extensions
+namespace LightningPay.DependencyInjection.Test
 {
-    public class EclairExtensionsTest
+    public class LndHubClientExtensionsTest
     {
         [Fact]
-        public void AddEclairLightningClient_Should_Add_EclairClient()
+        public void AddLndHubLightningClient_Should_Add_LndHubClient()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddEclairLightningClient(new Uri("http://localhost:8080"), "password");
+            serviceCollection.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"), "login", "password");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<EclairOptions>();
+            var options = serviceProvider.GetService<LndHubOptions>();
             Assert.NotNull(options);
-            Assert.Equal("http://localhost:8080/", options.Address.ToString());
+            Assert.Equal("https://lndhub.herokuapp.com/", options.Address.ToString());
+            Assert.Equal("login", options.Login);
             Assert.Equal("password", options.Password);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<EclairClient>(lightningClient);
+            Assert.IsType<LndHubClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);
@@ -42,26 +43,28 @@ namespace LightningPay.DependencyInjection.Test.Extensions
         }
 
         [Fact]
-        public void AddEclairLightningClient_Should_Add_EclairClient_With_Certificate_Options()
+        public void AddLndHubLightningClient_Should_Add_LndHubClient_With_Certificate_Options()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddEclairLightningClient(new Uri("http://localhost:8080"),
+            serviceCollection.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"), 
+                "login", 
                 "password",
                 certificateThumbprint: "284800A04D0C046636EBE60C37A4F527B8B550F3");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<EclairOptions>();
+            var options = serviceProvider.GetService<LndHubOptions>();
             Assert.NotNull(options);
-            Assert.Equal("http://localhost:8080/", options.Address.ToString());
+            Assert.Equal("https://lndhub.herokuapp.com/", options.Address.ToString());
+            Assert.Equal("login", options.Login);
             Assert.Equal("password", options.Password);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<EclairClient>(lightningClient);
+            Assert.IsType<LndHubClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);

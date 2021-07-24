@@ -9,7 +9,7 @@ namespace LightningPay
     /// <summary>
     ///  C-Lightning client dependency injection extension methods
     /// </summary>
-    public static class CLightningExtensions
+    public static class CLightningClientExtensions
     {
         /// <summary>Adds the C-Lightning client.</summary>
         /// <param name="services">The services.</param>

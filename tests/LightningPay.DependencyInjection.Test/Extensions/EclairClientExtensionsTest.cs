@@ -6,31 +6,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using NSubstitute;
 
-using LightningPay.Clients.LNBits;
+using LightningPay.Clients.Eclair;
 
-namespace LightningPay.DependencyInjection.Test
+namespace LightningPay.DependencyInjection.Test.Extensions
 {
-    public class LNBitsExtensionsTest
+    public class EclairClientExtensionsTest
     {
         [Fact]
-        public void AddLNBitsLightningClient_Should_Add_LNBitsClient()
+        public void AddEclairLightningClient_Should_Add_EclairClient()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLNBitsLightningClient(new Uri("https://lnbits.com/"), "apikey");
+            serviceCollection.AddEclairLightningClient(new Uri("http://localhost:8080"), "password");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<LNBitsOptions>();
+            var options = serviceProvider.GetService<EclairOptions>();
             Assert.NotNull(options);
-            Assert.Equal("https://lnbits.com/", options.Address.ToString());
-            Assert.Equal("apikey", options.ApiKey);
+            Assert.Equal("http://localhost:8080/", options.Address.ToString());
+            Assert.Equal("password", options.Password);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<LNBitsClient>(lightningClient);
+            Assert.IsType<EclairClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);
@@ -42,26 +42,26 @@ namespace LightningPay.DependencyInjection.Test
         }
 
         [Fact]
-        public void AddLNBitsLightningClient_Should_Add_LNBitsClient_With_Certificate_Options()
+        public void AddEclairLightningClient_Should_Add_EclairClient_With_Certificate_Options()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLNBitsLightningClient(new Uri("https://lnbits.com/"),
-                "apikey",
+            serviceCollection.AddEclairLightningClient(new Uri("http://localhost:8080"),
+                "password",
                 certificateThumbprint: "284800A04D0C046636EBE60C37A4F527B8B550F3");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<LNBitsOptions>();
+            var options = serviceProvider.GetService<EclairOptions>();
             Assert.NotNull(options);
-            Assert.Equal("https://lnbits.com/", options.Address.ToString());
-            Assert.Equal("apikey", options.ApiKey);
+            Assert.Equal("http://localhost:8080/", options.Address.ToString());
+            Assert.Equal("password", options.Password);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<LNBitsClient>(lightningClient);
+            Assert.IsType<EclairClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);

@@ -6,32 +6,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using NSubstitute;
 
-using LightningPay.Clients.LndHub;
+using LightningPay.Clients.LNBits;
 
 namespace LightningPay.DependencyInjection.Test
 {
-    public class LndHubExtensionsTest
+    public class LNBitsClientExtensionsTest
     {
         [Fact]
-        public void AddLndHubLightningClient_Should_Add_LndHubClient()
+        public void AddLNBitsLightningClient_Should_Add_LNBitsClient()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"), "login", "password");
+            serviceCollection.AddLNBitsLightningClient(new Uri("https://lnbits.com/"), "apikey");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<LndHubOptions>();
+            var options = serviceProvider.GetService<LNBitsOptions>();
             Assert.NotNull(options);
-            Assert.Equal("https://lndhub.herokuapp.com/", options.Address.ToString());
-            Assert.Equal("login", options.Login);
-            Assert.Equal("password", options.Password);
+            Assert.Equal("https://lnbits.com/", options.Address.ToString());
+            Assert.Equal("apikey", options.ApiKey);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<LndHubClient>(lightningClient);
+            Assert.IsType<LNBitsClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);
@@ -43,28 +42,26 @@ namespace LightningPay.DependencyInjection.Test
         }
 
         [Fact]
-        public void AddLndHubLightningClient_Should_Add_LndHubClient_With_Certificate_Options()
+        public void AddLNBitsLightningClient_Should_Add_LNBitsClient_With_Certificate_Options()
         {
             // Arrange
             var serviceCollection = Substitute.ForPartsOf<ServiceCollection>();
 
             // Act
-            serviceCollection.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"), 
-                "login", 
-                "password",
+            serviceCollection.AddLNBitsLightningClient(new Uri("https://lnbits.com/"),
+                "apikey",
                 certificateThumbprint: "284800A04D0C046636EBE60C37A4F527B8B550F3");
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Assert
-            var options = serviceProvider.GetService<LndHubOptions>();
+            var options = serviceProvider.GetService<LNBitsOptions>();
             Assert.NotNull(options);
-            Assert.Equal("https://lndhub.herokuapp.com/", options.Address.ToString());
-            Assert.Equal("login", options.Login);
-            Assert.Equal("password", options.Password);
+            Assert.Equal("https://lnbits.com/", options.Address.ToString());
+            Assert.Equal("apikey", options.ApiKey);
 
             var lightningClient = serviceProvider.GetService<ILightningClient>();
             Assert.NotNull(lightningClient);
-            Assert.IsType<LndHubClient>(lightningClient);
+            Assert.IsType<LNBitsClient>(lightningClient);
 
             var httpHandler = serviceProvider.GetService<DependencyInjection.DefaultHttpClientHandler>();
             Assert.NotNull(httpHandler);

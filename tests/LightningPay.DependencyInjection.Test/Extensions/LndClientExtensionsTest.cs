@@ -9,7 +9,7 @@ using LightningPay.Clients.Lnd;
 
 namespace LightningPay.DependencyInjection.Test
 {
-    public class LndHExtensionsTest
+    public class LndClientExtensionsTest
     {
 
         [Fact]
