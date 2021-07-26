@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using LightningPay.Infrastructure.Api;
+using LightningPay.Tools;
 
 namespace LightningPay.Clients.Lnd
 {
@@ -17,6 +18,8 @@ namespace LightningPay.Clients.Lnd
 
         private readonly IEventSubscriptionsManager eventSubscriptionsManager;
 
+        private readonly IServiceProvider serviceProvider;
+
         private CancellationTokenSource cts = new CancellationTokenSource();
 
         private Task listenTask;
@@ -24,12 +27,15 @@ namespace LightningPay.Clients.Lnd
         /// <summary>Initializes a new instance of the <see cref="LndListener" /> class.</summary>
         /// <param name="client"></param>
         /// <param name="eventSubscriptionsManager">The event subscriptions manager.</param>
+        /// <param name="serviceProvider">Service provider for resolving handlers</param>
         /// <param name="options">The options.</param>
         public LndListener(HttpClient client, 
             IEventSubscriptionsManager eventSubscriptionsManager,
+            IServiceProvider serviceProvider,
             LndOptions options) : base(options.Address.ToBaseUrl(), client, LndClient.BuildAuthentication(options))
         {
             this.eventSubscriptionsManager = eventSubscriptionsManager;
+            this.serviceProvider = serviceProvider;
         }
 
         /// <summary>Subscribes to an event.</summary>
@@ -80,21 +86,39 @@ namespace LightningPay.Clients.Lnd
                 while (!this.cts.IsCancellationRequested)
                 {
                     string line = await reader.ReadLineAsync();
-                    if (line != null)
+                    if (!string.IsNullOrEmpty(line))
                     {
-                        if (line.Contains("\"result\":"))
+                        var invoiceEvent = Json.Deserialize<LndEvent<LnrpcInvoice>>(line, new JsonOptions()
                         {
+                            SerializationOptions = JsonSerializationOptions.ByteArrayAsBase64
+                        });
 
-                        }
-                        else if (line.Contains("\"error\":"))
-                        {
-
-                        }
-                        else
-                        {
-                            throw new LightningPayException("Unknown result from LND", LightningPayException.ErrorCode.INTERNAL_ERROR);
-                        }
+                        this.CallHandlers(invoiceEvent);
                     }
+                }
+            }
+        }
+
+        private void CallHandlers(LndEvent<LnrpcInvoice> invoiceEvent)
+        {
+            var lightningEvent = invoiceEvent.ToEvent();
+
+            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentReceivedEvent>())
+            {
+                ILightningEventHandler<PaymentReceivedEvent> handler = null;
+                
+                if(this.serviceProvider == null)
+                {
+                    handler = Activator.CreateInstance(handlerType) as ILightningEventHandler<PaymentReceivedEvent>;
+                }
+                else
+                {
+                    handler = this.serviceProvider.GetService(handlerType) as ILightningEventHandler<PaymentReceivedEvent>;
+                }                             
+                
+                if(handler != null)
+                {
+                    handler.Handle(lightningEvent);
                 }
             }
         }
@@ -139,7 +163,7 @@ namespace LightningPay.Clients.Lnd
                     LightningPayException.ErrorCode.BAD_CONFIGURATION);
             }
 
-            LndListener listener = new LndListener(httpClient, eventSubscriptionsManager, new LndOptions()
+            LndListener listener = new LndListener(httpClient, eventSubscriptionsManager, null, new LndOptions()
             {
                 Address = new Uri(address),
                 Macaroon = macaroonBytes ?? macaroonHexString.HexStringToByteArray()
