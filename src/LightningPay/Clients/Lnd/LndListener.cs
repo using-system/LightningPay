@@ -103,23 +103,9 @@ namespace LightningPay.Clients.Lnd
         {
             var lightningEvent = invoiceEvent.ToEvent();
 
-            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentReceivedEvent>())
+            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<InvoiceUpdatedEvent>())
             {
-                ILightningEventHandler<PaymentReceivedEvent> handler = null;
-                
-                if(this.serviceProvider == null)
-                {
-                    handler = Activator.CreateInstance(handlerType) as ILightningEventHandler<PaymentReceivedEvent>;
-                }
-                else
-                {
-                    handler = this.serviceProvider.GetService(handlerType) as ILightningEventHandler<PaymentReceivedEvent>;
-                }                             
-                
-                if(handler != null)
-                {
-                    handler.Handle(lightningEvent);
-                }
+                this.serviceProvider.CallEventHandler(handlerType, lightningEvent);
             }
         }
 

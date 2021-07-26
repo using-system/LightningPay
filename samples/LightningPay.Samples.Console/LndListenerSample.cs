@@ -11,7 +11,7 @@ namespace LightningPay.Samples.Console
             using (var listener = LndListener.New("http://localhost:32736/"))
             {
                 //Listen for invoices change
-                listener.Subscribe<PaymentReceivedEvent, MyHandler>();
+                listener.Subscribe<InvoiceUpdatedEvent, MyHandler>();
                 await listener.StartListening();
 
                 //Try to create a new invoice and check if the handlers are called
@@ -22,11 +22,11 @@ namespace LightningPay.Samples.Console
             }
         }
 
-        public class MyHandler : ILightningEventHandler<PaymentReceivedEvent>
+        public class MyHandler : ILightningEventHandler<InvoiceUpdatedEvent>
         {
-            public Task Handle(PaymentReceivedEvent @event)
+            public Task Handle(InvoiceUpdatedEvent @event)
             {
-                System.Console.WriteLine($"Receive event {nameof(PaymentReceivedEvent)} for invoice {@event.Invoice.Id}");
+                System.Console.WriteLine($"Receive event {nameof(InvoiceUpdatedEvent)} for invoice {@event.Invoice.Id}");
 
                 return Task.CompletedTask;
             }

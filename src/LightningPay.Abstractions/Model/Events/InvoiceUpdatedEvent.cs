@@ -3,7 +3,7 @@
     /// <summary>
     ///   Payment Received Event
     /// </summary>
-    public class PaymentReceivedEvent : LightningEvent
+    public class InvoiceUpdatedEvent : LightningEvent
     {
         /// <summary>Gets or sets the invoice.</summary>
         /// <value>The invoice.</value>
