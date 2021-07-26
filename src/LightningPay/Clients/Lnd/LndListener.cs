@@ -54,7 +54,7 @@ namespace LightningPay.Clients.Lnd
         /// <param name="handler">The handler.</param>
         public void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : LightningEvent
         {
-            throw new NotImplementedException();
+            
         }
 
         /// <summary>Unsubscribes to an event.</summary>
