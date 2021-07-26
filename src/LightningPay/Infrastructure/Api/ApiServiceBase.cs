@@ -14,12 +14,14 @@ namespace LightningPay.Infrastructure.Api
     /// </summary>
     public abstract class ApiServiceBase
     {
-        private readonly string baseUrl;
+        /// <summary>The base URL</summary>
+        protected readonly string baseUrl;
 
         /// <summary>The HTTP client</summary>
         protected readonly HttpClient httpClient;
 
-        private readonly AuthenticationBase authentication;
+        /// <summary>The authentication</summary>
+        protected readonly AuthenticationBase authentication;
 
         /// <summary>Initializes a new instance of the <see cref="ApiServiceBase" /> class.</summary>
         /// <param name="baseurl">Base url of the api</param>

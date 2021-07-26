@@ -6,7 +6,7 @@ namespace LightningPay.Samples.Console
     {
         static async Task Main(string[] args)
         {
-            SampleBase sample = new CLightningClientSample();
+            SampleBase sample = new LndListenerSample();
 
             await sample.Execute();
 
