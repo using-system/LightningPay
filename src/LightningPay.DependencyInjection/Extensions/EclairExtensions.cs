@@ -37,14 +37,14 @@ namespace LightningPay
         /// <param name="services">The services.</param>
         /// <param name="address">The address of the LNBits api.</param>
         /// <param name="password">The password.</param>
+        /// <param name="retryOnHttpError">Number of retry on http error</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
-        /// <returns>
-        ///   ServiceCollection
-        /// </returns>
+        /// <returns>ServiceCollection</returns>
         public static IServiceCollection AddEclairLightningClient(this IServiceCollection services,
             Uri address,
             string password,
+            int retryOnHttpError = 10,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
@@ -64,7 +64,7 @@ namespace LightningPay
             services.AddHttpClient<ILightningClient, EclairClient>()
                 .AddPolicyHandler(HttpPolicyExtensions
                     .HandleTransientHttpError()
-                    .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
+                    .WaitAndRetryAsync(retryOnHttpError, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;
