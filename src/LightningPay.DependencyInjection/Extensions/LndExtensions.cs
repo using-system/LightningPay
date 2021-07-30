@@ -2,8 +2,10 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using LightningPay.Clients.Lnd;
+using Polly;
+using Polly.Extensions.Http;
 
+using LightningPay.Clients.Lnd;
 
 namespace LightningPay
 {
@@ -96,7 +98,11 @@ namespace LightningPay
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
+
             services.AddHttpClient<ILightningClient, LndClient>()
+                 .AddPolicyHandler(HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;
