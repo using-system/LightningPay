@@ -12,10 +12,6 @@ namespace LightningPay.Samples.Console
             {
                 //Listen for invoices change
                 listener.Subscribe<InvoiceUpdatedEvent, MyHandler>();
-                listener.Subscribe<InvoiceUpdatedEvent>((@event) =>
-                {
-                    System.Console.WriteLine($"Handler 2 : Receive event {nameof(InvoiceUpdatedEvent)} for invoice {@event.Invoice.Id}");
-                });
                 await listener.StartListening();
 
                 //Try to create a new invoice and check if the handlers are called
