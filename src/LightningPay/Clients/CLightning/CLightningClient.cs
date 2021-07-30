@@ -85,7 +85,6 @@ namespace LightningPay.Clients.CLightning
             {
                 await this.Client.SendCommandAsync<object>("pay", paymentRequest);
 
-
                 return new PaymentResponse(PayResult.Ok);
             }
             catch(LightningPayException exc)

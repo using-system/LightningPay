@@ -36,5 +36,18 @@ namespace LightningPay.Clients.CLightning
                     return LightningInvoiceStatus.Unpaid;
             }
         }
+
+        public static InvoiceUpdatedEvent ToEvent(this CLightningInvoice source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return new InvoiceUpdatedEvent()
+            {
+                Invoice = source.ToLightningInvoice()
+            };
+        }
     }
 }
