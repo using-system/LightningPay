@@ -30,7 +30,7 @@ Or with custodial solution for lightning (without having a node  of your own) :
 - [x] LNDHub / BlueWallet ([Documentation](documentation/client-lndhub.md))
 - [x] LNBits ([Documentation](documentation/client-lnbits.md))
 
-## Extend
+## Extensible
 
 With `LightningPay`, you can easly extend your client by add extension methods to the `ILightningClient` interface.
 
