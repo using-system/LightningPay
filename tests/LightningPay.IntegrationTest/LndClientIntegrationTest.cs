@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-using LightningPay.Clients.Lnd;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LightningPay.IntegrationTest
 {
@@ -8,11 +8,9 @@ namespace LightningPay.IntegrationTest
     {
         protected override bool NeedBitcoind => true;
 
-        protected override Task<ILightningClient> GetClient()
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            ILightningClient client = LndClient.New("http://localhost:32736/");
-
-            return Task.FromResult(client);
+            services.AddLndLightningClient(new Uri("http://localhost:32736/"));
         }
 
         protected override string SelfPaymentErrorMesssage => "self-payments not allowed";
