@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Polly;
-using Polly.Extensions.Http;
 
 using LightningPay.Clients.Lnd;
 
@@ -105,8 +106,10 @@ namespace LightningPay
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
 
             services.AddHttpClient<ILightningClient, LndClient>()
-                 .AddPolicyHandler(HttpPolicyExtensions
-                    .HandleTransientHttpError()
+                 .AddPolicyHandler(Policy
+                    // Add custom handling to exclude 500 because api return 500 for bad request errors
+                    .Handle<HttpRequestException>()
+                    .OrResult<HttpResponseMessage>(r =>  (int)r.StatusCode > 500 || r.StatusCode == HttpStatusCode.RequestTimeout)
                     .WaitAndRetryAsync(retryOnHttpError, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
