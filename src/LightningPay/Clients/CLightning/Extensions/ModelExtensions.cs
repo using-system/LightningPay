@@ -37,14 +37,14 @@ namespace LightningPay.Clients.CLightning
             }
         }
 
-        public static InvoiceUpdatedEvent ToEvent(this CLightningInvoice source)
+        public static PaymentSentEvent ToEvent(this CLightningInvoice source)
         {
             if (source == null)
             {
                 return null;
             }
 
-            return new InvoiceUpdatedEvent()
+            return new PaymentSentEvent()
             {
                 Invoice = source.ToLightningInvoice()
             };

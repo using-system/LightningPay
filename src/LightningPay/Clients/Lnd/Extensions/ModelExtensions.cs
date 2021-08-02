@@ -59,14 +59,14 @@ namespace LightningPay.Clients.Lnd
             return invoice;
         }
 
-        public static InvoiceUpdatedEvent ToEvent(this LndEvent<LnrpcInvoice> source)
+        public static PaymentSentEvent ToEvent(this LndEvent<LnrpcInvoice> source)
         {
             if(source == null)
             {
                 return null;
             }
 
-            return new InvoiceUpdatedEvent()
+            return new PaymentSentEvent()
             {
                 ErrorMessage = source.Error,
                 Invoice = source.Result.ToLightningInvoice()

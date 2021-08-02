@@ -60,7 +60,11 @@ namespace LightningPay.Clients.CLightning
         /// </returns>
         public Task StartListening()
         {
-            this.listenTask = this.ListenLoop();
+            if (this.listenTask == null)
+            {
+                this.listenTask = this.ListenLoop();
+            }
+
             return Task.CompletedTask;
         }
 
@@ -70,7 +74,7 @@ namespace LightningPay.Clients.CLightning
             {
                 var invoice = await this.client.SendCommandAsync<CLightningInvoice>("waitanyinvoice", lastInvoiceIndex);
 
-                foreach (var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<InvoiceUpdatedEvent>())
+                foreach (var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentSentEvent>())
                 {
                     this.serviceProvider.CallEventHandler(handlerType, invoice.ToEvent());
                 }

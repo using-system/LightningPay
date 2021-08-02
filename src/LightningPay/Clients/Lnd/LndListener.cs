@@ -62,7 +62,11 @@ namespace LightningPay.Clients.Lnd
         /// <summary>Starts listening the events.</summary>
         public Task StartListening()
         {
-            this.listenTask = this.ListenLoop();
+            if(this.listenTask == null)
+            {
+                this.listenTask = this.ListenLoop();
+            }
+
             return Task.CompletedTask;
         }
 
@@ -95,7 +99,7 @@ namespace LightningPay.Clients.Lnd
         {
             var lightningEvent = invoiceEvent.ToEvent();
 
-            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<InvoiceUpdatedEvent>())
+            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentSentEvent>())
             {
                 this.serviceProvider.CallEventHandler(handlerType, lightningEvent);
             }
