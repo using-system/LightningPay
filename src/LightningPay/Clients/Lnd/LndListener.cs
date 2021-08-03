@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
+using LightningPay.Events.Lnd;
 using LightningPay.Infrastructure.Api;
 using LightningPay.Tools;
 
@@ -99,7 +100,7 @@ namespace LightningPay.Clients.Lnd
         {
             var lightningEvent = invoiceEvent.ToEvent();
 
-            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentSentEvent>())
+            foreach(var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<InvoiceUpdatedEvent>())
             {
                 this.serviceProvider.CallEventHandler(handlerType, lightningEvent);
             }

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using LightningPay.Events.CLightning;
+
 namespace LightningPay.Clients.CLightning
 {
     internal static class ModelExtensions
@@ -37,14 +39,14 @@ namespace LightningPay.Clients.CLightning
             }
         }
 
-        public static PaymentSentEvent ToEvent(this CLightningInvoice source)
+        public static PaymentReceivedEvent ToEvent(this CLightningInvoice source)
         {
             if (source == null)
             {
                 return null;
             }
 
-            return new PaymentSentEvent()
+            return new PaymentReceivedEvent()
             {
                 Invoice = source.ToLightningInvoice()
             };

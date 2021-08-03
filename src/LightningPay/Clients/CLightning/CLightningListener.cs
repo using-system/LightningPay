@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using LightningPay.Events.CLightning;
+
 namespace LightningPay.Clients.CLightning
 {
     /// <summary>
@@ -74,7 +76,7 @@ namespace LightningPay.Clients.CLightning
             {
                 var invoice = await this.client.SendCommandAsync<CLightningInvoice>("waitanyinvoice", lastInvoiceIndex);
 
-                foreach (var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentSentEvent>())
+                foreach (var handlerType in this.eventSubscriptionsManager.GetHandlersForEvent<PaymentReceivedEvent>())
                 {
                     this.serviceProvider.CallEventHandler(handlerType, invoice.ToEvent());
                 }

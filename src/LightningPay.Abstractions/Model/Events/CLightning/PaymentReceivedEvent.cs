@@ -1,9 +1,9 @@
-﻿namespace LightningPay
+﻿namespace LightningPay.Events.CLightning
 {
     /// <summary>
-    ///   Payment Received Event
+    ///   Payment received event
     /// </summary>
-    public class PaymentSentEvent : LightningEvent
+    public class PaymentReceivedEvent : LightningEvent
     {
         /// <summary>Gets or sets the invoice.</summary>
         /// <value>The invoice.</value>

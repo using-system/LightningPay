@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
+using LightningPay.Events.Lnd;
+
 namespace LightningPay.Clients.Lnd
 {
     internal static class ModelExtensions
@@ -59,14 +61,14 @@ namespace LightningPay.Clients.Lnd
             return invoice;
         }
 
-        public static PaymentSentEvent ToEvent(this LndEvent<LnrpcInvoice> source)
+        public static InvoiceUpdatedEvent ToEvent(this LndEvent<LnrpcInvoice> source)
         {
             if(source == null)
             {
                 return null;
             }
 
-            return new PaymentSentEvent()
+            return new InvoiceUpdatedEvent()
             {
                 ErrorMessage = source.Error,
                 Invoice = source.Result.ToLightningInvoice()
