@@ -2,6 +2,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Polly;
+using Polly.Extensions.Http;
+
 using LightningPay.Clients.LndHub;
 
 namespace LightningPay
@@ -37,6 +40,7 @@ namespace LightningPay
         /// <param name="address">The address of the LNDHub.</param>
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
+        /// <param name="retryOnHttpError">Number of retry on http error</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
         /// <returns>
@@ -46,6 +50,7 @@ namespace LightningPay
             Uri address,
             string login,
             string password,
+            int retryOnHttpError = 10,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
@@ -62,7 +67,11 @@ namespace LightningPay
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
+
             services.AddHttpClient<ILightningClient, LndHubClient>()
+                 .AddPolicyHandler(HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(retryOnHttpError, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;

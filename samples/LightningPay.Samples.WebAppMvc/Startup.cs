@@ -52,7 +52,7 @@ namespace LightningPay.Samples.WebAppMvc
                
              */
 
-            services.AddLndLightningClient(new Uri("tcp://127.0.0.1:9835"));
+            services.AddLndLightningClient(new Uri("http://localhost:32736/"));
         }
 
 

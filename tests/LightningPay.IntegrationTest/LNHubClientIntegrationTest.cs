@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-using LightningPay.Clients.LndHub;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LightningPay.IntegrationTest
 {
@@ -8,50 +8,12 @@ namespace LightningPay.IntegrationTest
     {
         protected override bool NeedBitcoind => false;
 
-        protected async override Task<ILightningClient> GetClient()
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            ILightningClient client = LndHubClient.New("https://lndhub.herokuapp.com/");
-
-            var wallet = await client.CreateLndHubWallet();
-
-            client = LndHubClient.New("https://lndhub.herokuapp.com/",
-                login: wallet.Login,
-                password: wallet.Password);
-
-            return client;
+            services.AddLndHubLightningClient(new Uri("https://lndhub.herokuapp.com/"), "2073282b83fad2955b57", "a1c4f8c30a93bf3e8cbf");
         }
 
         protected override string SelfPaymentErrorMesssage => "not enough balance";
     }
 
-    internal static class LNHubClientIntegrationTestExtensions
-    {
-        internal async static Task<CreateWalletResponse> CreateLndHubWallet(this ILightningClient client)
-        {
-            return await client.ToRestClient()
-                .Post<CreateWalletResponse>("/create", new CreateWalletRequest()
-                {
-                    PartnerId = "bluewallet",
-                    AccountType = "test"
-                });
-        }
-
-        internal class CreateWalletRequest
-        {
-            [Serializable("partnerid")]
-            public string PartnerId { get; set; }
-
-            [Serializable("accounttype")]
-            public string AccountType { get; set; }
-        }
-
-        internal class CreateWalletResponse
-        {
-            [Serializable("login")]
-            public string Login { get; set; }
-
-            [Serializable("password")]
-            public string Password { get; set; }
-        }
-    }
 }

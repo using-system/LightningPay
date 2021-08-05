@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-using LightningPay.Clients.LNBits;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LightningPay.IntegrationTest
 {
@@ -8,12 +8,9 @@ namespace LightningPay.IntegrationTest
     {
         protected override bool NeedBitcoind => false;
 
-        protected override Task<ILightningClient> GetClient()
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            ILightningClient client =
-                LNBitsClient.New("https://lnbits.lndev.link/", apiKey: "0f920e085f96413fa754b73b9895abbd");
-
-            return Task.FromResult(client);
+            services.AddLNBitsLightningClient(new Uri("https://lnbits.lndev.link/"), "0f920e085f96413fa754b73b9895abbd");
         }
 
         protected override string SelfPaymentErrorMesssage => "Insufficient balance";

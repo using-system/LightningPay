@@ -2,6 +2,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Polly;
+using Polly.Extensions.Http;
+
 using LightningPay.Clients.LNBits;
 
 namespace LightningPay
@@ -34,6 +37,7 @@ namespace LightningPay
         /// <param name="services">The services.</param>
         /// <param name="address">The address of the LNBits api.</param>
         /// <param name="apiKey">The api key.</param>
+        /// <param name="retryOnHttpError">Number of retry on http error</param>
         /// <param name="allowInsecure">if set to <c>true</c> [allow insecure].</param>
         /// <param name="certificateThumbprint">The certificate thumbprint.</param>
         /// <returns>
@@ -42,6 +46,7 @@ namespace LightningPay
         public static IServiceCollection AddLNBitsLightningClient(this IServiceCollection services,
             Uri address,
             string apiKey,
+            int retryOnHttpError = 10,
             bool allowInsecure = false,
             string certificateThumbprint = null)
         {
@@ -57,7 +62,11 @@ namespace LightningPay
                 CertificateThumbprint = certificateThumbprint.HexStringToByteArray()
             });
             services.AddSingleton<DependencyInjection.DefaultHttpClientHandler>();
+
             services.AddHttpClient<ILightningClient, LNBitsClient>()
+                 .AddPolicyHandler(HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(retryOnHttpError, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .ConfigurePrimaryHttpMessageHandler<DependencyInjection.DefaultHttpClientHandler>();
 
             return services;

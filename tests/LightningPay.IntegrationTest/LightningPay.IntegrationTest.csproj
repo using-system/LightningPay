@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\LightningPay\LightningPay.csproj" />
+    <ProjectReference Include="..\..\src\LightningPay.DependencyInjection\LightningPay.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>
