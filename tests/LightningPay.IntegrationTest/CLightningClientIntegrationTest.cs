@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-using LightningPay.Clients.CLightning;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LightningPay.IntegrationTest
 {
@@ -8,11 +8,10 @@ namespace LightningPay.IntegrationTest
     {
         protected override bool NeedBitcoind => true;
 
-        protected override Task<ILightningClient> GetClient()
-        {
-            ILightningClient client = CLightningClient.New("tcp://127.0.0.1:48532");
 
-            return Task.FromResult(client);
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCLightningClient(new Uri("tcp://127.0.0.1:48532"));
         }
 
         protected override string SelfPaymentErrorMesssage => "Error code 210";

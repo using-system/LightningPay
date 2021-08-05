@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-using LightningPay.Clients.Eclair;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LightningPay.IntegrationTest
 {
@@ -8,11 +8,9 @@ namespace LightningPay.IntegrationTest
     {
         protected override bool NeedBitcoind => true;
 
-        protected override Task<ILightningClient> GetClient()
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            ILightningClient client = EclairClient.New("http://localhost:4570/", "eclairpassword");
-
-            return Task.FromResult(client);
+            services.AddEclairLightningClient(new Uri("http://localhost:4570/"), "eclairpassword");
         }
 
         protected override string SelfPaymentErrorMesssage => "Cannot process to the payment";
